@@ -1,0 +1,48 @@
+@config "../../tailwind.config.js";
+@import "tailwindcss";
+
+.video-container video {
+  transform: translateZ(0); /* Активирует аппаратное ускорение */
+  backface-visibility: hidden; /* Оптимизация рендеринга */
+}
+
+@custom-variant theme-1 (&:where([data-theme="theme-1"] *));
+@custom-variant theme-2 (&:where([data-theme="theme-2"] *));
+@custom-variant theme-3 (&:where([data-theme="theme-3"] *));
+@custom-variant theme-4 (&:where([data-theme="theme-4"] *));
+@custom-variant theme-5 (&:where([data-theme="theme-5"] *));
+
+@theme {
+  --animate-support: support 1.5s ease-in-out;
+  --animate-support-md: support 3s ease-in-out;
+
+  @keyframes support {
+    0%,
+    30% {
+      transform: translateX(300%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  --color-primary: #fefefe;
+  --color-secondary: #0D0D0D; 
+  --color-accent: #E23324;
+
+  --color-maskot1: #F5E7C4;
+  --color-maskot2: #5A5553;
+  --color-maskot3: #591628;
+  --color-maskot4: #F28D95;
+  --color-maskot5: #F2785C;
+
+}
+
+.link {
+  @apply cursor-pointer hover:opacity-90;
+}
+
+.x-spacing {
+  @apply px-[5vw] md:px-[10vw];
+}
+
