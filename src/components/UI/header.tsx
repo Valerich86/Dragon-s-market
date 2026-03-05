@@ -12,8 +12,9 @@ import NavIcon from "./nav-icon";
 
 const centeredLinks = [
   { name: "Kаталог", href: "/catalog" },
-  { name: "Категории", href: "/categories" },
-  { name: "Доставка", href: "/delivery" },
+  { name: "Новости", href: "/news" },
+  { name: "Как купить?", href: "/delivery" },
+  { name: "О нас", href: "/about" },
 ];
 
 const rightLinks = [
@@ -41,16 +42,13 @@ export default function Header() {
   }, []);
 
   return (
-    <div
-      className={
-        `w-full absolute h-15 left-0 top-0 flex justify-between items-center z-50
-        border-b border-gray-200 bg-primary x-spacing`
-      }
+    <header
+      className={`w-full fixed h-15 left-0 top-0 flex justify-between items-center z-50
+        border-b border-gray-200 bg-primary x-spacing`}
     >
       {/* левые ссылки */}
-      <div className="flex justify-start items-center gap-5 w-1/2 md:w-1/3">
-        <BurgerMenu links={centeredLinks}/>
-        <Link href={"/"} className="link">
+      <div className="flex justify-start items-center gap-5 w-1/3 md:w-1/3">
+        <Link href={"/"} className="">
           <Image
             src={
               screenWidth > 500
@@ -64,23 +62,25 @@ export default function Header() {
             className="w-full select-none pointer-events-none "
           />
         </Link>
+        <BurgerMenu links={centeredLinks} />
       </div>
 
       {/* центральные ссылки */}
-      <div className="hidden md:flex justify-center items-center w-1/3 h-full">
+      <nav
+        area-label="основная навигация (десктоп)"
+        className="hidden lg:flex justify-center items-center w-1/2 h-full"
+      >
         {centeredLinks.map((item, index) => (
           <NavLink href={item.href} name={item.name} key={index} />
         ))}
-      </div>
+      </nav>
 
       {/* правые ссылки */}
       <div className="flex justify-end items-center w-1/2 md:w-1/3 h-full">
         {rightLinks.map((item, index) => {
-          return (
-            <NavIcon key={index} href={item.href} icon={item.icon}/>
-          );
+          return <NavIcon key={index} href={item.href} icon={item.icon} />;
         })}
       </div>
-    </div>
+    </header>
   );
 }

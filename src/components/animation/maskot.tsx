@@ -1,117 +1,83 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 
 interface Props {
   src: string;
-  tempSrc?: string;
-  className?: string;
-  width?: string | number;
-  height?: string | number;
+  options?: string;
   loop?: boolean;
 }
 
 export default function MaskotAnimation({
   src,
-  tempSrc = "/video/swearing.webm",
-  className = "",
-  width = "100%",
-  height = "auto",
+  options = '',
   loop = false,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [current, setCurrent] = useState(src);
-  const [isFirstPlay, setIsFirstPlay] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
-  // Обработчик окончания видео
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    const handleEnded = () => {
-      if (current !== src) {
-        // Возвращаемся к основному видео после временного
-        setCurrent(src);
-      } else {
-        // Для основного видео — зацикливаем последние 70% (но не при первом проигрывании)
-        if (!isFirstPlay && video.duration) {
-          const offset = video.duration * 0.7;
-          const startPosition = video.duration - offset;
-          video.currentTime = startPosition;
-        }
-        video.play().catch(e =>
-          console.log('Автовоспроизведение заблокировано:', e)
-        );
+    // Инициализируем Intersection Observer
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        rootMargin: '50px 0px', // Наблюдаем за элементами в 50px от вьюпорта
+        threshold: 0.1 // Срабатывает, когда 10% элемента видно
       }
+    );
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
     };
+  }, []);
 
-    video.addEventListener("ended", handleEnded);
-    setIsFirstPlay(false);
-    return () => video.removeEventListener("ended", handleEnded);
-  }, [current, isFirstPlay]);
-
-  // Эффект для перезагрузки видео при смене current
+  // Эффект для управления воспроизведением при изменении видимости
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Перезагружаем видео с новым src
-    video.load();
-
-    // Ждём загрузки метаданных перед установкой позиции
-    const onLoadedMetadata = () => {
-      video.removeEventListener('loadedmetadata', onLoadedMetadata);
-
-      if (current === src && !isFirstPlay && video.duration) {
-        // Устанавливаем позицию на 70% только для основного видео (не при первом запуске)
-        const offset = video.duration * 0.7;
-        const startPosition = video.duration - offset;
-        video.currentTime = startPosition;
-      }
-
-      // Запускаем воспроизведение
-      video.play().catch(e =>
-        console.log('Автовоспроизведение заблокировано при загрузке:', e)
-      );
-    };
-
-    video.addEventListener('loadedmetadata', onLoadedMetadata);
-    return () => video.removeEventListener('loadedmetadata', onLoadedMetadata);
-  }, [current]);
-
-
-  const clickHandler = () => {
-    // Меняем на временное видео
-    setCurrent(tempSrc);
-    // После клика сбрасываем флаг первого воспроизведения — следующее воспроизведение основного видео будет с 70%
-    setIsFirstPlay(false);
-  };
+    if (isVisible) {
+      // Перезапускаем видео с начала при появлении во вьюпорте
+      video.currentTime = 0;
+      video.play().catch((e) => {
+        console.log('Автовоспроизведение заблокировано:', e);
+      });
+    } else {
+      // Ставим на паузу и сбрасываем позицию при уходе из вьюпорта
+      video.pause();
+      video.currentTime = 0;
+    }
+  }, [isVisible]);
 
   return (
-    <div className={className} onClick={clickHandler} style={{ cursor: "pointer" }}>
+    <div className={`md:w-1/3 ${isVisible ? "animate-shining" : ""}`}>
       <video
         onContextMenu={(e) => e.preventDefault()}
         ref={videoRef}
-        autoPlay
         muted
         playsInline
         disablePictureInPicture
         disableRemotePlayback
         style={{
-          width,
-          height,
-          display: "block",
-          maxWidth: "100%",
-          userSelect: "none",
-          cursor: "default",
+          width: '100%',
+          height: 'auto',
+          display: 'block',
+          userSelect: 'none',
         }}
-        loop={current === src ? loop : false} // Временное видео не зацикливаем
+        loop={loop}
         controls={false}
       >
-        <source src={current} type="video/webm" />
-        {/* Резервный формат */}
-        <source src={src.replace(".webm", ".mov")} type="video/quicktime" />
+        <source src={src} type="video/webm" />
         Ваш браузер не поддерживает видео.
       </video>
     </div>

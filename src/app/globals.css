@@ -1,48 +1,82 @@
 @config "../../tailwind.config.js";
 @import "tailwindcss";
 
+p,
+span,
+pre,
+h1, h2 {
+  text-wrap: initial;
+  caret-color: transparent;
+  user-select: none;
+  outline: none;
+}
+
+.button {
+  outline: none;
+}
+
 .video-container video {
   transform: translateZ(0); /* Активирует аппаратное ускорение */
   backface-visibility: hidden; /* Оптимизация рендеринга */
 }
 
-@custom-variant theme-1 (&:where([data-theme="theme-1"] *));
-@custom-variant theme-2 (&:where([data-theme="theme-2"] *));
-@custom-variant theme-3 (&:where([data-theme="theme-3"] *));
-@custom-variant theme-4 (&:where([data-theme="theme-4"] *));
-@custom-variant theme-5 (&:where([data-theme="theme-5"] *));
+@custom-variant light (&:where([data-theme="light"] *));
+@custom-variant dark (&:where([data-theme="dark"] *));
+@custom-variant blob (&:where([data-theme="blob"] *));
 
 @theme {
-  --animate-support: support 1.5s ease-in-out;
-  --animate-support-md: support 3s ease-in-out;
+  --animate-shining: shining 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  --animate-shining-intro: shining 2s ease-in-out forwards;
 
-  @keyframes support {
-    0%,
-    30% {
-      transform: translateX(300%);
-    }
-    100% {
-      transform: translateX(0);
-    }
+@keyframes shining {
+  0% {
+    opacity: 0;
+    filter: blur(20px) brightness(1.8) drop-shadow(0 0 25px rgba(255, 200, 100, 0.8));
+    transform: scale(0.8);
   }
+  60% {
+    opacity: 1;
+    filter: blur(8px) brightness(1.5) drop-shadow(0 0 35px rgba(255, 220, 150, 0.6));
+    transform: scale(1.05);
+  }
+  80% {
+    opacity: 1;
+    filter: blur(4px) brightness(1.3) drop-shadow(0 0 25px rgba(255, 230, 180, 0.5));
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0) brightness(1) drop-shadow(0);
+    transform: scale(1);
+  }
+}
 
   --color-primary: #fefefe;
-  --color-secondary: #0D0D0D; 
+  --color-secondary: #080808; 
   --color-accent: #E23324;
 
-  --color-maskot1: #F5E7C4;
-  --color-maskot2: #5A5553;
+  --color-maskot1: #A7A18D;
+  --color-maskot2: #403D3E;
   --color-maskot3: #591628;
-  --color-maskot4: #F28D95;
+  --color-maskot4: #A65C41;
   --color-maskot5: #F2785C;
 
 }
 
 .link {
-  @apply cursor-pointer hover:opacity-90;
+  @apply cursor-pointer hover:opacity-80;
 }
 
 .x-spacing {
   @apply px-[5vw] md:px-[10vw];
 }
+
+.section {
+  @apply w-full flex flex-col justify-center items-center gap-10 md:gap-0 pb-30 lg:pb-0 relative;
+}
+
+.sceleton {
+  @apply bg-linear-to-br from-gray-200 via-white to-gray-200
+}
+
 

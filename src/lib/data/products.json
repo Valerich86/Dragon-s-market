@@ -1,0 +1,322 @@
+[
+  {
+    "id": 1,
+    "title": "Ecostoria - хрустящие нори",
+    "description": "Лёгкие и воздушные чипсы из риса с ароматом морских водорослей и перца. Идеально подходят для перекуса.",
+    "weight": 85,
+    "price": 249.90,
+    "old_price": 249.90,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_нори.png",
+    "status": "new"
+  },
+  {
+    "id": 2,
+    "title": "Острые соевые снеки",
+    "description": "Хрустящие соевые кусочки с пикантной азиатской приправой. Острый вкус с нотками имбиря и чили.",
+    "weight": 100,
+    "price": 199.50,
+    "old_price": 199.50,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/соевые_снеки.png",
+    "status": "new"
+  },
+  {
+    "id": 3,
+    "title": "Бамбуковые чипсы со вкусом краба",
+    "description": "Нежные чипсы из бамбукового крахмала с деликатным вкусом краба. Традиционный азиатский снэк.",
+    "weight": 90,
+    "price": 279.00,
+    "old_price": 279.00,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_краб.png",
+    "status": "new"
+  },
+  {
+    "id": 4,
+    "title": "Сладкие рисовые шарики с кунжутом",
+    "description": "Мягкие рисовые шарики, покрытые обжаренным кунжутом. Лёгкая сладость и приятный ореховый аромат.",
+    "weight": 120,
+    "price": 329.99,
+    "old_price": 259.99,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/рисовые_шарики.png",
+    "status": "sale"
+  },
+  {
+    "id": 5,
+    "title": "Ecostoria - хрустящие нори",
+    "description": "Лёгкие и воздушные чипсы из риса с ароматом морских водорослей и перца. Идеально подходят для перекуса.",
+    "weight": 85,
+    "price": 249.90,
+    "old_price": 249.90,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_нори.png",
+    "status": "new"
+  },
+  {
+    "id": 6,
+    "title": "Острые соевые снеки",
+    "description": "Хрустящие соевые кусочки с пикантной азиатской приправой. Острый вкус с нотками имбиря и чили.",
+    "weight": 100,
+    "price": 199.50,
+    "old_price": 199.50,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/соевые_снеки.png",
+    "status": "new"
+  },
+  {
+    "id": 7,
+    "title": "Бамбуковые чипсы со вкусом краба",
+    "description": "Нежные чипсы из бамбукового крахмала с деликатным вкусом краба. Традиционный азиатский снэк.",
+    "weight": 90,
+    "price": 279.00,
+    "old_price": 279.00,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_краб.png",
+    "status": "new"
+  },
+  {
+    "id": 8,
+    "title": "Сладкие рисовые шарики с кунжутом",
+    "description": "Мягкие рисовые шарики, покрытые обжаренным кунжутом. Лёгкая сладость и приятный ореховый аромат.",
+    "weight": 120,
+    "price": 329.99,
+    "old_price": 259.99,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/рисовые_шарики.png",
+    "status": "sale"
+  },
+  {
+    "id": 9,
+    "title": "Ecostoria - хрустящие нори",
+    "description": "Лёгкие и воздушные чипсы из риса с ароматом морских водорослей и перца. Идеально подходят для перекуса.",
+    "weight": 85,
+    "price": 249.90,
+    "old_price": 249.90,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_нори.png",
+    "status": "new"
+  },
+  {
+    "id": 10,
+    "title": "Острые соевые снеки",
+    "description": "Хрустящие соевые кусочки с пикантной азиатской приправой. Острый вкус с нотками имбиря и чили.",
+    "weight": 100,
+    "price": 199.50,
+    "old_price": 199.50,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/соевые_снеки.png",
+    "status": "new"
+  },
+  {
+    "id": 11,
+    "title": "Бамбуковые чипсы со вкусом краба",
+    "description": "Нежные чипсы из бамбукового крахмала с деликатным вкусом краба. Традиционный азиатский снэк.",
+    "weight": 90,
+    "price": 279.00,
+    "old_price": 279.00,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_краб.png",
+    "status": "new"
+  },
+  {
+    "id": 12,
+    "title": "Сладкие рисовые шарики с кунжутом",
+    "description": "Мягкие рисовые шарики, покрытые обжаренным кунжутом. Лёгкая сладость и приятный ореховый аромат.",
+    "weight": 120,
+    "price": 329.99,
+    "old_price": 259.99,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/рисовые_шарики.png",
+    "status": "sale"
+  },
+  {
+    "id": 13,
+    "title": "Ecostoria - хрустящие нори",
+    "description": "Лёгкие и воздушные чипсы из риса с ароматом морских водорослей и перца. Идеально подходят для перекуса.",
+    "weight": 85,
+    "price": 249.90,
+    "old_price": 249.90,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_нори.png",
+    "status": "new"
+  },
+  {
+    "id": 14,
+    "title": "Острые соевые снеки",
+    "description": "Хрустящие соевые кусочки с пикантной азиатской приправой. Острый вкус с нотками имбиря и чили.",
+    "weight": 100,
+    "price": 199.50,
+    "old_price": 199.50,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/соевые_снеки.png",
+    "status": "new"
+  },
+  {
+    "id": 15,
+    "title": "Бамбуковые чипсы со вкусом краба",
+    "description": "Нежные чипсы из бамбукового крахмала с деликатным вкусом краба. Традиционный азиатский снэк.",
+    "weight": 90,
+    "price": 279.00,
+    "old_price": 279.00,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_краб.png",
+    "status": "new"
+  },
+  {
+    "id": 16,
+    "title": "Сладкие рисовые шарики с кунжутом",
+    "description": "Мягкие рисовые шарики, покрытые обжаренным кунжутом. Лёгкая сладость и приятный ореховый аромат.",
+    "weight": 120,
+    "price": 329.99,
+    "old_price": 259.99,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/рисовые_шарики.png",
+    "status": "sale"
+  },
+  {
+    "id": 17,
+    "title": "Ecostoria - хрустящие нори",
+    "description": "Лёгкие и воздушные чипсы из риса с ароматом морских водорослей и перца. Идеально подходят для перекуса.",
+    "weight": 85,
+    "price": 249.90,
+    "old_price": 249.90,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_нори.png",
+    "status": "new"
+  },
+  {
+    "id": 18,
+    "title": "Острые соевые снеки",
+    "description": "Хрустящие соевые кусочки с пикантной азиатской приправой. Острый вкус с нотками имбиря и чили.",
+    "weight": 100,
+    "price": 199.50,
+    "old_price": 199.50,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/соевые_снеки.png",
+    "status": "new"
+  },
+  {
+    "id": 19,
+    "title": "Бамбуковые чипсы со вкусом краба",
+    "description": "Нежные чипсы из бамбукового крахмала с деликатным вкусом краба. Традиционный азиатский снэк.",
+    "weight": 90,
+    "price": 279.00,
+    "old_price": 279.00,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_краб.png",
+    "status": "new"
+  },
+  {
+    "id": 20,
+    "title": "Сладкие рисовые шарики с кунжутом",
+    "description": "Мягкие рисовые шарики, покрытые обжаренным кунжутом. Лёгкая сладость и приятный ореховый аромат.",
+    "weight": 120,
+    "price": 329.99,
+    "old_price": 259.99,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/рисовые_шарики.png",
+    "status": "sale"
+  },
+  {
+    "id": 21,
+    "title": "Ecostoria - хрустящие нори",
+    "description": "Лёгкие и воздушные чипсы из риса с ароматом морских водорослей и перца. Идеально подходят для перекуса.",
+    "weight": 85,
+    "price": 249.90,
+    "old_price": 249.90,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_нори.png",
+    "status": "new"
+  },
+  {
+    "id": 22,
+    "title": "Острые соевые снеки",
+    "description": "Хрустящие соевые кусочки с пикантной азиатской приправой. Острый вкус с нотками имбиря и чили.",
+    "weight": 100,
+    "price": 199.50,
+    "old_price": 199.50,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/соевые_снеки.png",
+    "status": "new"
+  },
+  {
+    "id": 23,
+    "title": "Бамбуковые чипсы со вкусом краба",
+    "description": "Нежные чипсы из бамбукового крахмала с деликатным вкусом краба. Традиционный азиатский снэк.",
+    "weight": 90,
+    "price": 279.00,
+    "old_price": 279.00,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_краб.png",
+    "status": "new"
+  },
+  {
+    "id": 24,
+    "title": "Сладкие рисовые шарики с кунжутом",
+    "description": "Мягкие рисовые шарики, покрытые обжаренным кунжутом. Лёгкая сладость и приятный ореховый аромат.",
+    "weight": 120,
+    "price": 329.99,
+    "old_price": 259.99,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/рисовые_шарики.png",
+    "status": "sale"
+  },
+  {
+    "id": 25,
+    "title": "Ecostoria - хрустящие нори",
+    "description": "Лёгкие и воздушные чипсы из риса с ароматом морских водорослей и перца. Идеально подходят для перекуса.",
+    "weight": 85,
+    "price": 249.90,
+    "old_price": 249.90,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_нори.png",
+    "status": "new"
+  },
+  {
+    "id": 26,
+    "title": "Острые соевые снеки",
+    "description": "Хрустящие соевые кусочки с пикантной азиатской приправой. Острый вкус с нотками имбиря и чили.",
+    "weight": 100,
+    "price": 199.50,
+    "old_price": 199.50,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/соевые_снеки.png",
+    "status": "new"
+  },
+  {
+    "id": 27,
+    "title": "Бамбуковые чипсы со вкусом краба",
+    "description": "Нежные чипсы из бамбукового крахмала с деликатным вкусом краба. Традиционный азиатский снэк.",
+    "weight": 90,
+    "price": 279.00,
+    "old_price": 279.00,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_краб.png",
+    "status": "new"
+  },
+  {
+    "id": 28,
+    "title": "Сладкие рисовые шарики с кунжутом",
+    "description": "Мягкие рисовые шарики, покрытые обжаренным кунжутом. Лёгкая сладость и приятный ореховый аромат.",
+    "weight": 120,
+    "price": 329.99,
+    "old_price": 259.99,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/рисовые_шарики.png",
+    "status": "sale"
+  },
+  {
+    "id": 29,
+    "title": "Ecostoria - хрустящие нори",
+    "description": "Лёгкие и воздушные чипсы из риса с ароматом морских водорослей и перца. Идеально подходят для перекуса.",
+    "weight": 85,
+    "price": 249.90,
+    "old_price": 249.90,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_нори.png",
+    "status": "new"
+  },
+  {
+    "id": 30,
+    "title": "Острые соевые снеки",
+    "description": "Хрустящие соевые кусочки с пикантной азиатской приправой. Острый вкус с нотками имбиря и чили.",
+    "weight": 100,
+    "price": 199.50,
+    "old_price": 199.50,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/соевые_снеки.png",
+    "status": "new"
+  },
+  {
+    "id": 31,
+    "title": "Бамбуковые чипсы со вкусом краба",
+    "description": "Нежные чипсы из бамбукового крахмала с деликатным вкусом краба. Традиционный азиатский снэк.",
+    "weight": 90,
+    "price": 279.00,
+    "old_price": 279.00,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/чипсы_краб.png",
+    "status": "new"
+  },
+  {
+    "id": 32,
+    "title": "Сладкие рисовые шарики с кунжутом",
+    "description": "Мягкие рисовые шарики, покрытые обжаренным кунжутом. Лёгкая сладость и приятный ореховый аромат.",
+    "weight": 120,
+    "price": 329.99,
+    "old_price": 259.99,
+    "url": "https://hb.ru-msk.vkcloud-storage.ru/bazar/рисовые_шарики.png",
+    "status": "sale"
+  }
+]
