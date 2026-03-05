@@ -47,7 +47,7 @@ export default function ProductsList({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={inView ? { opacity: 1, scale: 1 } : {}}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className=" w-[45%] z-10 lg:w-1/6 h-80"
+        className="w-[47%] z-10 lg:w-1/5 h-90"
       >
         <Link
           href={`/catalog/${categoryId}/${item.id}?categoryName=${categoryName}&productName=${item.title}`}
@@ -99,7 +99,7 @@ export default function ProductsList({
   return (
     <div
       aria-label="категории"
-      className="w-full flex flex-wrap gap-5 lg:gap-10 items-center justify-center x-spacing"
+      className="w-full flex flex-wrap gap-y-5 md:gap-y-10 gap-x-2 items-center justify-between x-spacing"
     >
       {products.map((item) => (
         <ProductItem key={item.id} item={item} />

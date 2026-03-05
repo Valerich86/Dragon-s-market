@@ -81,7 +81,7 @@ export default function NewsList() {
     );
 
   return (
-    <div aria-label="новости" className="w-full flex flex-col justify-center items-center gap-10 md:gap-0">
+    <div aria-label="новости" className="w-full flex flex-col justify-center items-center gap-5 md:gap-0">
       {news.map((item) => (
         <NewsItem key={item.id} item={item} />
       ))}
