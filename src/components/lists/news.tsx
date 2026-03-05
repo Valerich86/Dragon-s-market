@@ -6,6 +6,7 @@ import Headline from "../UI/headline";
 import type { News } from "@/lib/types";
 import CustomButton from "../UI/custom-button";
 import MaskotAnimation from "../animation/maskot";
+import Loading from "@/app/loading";
 
 export default function NewsList() {
   const [news, setNews] = useState<News[]>([]);
@@ -69,13 +70,13 @@ export default function NewsList() {
     );
   };
 
-  // if (loading) return <div>Загрузка...</div>;
+  if (loading) return <Loading/>;
 
   // Защита от map для undefined/null
   if (!news || news.length === 0)
     return (
       <div className="w-full h-screen flex justify-center items-center">
-        Нет новостей для отображения
+        Нет новостей
       </div>
     );
 
