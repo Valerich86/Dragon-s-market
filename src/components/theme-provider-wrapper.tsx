@@ -11,7 +11,7 @@ export function ThemeProviderWrapper({
     <ThemeProvider
       attribute="data-theme"
       defaultTheme="dark"
-      themes={["light", "dark", "blob"]}
+      themes={["light", "dark", "blob", "fire"]}
     >
       {children}
     </ThemeProvider>

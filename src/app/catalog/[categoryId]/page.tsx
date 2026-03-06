@@ -41,7 +41,7 @@ export default async function CategoryProductsPage({
   const { categoryName } = await searchParams;
 
   return (
-    <main area-label="категории" className={`w-full overflow-x-hidden pt-30`}>
+    <main area-label="категории" className={`w-full overflow-x-hidden`}>
       <h1 className="x-spacing text-center mb-10">Товары категории "{categoryName}"</h1>
       <BGBlob src={"/images/bg-blob.webp"} />
       <ProductsList categoryId={categoryId} categoryName={categoryName}/>

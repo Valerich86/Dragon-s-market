@@ -35,7 +35,22 @@ export default function NewsList() {
     return (
       <div className="relative">
         <Headline text={item.title} />
-        <div className="w-full min-h-screen flex flex-col md:flex-row justify-center items-center mt-70 x-spacing">
+        <div className="w-full min-h-screen flex flex-col md:flex-row gap-10 justify-center items-center mt-70 x-spacing">
+          {/* изображение или анимация */}
+          {item.media_type === "video" && (
+            <MaskotAnimation src={item.url} />
+          )}
+          {item.media_type === "image" && (
+            <Image
+              src={item.url}
+              alt="иллюстрация к новости"
+              width={200}
+              height={200}
+              loading="lazy"
+              className="h-full w-auto object-cover"
+            />
+          )}
+
           {/* текст новости или конкурса */}
           <div className="w-full md:w-2/3 flex flex-col justify-center items-center md:items-start gap-5">
             <pre className="whitespace-pre-wrap text-center md:text-left lg:text-sm">
@@ -51,20 +66,6 @@ export default function NewsList() {
             )}
           </div>
 
-          {/* изображение или анимация */}
-          {item.media_type === "video" && (
-            <MaskotAnimation src={item.url} />
-          )}
-          {item.media_type === "image" && (
-            <Image
-              src={item.url}
-              alt="иллюстрация к новости"
-              width={200}
-              height={200}
-              loading="lazy"
-              className="h-full w-auto object-cover"
-            />
-          )}
         </div>
       </div>
     );
@@ -81,7 +82,7 @@ export default function NewsList() {
     );
 
   return (
-    <div aria-label="новости" className="w-full flex flex-col justify-center items-center gap-5 md:gap-0">
+    <div aria-label="новости" className="w-full flex flex-col justify-center items-center gap-10 md:gap-0">
       {news.map((item) => (
         <NewsItem key={item.id} item={item} />
       ))}

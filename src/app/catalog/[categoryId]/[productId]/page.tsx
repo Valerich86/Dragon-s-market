@@ -45,7 +45,7 @@ export default async function ProductPage({
   const { productId } = await params;
 
   return (
-    <main area-label="категории" className={`w-full overflow-x-hidden pt-30`}>
+    <main area-label="категории" className={`w-full overflow-x-hidden`}>
       <BGBlob src={"/images/bg-blob.webp"} />
       <ProductItem id={productId} />
     </main>

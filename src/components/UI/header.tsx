@@ -6,9 +6,9 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { SlBasket } from "react-icons/sl";
 import { SlUser } from "react-icons/sl";
-import { SlMagnifier } from "react-icons/sl";
 import BurgerMenu from "./burger-menu";
 import NavIcon from "./nav-icon";
+import SearchInput from "./search-input";
 
 const centeredLinks = [
   { name: "Kаталог", href: "/catalog" },
@@ -18,7 +18,6 @@ const centeredLinks = [
 ];
 
 const rightLinks = [
-  { icon: SlMagnifier, href: "/catalog" },
   { icon: SlBasket, href: "/basket" },
   { icon: SlUser, href: "/profile" },
 ];
@@ -77,6 +76,7 @@ export default function Header() {
 
       {/* правые ссылки */}
       <div className="flex justify-end items-center w-1/2 md:w-1/3 h-full">
+        <SearchInput screenWidth={screenWidth}/>
         {rightLinks.map((item, index) => {
           return <NavIcon key={index} href={item.href} icon={item.icon} />;
         })}

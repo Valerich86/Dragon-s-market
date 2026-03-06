@@ -16,6 +16,8 @@ const ThemeSwitcher = () => {
       ? setTheme("dark")
      : theme === "dark" 
      ? setTheme("blob")
+     : theme === "blob" 
+     ? setTheme("fire")
       : setTheme("light");
   };
 

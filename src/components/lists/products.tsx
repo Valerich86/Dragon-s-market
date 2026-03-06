@@ -39,6 +39,7 @@ export default function ProductsList({
   };
 
   const ProductItem = ({ item }: { item: Product }) => {
+    const href = `/catalog/${categoryId}/${item.id}?categoryName=${categoryName}&productName=${item.title}`;
     const ref = useRef(null);
     const inView = useInView(ref, { once: true, amount: 0.3 });
     return (
@@ -49,11 +50,10 @@ export default function ProductsList({
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-[47%] z-10 lg:w-1/5 h-90"
       >
-        <Link
-          href={`/catalog/${categoryId}/${item.id}?categoryName=${categoryName}&productName=${item.title}`}
-          className={`w-full h-full link flex flex-col items-center bg-primary text-secondary rounded-xl shadow-xl border border-gray-200`}
+        <div
+          className={`w-full h-full flex flex-col items-center bg-primary text-secondary rounded-xl shadow-xl border border-gray-200`}
         >
-          <div className="w-full h-1/2 flex justify-center items-center p-2">
+          <Link href={href} className="link w-full h-1/2 flex justify-center items-center p-2">
             <Image
               src={item.url}
               alt="изображение товара"
@@ -62,11 +62,11 @@ export default function ProductsList({
               loading="lazy"
               className="h-full w-auto object-cover"
             />
-          </div>
+          </Link>
           <div className="h-1/2 w-full flex flex-col gap-2 justify-between p-2 bg-gray-200 rounded-b-xl">
-            <p className="">
-              {item.title}, {item.weight}г.
-            </p>
+            <Link href={href} className="link">
+              {item.title}, {item.weight}г. <span className="text-accent"> ⇨</span>
+            </Link>
             <p className="">
               <span
                 className={`${item.status === "sale" ? "line-through decoration-accent text-xs" : "font-extrabold"}`}
@@ -82,7 +82,7 @@ export default function ProductsList({
               text="В корзину"
             />
           </div>
-        </Link>
+        </div>
       </motion.div>
     );
   };

@@ -21,7 +21,7 @@ export default function CatalogLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="pb-50">
+    <div className="pb-50 pt-30">
       {children}
     </div>
   );

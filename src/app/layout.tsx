@@ -4,7 +4,7 @@ import Header from "@/components/UI/header";
 import { ThemeProviderWrapper } from "@/components/theme-provider-wrapper";
 import "./globals.css";
 import Footer from "@/components/UI/footer";
-import Breadcrumbs from "@/components/breadcrumbs";
+import Decor from "@/components/decor";
 import BackButton from "@/components/UI/back-button";
 
 export const metadata: Metadata = {
@@ -27,9 +27,12 @@ export default function RootLayout({
         <ThemeProviderWrapper>
           {/* <Breadcrumbs /> */}
           <Header />
+          <Decor />
           <BackButton />
           <div
-            className={` dark:bg-secondary dark:text-primary blob:bg-primary blob:text-secondary`}
+            className={`
+            dark:bg-secondary dark:text-primary blob:bg-primary blob:text-secondary 
+            fire:text-primary fire:bg-linear-to-r from-black  to-maskot3`}
           >
             {children}
           </div>

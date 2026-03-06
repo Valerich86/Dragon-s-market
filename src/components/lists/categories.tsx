@@ -41,7 +41,7 @@ export default function CategoriesList() {
         initial={{opacity: 0, scale: 0.99}}
          animate={inView ? { opacity: 1, scale: 1 } : {}}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className=" w-[45%] z-10 lg:w-1/6 h-50"
+        className=" w-[45%] z-10 lg:w-1/6 h-60"
       >
         <Link
         href={`/catalog/${item.id}?categoryName=${item.name}`}

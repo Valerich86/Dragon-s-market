@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import NewsSection from "@/components/sections/news";
 import ProductsSection from "@/components/sections/products";
 import BGBlob from "@/components/UI/bg-blob";
+import Decor from "@/components/decor";
 
 export const metadata: Metadata = {
   // title: "Главная",

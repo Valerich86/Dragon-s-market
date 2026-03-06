@@ -50,7 +50,7 @@ function BurgerMenu({ links }: Props) {
     <>
       <div ref={iconRef} className="h-full flex items-center">
         <button
-          className="link select-none"
+          className="link"
           onClick={() => setIsOpened(isOpened ? false : true)}
         >
           <SlMenu size={20} className="lg:w-2/3" color="black"/>

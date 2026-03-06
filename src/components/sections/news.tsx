@@ -11,7 +11,7 @@ export default function NewsSection() {
     >
       <NewsList />
       <div className="w-full flex justify-end x-spacing ">
-        <NavLink href="news" name="Все новости ⇨" options="dark:text-primary"/>
+        <NavLink href="news" name="Все новости ⇨" options="text-accent fire:text-gray-200 animate-pulse"/>
       </div>
     </section>
   );
