@@ -10,7 +10,7 @@ export function ThemeProviderWrapper({
   return (
     <ThemeProvider
       attribute="data-theme"
-      defaultTheme="dark"
+      defaultTheme="fire"
       themes={["light", "dark", "blob", "fire"]}
     >
       {children}

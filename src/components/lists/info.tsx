@@ -2,14 +2,20 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import Headline from "../UI/headline";
-import type { News } from "@/lib/types";
+import type { Info } from "@/lib/types";
 import CustomButton from "../UI/custom-button";
 import MaskotAnimation from "../animation/maskot";
 import Loading from "@/app/loading";
 
-export default function NewsList() {
-  const [news, setNews] = useState<News[]>([]);
+interface Props {
+  type: string;
+  limit?: number;
+}
+
+export default function InfoList({type, limit}:Props) {
+  const [news, setNews] = useState<Info[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,7 +24,7 @@ export default function NewsList() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("/api/news");
+      const response = await fetch(`/api/info?type=${type}&limit=${limit}`);
       if (!response.ok) {
         throw new Error("Ошибка загрузки данных");
       }
@@ -31,24 +37,34 @@ export default function NewsList() {
     }
   };
 
-  const NewsItem = ({ item }: { item: News }) => {
+  const NewsItem = ({ item }: { item: Info }) => {
     return (
       <div className="relative">
-        <Headline text={item.title} />
-        <div className="w-full min-h-screen flex flex-col md:flex-row gap-10 justify-center items-center mt-70 x-spacing">
+        {item.title && <Headline text={item.title} />}
+        <div className={
+          `w-full min-h-screen flex flex-col md:flex-row gap-10 
+          justify-center items-center x-spacing ${item.title ? "mt-70" : "mt-20"}`
+        }>
           {/* изображение или анимация */}
-          {item.media_type === "video" && (
+          {item.media_type === "video" && item.url && (
             <MaskotAnimation src={item.url} />
           )}
-          {item.media_type === "image" && (
-            <Image
-              src={item.url}
-              alt="иллюстрация к новости"
-              width={200}
-              height={200}
-              loading="lazy"
-              className="h-full w-auto object-cover"
-            />
+          {item.media_type === "image" && item.url && (
+            <motion.div
+              initial={{ scale: 0.9 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <Image
+                src={item.url}
+                alt="иллюстрация к новости"
+                width={200}
+                height={200}
+                loading="lazy"
+                className="h-full w-auto object-cover rounded-2xl"
+              />
+            </motion.div>
           )}
 
           {/* текст новости или конкурса */}
@@ -65,13 +81,12 @@ export default function NewsList() {
               />
             )}
           </div>
-
         </div>
       </div>
     );
   };
 
-  if (loading) return <Loading/>;
+  if (loading) return <Loading />;
 
   // Защита от map для undefined/null
   if (!news || news.length === 0)
@@ -82,7 +97,10 @@ export default function NewsList() {
     );
 
   return (
-    <div aria-label="новости" className="w-full flex flex-col justify-center items-center gap-10 md:gap-0">
+    <div
+      aria-label="новости"
+      className="w-full flex flex-col justify-center items-center gap-10 md:gap-0"
+    >
       {news.map((item) => (
         <NewsItem key={item.id} item={item} />
       ))}

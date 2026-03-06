@@ -20,7 +20,7 @@ export default function HeroSection() {
         >
           Какой азиатский снек перевернёт ваше представление о сладостях?
         </p>
-        <CustomButton optional="w-2/3 lg:w-1/2" onClick={() => router.push("/catalog")} text={"За покупками"}/>
+        <CustomButton optional="w-2/3 lg:w-1/3" onClick={() => router.push("/catalog")} text={"За покупками"}/>
       </div>
       {/* <div className="absolute w-full lg:w-1/4 top-[55%] lg:top-[35%] left-1/3 lg:left-[65%]">
         <IntroAnimation

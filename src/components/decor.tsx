@@ -110,7 +110,7 @@ export default function Decor() {
           // Позиция: начало ячейки + случайное смещение + половина размера изображения (чтобы центрировать относительно точки)
           x: j * cellWidth + randomXOffset * cellWidth,
           y: i * cellHeight + randomYOffset * cellHeight,
-          rotate: Math.floor(Math.random() * 45) - 10, // случайный поворот от -10 до +35 градусов
+          rotate: Math.floor(Math.random() * 61) - 30
         });
       }
     }
@@ -132,7 +132,7 @@ export default function Decor() {
 
   return (
     <div
-      className={`fixed dark:hidden top-0 left-0 w-screen h-[800vh] pointer-events-none overflow-hidden`}
+      className={`fixed dark:hidden top-0 left-0 w-screen h-screen pointer-events-none overflow-hidden`}
     >
       {images.map((image, index) => (
         <DecorItem

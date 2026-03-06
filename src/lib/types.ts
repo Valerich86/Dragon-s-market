@@ -15,11 +15,12 @@ export type Category = {
   url: string
 }
 
-export type News = {
+export type Info = {
   id: number,
-  title: string,
+  title?: string,
+  type: "news" | "about" | "assortment",
   text: string,
-  media_type: "image" | "video",
-  url: string,
+  media_type: "image" | "video" | "none",
+  url?: string,
   link?: string,
 }

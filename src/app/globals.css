@@ -89,12 +89,10 @@ video::--webkit-media-controls-start-playback-button {
   @apply w-full flex flex-col justify-center items-center gap-10 md:gap-0 pb-30 lg:pb-0 relative;
 }
 
-.sceleton {
-  @apply bg-linear-to-br from-gray-200 via-white to-gray-200
+.heading {
+  @apply text-3xl lg:text-4xl lg:my-50 text-center; 
 }
 
-.fire-gradient {
-  @apply bg-linear-to-br from-accent to-secondary;
-}
+
 
 

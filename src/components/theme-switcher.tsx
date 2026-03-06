@@ -7,22 +7,27 @@ const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) return null;
 
   const handleClick = () => {
     theme === "system" || theme === "light"
       ? setTheme("dark")
-     : theme === "dark" 
-     ? setTheme("blob")
-     : theme === "blob" 
-     ? setTheme("fire")
-      : setTheme("light");
+      : theme === "dark"
+        ? setTheme("blob")
+        : theme === "blob"
+          ? setTheme("fire")
+          : setTheme("light");
   };
 
   return (
-    <button onClick={handleClick} className="w-full link bg-maskot2 text-primary rounded py-2 outline-none active:scale-98 transition duration-200">
+    <button
+      onClick={handleClick}
+      className="w-full link bg-maskot2 text-primary rounded py-2 outline-none active:scale-98 transition duration-200"
+    >
       Сменить тему
     </button>
   );

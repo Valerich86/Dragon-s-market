@@ -4,6 +4,8 @@ import NewsSection from "@/components/sections/news";
 import ProductsSection from "@/components/sections/products";
 import BGBlob from "@/components/UI/bg-blob";
 import Decor from "@/components/decor";
+import AboutSection from "@/components/sections/about";
+import AssortmentSection from "@/components/sections/assortment";
 
 export const metadata: Metadata = {
   // title: "Главная",
@@ -17,8 +19,10 @@ export default function Home() {
     }>
       <BGBlob src={"/images/bg-blob.webp"} />
       <HeroSection />
-      <NewsSection />
       <ProductsSection />
+      <NewsSection />
+      <AboutSection />
+      <AssortmentSection />
     </main>
   );
 }

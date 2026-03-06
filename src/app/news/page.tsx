@@ -1,6 +1,6 @@
 import BGBlob from "@/components/UI/bg-blob";
 import { Metadata } from "next";
-import NewsList from "@/components/lists/news";
+import InfoList from "@/components/lists/info";
 
 export const metadata: Metadata = {
   title: "Новости",
@@ -14,11 +14,11 @@ export const metadata: Metadata = {
   ],
 };
 
-export default async function CategoriesPage() {
+export default async function NewssPage() {
   return (
     <main area-label="новости" className={`w-full overflow-x-hidden pt-30 pb-50`}>
       <BGBlob src={"/images/bg-blob.webp"} />
-      <NewsList />
+      <InfoList type="news"/>
     </main>
   );
 }

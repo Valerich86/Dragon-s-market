@@ -13,7 +13,7 @@ export default function BackButton() {
     if (prevPathname.current !== pathname) {
       // Ждём завершения перехода и прокручиваем вверх
       setTimeout(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, left: 0 });
       }, 100); // Небольшая задержка для гарантии завершения перехода
 
       // Обновляем предыдущий путь
