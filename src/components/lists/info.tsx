@@ -8,14 +8,16 @@ import type { Info } from "@/lib/types";
 import CustomButton from "../UI/custom-button";
 import MaskotAnimation from "../animation/maskot";
 import Loading from "@/app/loading";
+import NoInfo from "../no-info";
 
 interface Props {
   type: string;
   limit?: number;
+  cloudPath: string;
 }
 
-export default function InfoList({type, limit}:Props) {
-  const [news, setNews] = useState<Info[]>([]);
+export default function InfoList({type, limit, cloudPath}:Props) {
+  const [info, setInfo] = useState<Info[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export default function InfoList({type, limit}:Props) {
         throw new Error("Ошибка загрузки данных");
       }
       const { data } = await response.json();
-      setNews(data);
+      setInfo(data);
     } catch (error) {
       console.error("Ошибка:", error);
     } finally {
@@ -37,7 +39,7 @@ export default function InfoList({type, limit}:Props) {
     }
   };
 
-  const NewsItem = ({ item }: { item: Info }) => {
+  const InfoItem = ({ item }: { item: Info }) => {
     return (
       <div className="relative">
         {item.title && <Headline text={item.title} />}
@@ -46,18 +48,18 @@ export default function InfoList({type, limit}:Props) {
           justify-center items-center x-spacing ${item.title ? "mt-70" : "mt-20"}`
         }>
           {/* изображение или анимация */}
-          {item.media_type === "video" && item.url && (
-            <MaskotAnimation src={item.url} />
+          {item.media_type === "video" && item.media_url && (
+            <MaskotAnimation src={`${cloudPath}/info/${item.media_url}`} />
           )}
-          {item.media_type === "image" && item.url && (
+          {item.media_type === "image" && item.media_url && (
             <motion.div
-              initial={{ scale: 0.9 }}
+              initial={{ scale: 0.8 }}
               whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.7, ease: "easeIn" }}
             >
               <Image
-                src={item.url}
+                src={`${cloudPath}/info/${item.media_url}`}
                 alt="иллюстрация к новости"
                 width={200}
                 height={200}
@@ -69,15 +71,16 @@ export default function InfoList({type, limit}:Props) {
 
           {/* текст новости или конкурса */}
           <div className="w-full md:w-2/3 flex flex-col justify-center items-center md:items-start gap-5">
-            <pre className="whitespace-pre-wrap text-center md:text-left lg:text-sm">
-              {item.text}
+            <pre className="whitespace-pre-wrap text-left md:text-left lg:text-sm">
+              {item.content}
             </pre>
-            {item.link && (
+            {item.optional_link_url && (
               <CustomButton
                 onClick={() =>
-                  window.open(item.link, "_blank", "noopener,noreferrer")
+                  window.open(item.optional_link_url, "_blank", "noopener,noreferrer")
                 }
                 text="Участвовать"
+                options="w-full lg:w-1/3"
               />
             )}
           </div>
@@ -88,21 +91,17 @@ export default function InfoList({type, limit}:Props) {
 
   if (loading) return <Loading />;
 
-  // Защита от map для undefined/null
-  if (!news || news.length === 0)
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        Нет новостей
-      </div>
-    );
+  if (!info || info.length === 0) return <NoInfo />
+    
 
   return (
     <div
-      aria-label="новости"
+      aria-label="информационный блок"
+      id={type === "news" ? "news" : type === "assortment" ? "assortment" : "about"}
       className="w-full flex flex-col justify-center items-center gap-10 md:gap-0"
     >
-      {news.map((item) => (
-        <NewsItem key={item.id} item={item} />
+      {info.map((item) => (
+        <InfoItem key={item.id} item={item} />
       ))}
     </div>
   );

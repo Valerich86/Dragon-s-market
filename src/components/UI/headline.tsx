@@ -23,8 +23,8 @@ export default function Headline({ text }: Props) {
     >
       <motion.div
         ref={ref}
-        initial={{ opacity: 0, x: -50 }}
-        animate={inView ? { opacity: 1, x: 0 } : {}}
+        initial={{ x: -50 }}
+        animate={inView ? { x: 0 } : {}}
         transition={{ duration: 0.3, ease: "easeOut" }}
         className={`w-full h-full flex justify-center items-center`}
       >

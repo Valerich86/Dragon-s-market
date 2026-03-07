@@ -26,7 +26,7 @@ const ThemeSwitcher = () => {
   return (
     <button
       onClick={handleClick}
-      className="w-full link bg-maskot2 text-primary rounded py-2 outline-none active:scale-98 transition duration-200"
+      className="w-full link bg-maskot2 text-primary rounded-full py-2 outline-none active:scale-98 transition duration-200"
     >
       Сменить тему
     </button>

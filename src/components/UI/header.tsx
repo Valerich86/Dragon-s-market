@@ -61,7 +61,7 @@ export default function Header() {
             className="w-full select-none pointer-events-none "
           />
         </Link>
-        <BurgerMenu links={centeredLinks} />
+        <BurgerMenu />
       </div>
 
       {/* центральные ссылки */}

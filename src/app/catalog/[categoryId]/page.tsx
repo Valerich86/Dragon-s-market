@@ -1,6 +1,7 @@
 import { Metadata, ResolvingMetadata } from "next";
 import BGBlob from "@/components/UI/bg-blob";
 import ProductsList from "@/components/lists/products";
+import { useCloudPath } from "@/lib/cloud";
 
 export async function generateMetadata(
   {
@@ -39,12 +40,13 @@ export default async function CategoryProductsPage({
 }) {
   const { categoryId } = await params;
   const { categoryName } = await searchParams;
+  const cloudPath = await useCloudPath();
 
   return (
     <main area-label="категории" className={`w-full overflow-x-hidden`}>
       <h1 className="x-spacing text-center mb-10">Товары категории "{categoryName}"</h1>
       <BGBlob src={"/images/bg-blob.webp"} />
-      <ProductsList categoryId={categoryId} categoryName={categoryName}/>
+      <ProductsList categoryId={categoryId} categoryName={categoryName} cloudPath={cloudPath}/>
     </main>
   );
 }

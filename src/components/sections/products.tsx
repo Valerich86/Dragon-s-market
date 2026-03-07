@@ -13,8 +13,9 @@ import { productsSectionHeadline } from "@/lib/text";
 import Headline from "../UI/headline";
 import type { Product } from "@/lib/types";
 import NavLink from "../UI/nav-link";
+import ProductImage from "../UI/product-image";
 
-export default function ProductsSection() {
+export default function ProductsSection({ cloudPath }: { cloudPath: string }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -77,12 +78,12 @@ export default function ProductsSection() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("/api/products");
+      const response = await fetch("/api/products?toCarousel=true");
       if (!response.ok) {
         throw new Error("Ошибка загрузки данных");
       }
       const { data } = await response.json();
-      setProducts(data.slice(0, 4));
+      setProducts(data);
     } catch (error) {
       console.error("Ошибка:", error);
       setProducts([]); // Гарантируем, что products всегда массив
@@ -98,34 +99,16 @@ export default function ProductsSection() {
     product: Product;
     index: number;
   }) => {
-    const colors = ["bg-maskot1", "bg-maskot5", "bg-maskot4", "bg-maskot5"];
-    const bgColor = colors[index];
     return (
       <div
         className={`bg-primary h-full w-full flex flex-col md:flex-row text-primary`}
       >
-        <div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col items-center justify-center relative">
-          <span
-            className={`${font_asian1.className} text-3xl -rotate-30 absolute top-8 left-3 bg-maskot3 py-2 w-30 text-center`}
-          >
-            {product.status === "new"
-              ? "Новинка"
-              : product.status === "sale"
-                ? "Акция!"
-                : ""}
-          </span>
-          <Image
-            src={product.url}
-            alt="изображение продукта"
-            width={200}
-            height={200}
-            loading="lazy"
-            className="h-full w-auto object-cover"
-          />
+        <div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col items-center justify-center relative p-5">
+          <ProductImage product={product} cloudPath={cloudPath} captionOptions="top-6 left-2 text-2xl"/>
         </div>
         <div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col items-start justify-around p-10 bg-maskot2 ">
           <h3 className={`text-2xl font-extrabold uppercase`}>
-            {product.title}
+            {product.name}
           </h3>
           <p className="">{product.description}</p>
           <div className="w-full">

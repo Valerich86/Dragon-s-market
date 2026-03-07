@@ -6,8 +6,15 @@ import Image from "next/image";
 import Loading from "@/app/loading";
 import CustomButton from "../UI/custom-button";
 import { font_accent, font_asian1 } from "@/lib/fonts";
+import ProductImage from "../UI/product-image";
 
-export default function ProductItem({ id }: { id: string }) {
+export default function ProductItem({
+  id,
+  cloudPath,
+}: {
+  id: string;
+  cloudPath: string;
+}) {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -41,30 +48,20 @@ export default function ProductItem({ id }: { id: string }) {
     );
 
   return (
-    <div className="x-spacing w-full flex flex-col gap-y-5 lg:flex-row">
-      <div className="w-full lg:w-1/3 relative flex justify-center">
-        <span
-          className={`${font_asian1.className} text-3xl -rotate-30 absolute top-8 left-3 bg-maskot3 text-primary py-2 w-30 text-center`}
-        >
-          {product.status === "new"
-            ? "Новинка"
-            : product.status === "sale"
-              ? "Акция!"
-              : ""}
-        </span>
-        <Image
-          src={product.url}
-          alt="изображение товара"
-          width={200}
-          height={200}
-          loading="eager"
-          className="h-full w-auto object-cover"
+    <div className="x-spacing w-full flex flex-col gap-10 lg:flex-row justify-center items-center">
+      <div
+        className={`w-full lg:w-1/3 h-[50vh] relative flex items-center justify-center bg-primary p-3 rounded-2xl`}
+      >
+        <ProductImage
+          product={product}
+          cloudPath={cloudPath}
+          captionOptions="left-0 top-5 text-2xl"
         />
       </div>
-      <div className="w-full lg:w-2/3 lg:p-10">
+      <div className="w-full lg:w-1/3 lg:p-10">
         <div className="w-full flex flex-col gap-5 ">
           <p className={`${font_accent.className} font-extrabold uppercase`}>
-            {product.title}, {product.weight}г.
+            {product.name}, {product.weight}г.
           </p>
           <p className={``}>{product.description}</p>
           <p className="">
@@ -80,6 +77,7 @@ export default function ProductItem({ id }: { id: string }) {
           <CustomButton
             onClick={() => console.log("Добавлено")}
             text="В корзину"
+            options="w-full md:w-1/2"
           />
         </div>
       </div>

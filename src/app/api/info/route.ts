@@ -1,16 +1,11 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { info } from '@/lib/data/info';
+import { pool } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
     const { type, limitStr } = Object.fromEntries(searchParams.entries());
 
-    let newData = info;
-    if (type) {
-      newData = info.filter(item => item.type === type);
-    }
-    
     let limit: number | null = null;
     if (limitStr) {
       const parsedLimit = parseInt(limitStr, 10);
@@ -19,15 +14,25 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Ограничиваем по limit (если указан и валиден)
+    // Формируем запрос в зависимости от наличия limit
+    let query: string;
+    let params: any[];
+
     if (limit !== null) {
-      newData = newData.slice(0, limit);
+      query = `SELECT * FROM info WHERE info_type = $1 ORDER BY created_at DESC LIMIT $2`;
+      params = [type, limit];
+    } else {
+      // Если limit не указан или некорректен — просто не используем LIMIT
+      query = `SELECT * FROM info WHERE info_type = $1 ORDER BY created_at DESC`;
+      params = [type];
     }
-    
+
+    const data = await pool.query(query, params);
+
     return NextResponse.json(
       {
         success: true,
-        data: newData
+        data: data.rows
       },
       { status: 200 }
     );
@@ -43,4 +48,5 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
 

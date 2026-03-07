@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import productsData from "@/lib/data/products.json";
+import { pool } from "@/lib/db";
 
 export async function GET(
   request: Request,
@@ -7,22 +7,11 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const product = productsData.find(item => (item.id.toString()) === id);
-
-    if (!product) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Продукт не найден",
-        },
-        { status: 404 },
-      );
-    }
-    
+    const data = await pool.query(`SELECT * FROM products WHERE id=$1`, [id]);
     return NextResponse.json(
       {
         success: true,
-        data: product,
+        data: data.rows[0],
       },
       { status: 200 },
     );

@@ -3,26 +3,29 @@ import type { Metadata } from "next";
 import NewsSection from "@/components/sections/news";
 import ProductsSection from "@/components/sections/products";
 import BGBlob from "@/components/UI/bg-blob";
-import Decor from "@/components/decor";
 import AboutSection from "@/components/sections/about";
 import AssortmentSection from "@/components/sections/assortment";
+import { useCloudPath } from "@/lib/cloud";
 
 export const metadata: Metadata = {
-  // title: "Главная",
+  title: "Главная",
   description: "Главная страница содержит приветственную секцию, последние новости и акции, товары-новинки",
 };
 
-export default function Home() {
+
+export default async function Home() {
+  const cloudPath = await useCloudPath();
+
   return (
     <main area-label='главная страница' className={
       `w-full overflow-x-hidden pb-50`
     }>
       <BGBlob src={"/images/bg-blob.webp"} />
       <HeroSection />
-      <ProductsSection />
-      <NewsSection />
-      <AboutSection />
-      <AssortmentSection />
+      <ProductsSection cloudPath={cloudPath}/>
+      <NewsSection cloudPath={cloudPath}/>
+      <AboutSection cloudPath={cloudPath}/>
+      <AssortmentSection cloudPath={cloudPath}/>
     </main>
   );
 }

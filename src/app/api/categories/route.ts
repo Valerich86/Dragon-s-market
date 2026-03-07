@@ -1,15 +1,14 @@
 import { NextResponse } from 'next/server';
-import categoriesData from "@/lib/data/categories.json";
+import { pool } from '@/lib/db';
 
 export async function GET() {
   try {
-    // В реальном приложении здесь будет запрос к БД:
-    // const products = await db.products.findMany();
+    const data = await pool.query("SELECT * FROM categories ORDER BY name ASC");
 
     return NextResponse.json(
       {
         success: true,
-        data: categoriesData
+        data: data.rows
       },
       { status: 200 }
     );

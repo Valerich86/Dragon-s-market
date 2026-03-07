@@ -17,7 +17,15 @@ interface Props {
   links: NavLink[];
 }
 
-function BurgerMenu({ links }: Props) {
+const links = [
+  { name: "Kаталог", href: "/catalog" },
+  { name: "Новости", href: "/news" },
+  { name: "Как купить?", href: "/delivery" },
+  { name: "О нас", href: "/about" },
+  { name: "О товарах", href: "/assortment" },
+];
+
+function BurgerMenu() {
   const [isOpened, setIsOpened] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLDivElement>(null);

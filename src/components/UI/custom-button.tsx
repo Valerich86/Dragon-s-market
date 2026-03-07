@@ -1,15 +1,15 @@
 interface Props {
   onClick: () => void;
-  optional?: string;
+  options?: string;
   text: string;
 }
 
-export default function CustomButton({ onClick, optional, text }: Props) {
+export default function CustomButton({ onClick, options, text }: Props) {
   return (
     <button
       onClick={onClick}
-      className={`${optional} bg-accent py-2 z-10
-          p-2 rounded text-primary hover:shadow-[0px_0px_20px_-5px_#E23324] 
+      className={`${options} bg-accent z-10
+          p-2 rounded-full text-primary hover:shadow-[0px_0px_20px_-5px_#E23324] 
           theme-5:hover:shadow-[0px_0px_20px_-5px_#591628] transition duration-200 
           cursor-pointer outline-none active:scale-98`}
     >
