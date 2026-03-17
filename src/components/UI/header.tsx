@@ -42,7 +42,7 @@ export default function Header() {
 
   return (
     <header
-      className={`w-full fixed left-0 top-0 flex justify-between items-center z-50 bg-primary px-3 lg:pl-0`}
+      className={`w-full fixed left-0 top-0 flex justify-between items-center z-50 bg-primary h-12 px-3 lg:pl-0 border border-gray-600`}
     >
       {/* левые ссылки */}
       <div className="flex justify-start items-center h-13 lg:gap-5 w-full lg:w-1/3">

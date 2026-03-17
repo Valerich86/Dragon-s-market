@@ -1,7 +1,8 @@
 "use client";
 
-import { font_mg, font_montserrat } from "@/lib/fonts";
+import { font_mg, font_heading } from "@/lib/fonts";
 import Image from "next/image";
+import Headline from "../UI/headline";
 
 type DayInfo = {
   day: string;
@@ -79,21 +80,21 @@ export default function DiscountPlan() {
     return (
       <div
         className={`${font_mg.className} text-primary border-5 rounded-2xl w-full
-      flex flex-col justify-center items-center gap-2 py-3 relative`}
+      flex flex-col justify-center items-center gap-1 py-2 relative`}
         style={{ backgroundColor: item.bgColor, borderColor: item.borderColor }}
       >
         <p className="uppercase">
-          <span className={`${font_montserrat.className}`}>{item.day}: </span>
+          <span className={`${font_heading.className}`}>{item.day}: </span>
           {item.description}
         </p>
-        <p>{item.categories}</p>
+        <p className="text-xs lg:text-sm">{item.categories}</p>
         <Image
           src={item.icon}
           alt="иконка дня недели"
-          width={200}
-          height={200}
+          width={300}
+          height={300}
           loading="lazy"
-          className="h-[80%] lg:h-full w-auto absolute -top-8 -left-4 lg:-left-8 lg:top-1/2 lg:-translate-y-[50%] hover:cursor-pointer hover:scale-110 hover:rotate-10 active:rotate-10 active:scale-110 transition-transform duration-300"
+          className="h-full lg:h-[140%] w-auto absolute -left-5 top-1/2 -translate-y-[50%] hover:cursor-pointer hover:scale-110 hover:rotate-10 active:rotate-10 active:scale-110 transition-transform duration-300"
         />
       </div>
     );
@@ -101,16 +102,7 @@ export default function DiscountPlan() {
 
   return (
     <section area-label="план скидок" className="section x-spacing">
-      <div className="w-full flex justify-center">
-        <Image
-          src={"/images/plan-heading.webp"}
-          alt="заголовок"
-          width={200}
-          height={200}
-          loading="eager"
-          className="w-[90%] lg:w-1/3 h-auto mb-10"
-        />
-      </div>
+      <Headline text="Драконий план скидок" emojiIndex={19}/>
       <div className="w-full flex flex-wrap gap-10 justify-center text-sm lg:text-lg">
         <div className="flex flex-col gap-10 w-full lg:w-[45%]">
           {daysInfo1.map((item, index) => (

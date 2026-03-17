@@ -1,5 +1,5 @@
 import { font_accent, font_asian2, font_asian3, font_light } from "@/lib/fonts";
-import IntroAnimation from "../animation/intro";
+import IntroAnimation from "../animation/sparkles";
 import CustomButton from "../UI/custom-button";
 import DarknedImage from "../UI/darkned-image";
 import BGBlob from "../UI/bg-blob";

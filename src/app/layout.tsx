@@ -6,6 +6,7 @@ import Footer from "@/components/UI/footer";
 import Decor from "@/components/decor";
 import BackButton from "@/components/UI/back-button";
 import "./globals.css";
+import SparklesAnimation from "@/components/animation/sparkles";
 
 export const metadata: Metadata = {
   title: {
@@ -27,6 +28,7 @@ export default function RootLayout({
         {/* <ThemeProviderWrapper> */}
           <Header />
           {/* <Decor /> */}
+          {/* <SparklesAnimation /> */}
           <BackButton />
           <div
             className={`bg-primary text-secondary`}

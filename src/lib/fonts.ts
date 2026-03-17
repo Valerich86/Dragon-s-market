@@ -52,7 +52,7 @@ export const font_mg = localFont({
   src: "../../public/fonts/milligram/Milligram-Text-Bold-trial.ttf",
 });
 
-export const font_montserrat = localFont({
+export const font_heading = localFont({
   src: "../../public/fonts/montserrat/Montserrat-Black.ttf",
 });
 
