@@ -8,15 +8,6 @@ import { SlMenu } from "react-icons/sl";
 import { PiTelegramLogoLight } from "react-icons/pi";
 import ThemeSwitcher from "../theme-switcher";
 
-type NavLink = {
-  href: string;
-  name: string;
-};
-
-interface Props {
-  links: NavLink[];
-}
-
 const links = [
   { name: "Kаталог", href: "/catalog" },
   { name: "Новости", href: "/news" },
@@ -24,6 +15,11 @@ const links = [
   { name: "О нас", href: "/about" },
   { name: "О товарах", href: "/assortment" },
 ];
+
+// const links_2 = [
+//   {name: "Корзина", href: "/basket"},
+//   {name: "Профиль", href: "/profile"},
+// ];
 
 function BurgerMenu() {
   const [isOpened, setIsOpened] = useState(false);
@@ -56,12 +52,12 @@ function BurgerMenu() {
 
   return (
     <>
-      <div ref={iconRef} className="h-full flex items-center">
+      <div ref={iconRef} className="h-full flex items-center lg:hidden">
         <button
           className="link"
           onClick={() => setIsOpened(isOpened ? false : true)}
         >
-          <SlMenu size={20} className="lg:w-2/3" color="black"/>
+          <SlMenu size={20} className="lg:w-2/3" color="white"/>
         </button>
       </div>
       <AnimatePresence>
@@ -79,7 +75,7 @@ function BurgerMenu() {
               handleSwipe(swipeDistance);
             }}
             area-label="основная навигация (смартфон)"
-            className={` py-5 px-5 rounded-r-xl absolute left-0 top-15 bg-primary text-secondary shadow-xl
+            className={` py-5 px-5 rounded-r-xl absolute left-0 top-15 z-50 bg-primary text-secondary shadow-xl
             flex flex-col gap-5 border border-gray-200`}
           >
             <div className="pb-5 border-b border-gray-400 flex flex-col items-center gap-y-5">
@@ -103,7 +99,7 @@ function BurgerMenu() {
                 {link.name}
               </Link>
             ))}
-            <ThemeSwitcher />
+            {/* <ThemeSwitcher /> */}
           </motion.div>
         )}
       </AnimatePresence>

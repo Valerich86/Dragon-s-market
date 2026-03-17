@@ -10,6 +10,7 @@ export type Product = {
   is_active: boolean;
   to_carousel: boolean;
   status: "new" | "sale" | "default";
+  category_id: string;
 };
 
 export type Category = {

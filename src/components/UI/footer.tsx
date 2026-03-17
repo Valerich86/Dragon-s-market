@@ -11,7 +11,7 @@ type FooterLink = {
 const leftLinks = [
   { name: "О нас", href: "/about" },
   { name: "Новости", href: "/news" },
-  { name: "Отзывы", href: "/" },
+  { name: "Отзывы", href: "" },
 ];
 
 const rightLinks = [
@@ -36,7 +36,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="absolute bg-maskot2/80 text-primary w-full x-spacing flex flex-col lg:text-xs z-10">
+    <footer className="absolute bg-maskot2/80 text-secondary w-full x-spacing flex flex-col lg:text-xs z-10">
       <div className="flex flex-col lg:flex-row lg:justify-between gap-20 lg:gap-0 py-10 border-b border-gray-200">
         <FooterBlock links={leftLinks} />
         <FooterBlock links={rightLinks} />
@@ -48,7 +48,7 @@ export default function Footer() {
             href={"https://t.me/dragonbazarmag"}
             target="_blank"
             aria-label="Telegram"
-            className="link flex gap-2 w-2/3 bg-gray-200 rounded-full py-1 text-secondary justify-center items-center"
+            className="link flex gap-2 w-2/3 bg-gray-200 rounded-full py-1 text-primary justify-center items-center"
           >
             <PiTelegramLogoLight size={20} />
             <span>мы в Telegram</span>

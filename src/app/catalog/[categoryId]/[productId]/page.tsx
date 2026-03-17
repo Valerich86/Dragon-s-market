@@ -1,8 +1,11 @@
 import { Metadata, ResolvingMetadata } from "next";
 import BGBlob from "@/components/UI/bg-blob";
-import ProductsList from "@/components/lists/products";
-import ProductItem from "@/components/items/product-item";
+import { pool } from "@/lib/db";
 import { useCloudPath } from "@/lib/cloud";
+import ProductImage from "@/components/UI/product-image";
+import CustomButton from "@/components/UI/custom-button";
+import { font_accent } from "@/lib/fonts";
+import ProductSection from "@/components/sections/product";
 
 export async function generateMetadata(
   {
@@ -10,13 +13,11 @@ export async function generateMetadata(
     searchParams,
   }: {
     params: Promise<{ productId: string }>;
-    searchParams: Promise<{ categoryName: string, productName: string }>;
+    searchParams: Promise<{ categoryName: string; productName: string }>;
   },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  // Разворачиваем searchParams с помощью await
-  const {categoryName, productName} = await searchParams;
-
+  const { categoryName, productName } = await searchParams;
   let product = "Неизвестный товар";
   if (productName) {
     product = decodeURIComponent(productName);
@@ -25,10 +26,8 @@ export async function generateMetadata(
   if (categoryName) {
     category = decodeURIComponent(categoryName);
   }
-
   const title = `${category} | ${product}`;
   const description = `Купить ${product.toLowerCase()} в магазине азиатских снеков "Драконий базар", Пермь`;
-
   return {
     title,
     description,
@@ -45,11 +44,22 @@ export default async function ProductPage({
 }) {
   const { productId } = await params;
   const cloudPath = await useCloudPath();
+  const data = await pool.query(`SELECT * FROM products WHERE id=$1`, [
+    productId,
+  ]);
+  const product = data.rows[0];
+
+  if (!product)
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        Товар не найден
+      </div>
+    );
 
   return (
     <main area-label="товар" className={`w-full overflow-x-hidden z-50`}>
       <BGBlob src={"/images/bg-blob.webp"} />
-      <ProductItem id={productId} cloudPath={cloudPath}/>
+      <ProductSection product={product} cloudPath={cloudPath}/>
     </main>
   );
 }

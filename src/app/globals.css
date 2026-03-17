@@ -4,7 +4,8 @@
 p,
 span,
 pre,
-h1, h2 {
+h1,
+h2 {
   text-wrap: initial;
   caret-color: transparent;
   user-select: none;
@@ -41,40 +42,53 @@ video::--webkit-media-controls-start-playback-button {
 @theme {
   --animate-shining: shining 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   --animate-shining-intro: shining 2s ease-in-out forwards;
+  --animate-spin: spin 5s linear infinite;
+  --animate-address: address 0.7s ease-in;
 
-@keyframes shining {
-  0% {
-    opacity: 0;
-    filter: blur(20px) brightness(1.8) drop-shadow(0 0 25px rgba(255, 200, 100, 0.8));
-    transform: scale(0.8);
+  @keyframes address {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
   }
-  60% {
-    opacity: 1;
-    filter: blur(8px) brightness(1.5) drop-shadow(0 0 35px rgba(255, 220, 150, 0.6));
-    transform: scale(1.05);
-  }
-  80% {
-    opacity: 1;
-    filter: blur(4px) brightness(1.3) drop-shadow(0 0 25px rgba(255, 230, 180, 0.5));
-    transform: scale(1);
-  }
-  100% {
-    opacity: 1;
-    filter: blur(0) brightness(1) drop-shadow(0);
-    transform: scale(1);
-  }
-}
 
-  --color-primary: #fefefe;
-  --color-secondary: #080808; 
-  --color-accent: #E23324;
+  @keyframes shining {
+    0% {
+      opacity: 0;
+      filter: blur(20px) brightness(1.8)
+        drop-shadow(0 0 25px rgba(255, 200, 100, 0.8));
+      transform: scale(0.8);
+    }
+    60% {
+      opacity: 1;
+      filter: blur(8px) brightness(1.5)
+        drop-shadow(0 0 35px rgba(255, 220, 150, 0.6));
+      transform: scale(1.05);
+    }
+    80% {
+      opacity: 1;
+      filter: blur(4px) brightness(1.3)
+        drop-shadow(0 0 25px rgba(255, 230, 180, 0.5));
+      transform: scale(1);
+    }
+    100% {
+      opacity: 1;
+      filter: blur(0) brightness(1) drop-shadow(0);
+      transform: scale(1);
+    }
+  }
 
-  --color-maskot1: #A7A18D;
-  --color-maskot2: #403D3E;
+  --color-primary: #080808;
+  --color-secondary: #fefefe;
+  --color-accent: #e23324;
+
+  --color-maskot1: #a7a18d;
+  --color-maskot2: #403d3e;
   --color-maskot3: #591628;
-  --color-maskot4: #A65C41;
-  --color-maskot5: #F2785C;
-
+  --color-maskot4: #a65c41;
+  --color-maskot5: #f2785c;
 }
 
 .link {
@@ -90,9 +104,5 @@ video::--webkit-media-controls-start-playback-button {
 }
 
 .heading {
-  @apply text-3xl lg:text-4xl lg:my-50 text-center; 
+  @apply text-3xl lg:text-4xl lg:my-50 text-center;
 }
-
-
-
-

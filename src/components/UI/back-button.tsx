@@ -25,7 +25,7 @@ export default function BackButton() {
     <>
       {pathname !== "/" && (
         <button
-          className="link fixed left-0 x-spacing top-18 text-3xl opacity-60 z-50 text-secondary dark:text-primary fire:text-primary"
+          className="link fixed left-0 x-spacing top-18 text-3xl opacity-60 z-40 text-secondary"
           onClick={() => {
             router.back();
           }}

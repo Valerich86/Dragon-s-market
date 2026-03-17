@@ -1,18 +1,36 @@
 import { font_accent } from "@/lib/fonts";
-import InfoList from "../lists/info";
 import NavLink from "../UI/nav-link";
+import { pool } from "@/lib/db";
+import NoInfo from "../no-info";
+import InfoItem from "../list-items/info-item";
 
-export default function AboutSection({cloudPath}:{cloudPath:string}) {
+export default async function AboutSection({
+  cloudPath,
+}: {
+  cloudPath: string;
+}) {
+  const data = await pool.query(
+    `SELECT * FROM info WHERE info_type = 'about' ORDER BY created_at DESC LIMIT 1`,
+  );
+
+  if (!data || data.rows.length === 0) return <NoInfo />;
 
   return (
-    <section
-      area-label="немного о нас"
-      className="section"
-    >
+    <section area-label="о нас" className="section">
       <h1 className={`${font_accent.className} heading`}>Немного о нас</h1>
-      <InfoList type={"about"} limit={1} cloudPath={cloudPath}/>
+      <div
+        className="w-full flex flex-col justify-center items-center gap-10 md:gap-0"
+      >
+        {data.rows.map((item) => (
+          <InfoItem key={item.id} item={item} cloudPath={cloudPath} />
+        ))}
+      </div>
       <div className="w-full flex justify-end x-spacing ">
-        <NavLink href="/about" name="Подробнее о нас ⇨" options="text-accent fire:text-gray-200 animate-pulse"/>
+        <NavLink
+          href="/about"
+          name="Подробнее о нас ⇨"
+          options="text-accent fire:text-gray-200 animate-pulse"
+        />
       </div>
     </section>
   );

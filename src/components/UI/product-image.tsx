@@ -1,3 +1,5 @@
+'use client';
+
 import { font_asian1 } from "@/lib/fonts";
 import Image from "next/image";
 import { Product } from "@/lib/types";
@@ -11,15 +13,15 @@ interface Props {
 export default function ProductImage({ product, cloudPath, captionOptions="" }: Props) {
   return (
     <>
-      <span
-        className={`${font_asian1.className} ${product.status === "default" ? "hidden" : ""} ${captionOptions} -rotate-30 absolute z-10 bg-maskot3 text-primary py-2 px-3 text-center`}
+      {/* <span
+        className={`${font_asian1.className} ${product.status === "default" ? "hidden" : ""} ${captionOptions} -rotate-30 absolute z-10 bg-maskot3 text-secondary py-2 px-3 text-center`}
       >
         {product.status === "new"
           ? "Новинка"
           : product.status === "sale"
             ? "Акция!"
             : ""}
-      </span>
+      </span> */}
       <Image
         src={
           product.image_url
@@ -30,7 +32,7 @@ export default function ProductImage({ product, cloudPath, captionOptions="" }: 
         width={200}
         height={200}
         loading="eager"
-        className="h-full w-full object-contain rounded-2xl"
+        className="h-full w-full object-contain rounded-2xl animate-shining"
         onError={(e) => {
           const target = e.target as HTMLImageElement;
           target.src = "/images/stickers/please_buy.webp";

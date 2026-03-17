@@ -1,32 +1,24 @@
-"use client";
-
-import { font_accent, font_asian2, font_asian3 } from "@/lib/fonts";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { font_accent, font_asian2, font_asian3, font_light } from "@/lib/fonts";
 import IntroAnimation from "../animation/intro";
 import CustomButton from "../UI/custom-button";
 import DarknedImage from "../UI/darkned-image";
 import BGBlob from "../UI/bg-blob";
+import DayProduct from "../UI/day-product";
+import { pool } from "@/lib/db";
 
-export default function HeroSection() {
-  const router = useRouter();
+export default async function HeroSection({cloudPath}:{cloudPath:string}) {
+  const dayProduct = await pool.query(`SELECT * FROM products WHERE to_carousel=TRUE AND is_active=TRUE AND stock_quantity>0`);
 
   return (
-    <section area-label="hero-секция" className="w-full h-screen flex justify-center items-center x-spacing relative ">
+    <section area-label="hero-секция" className="w-full h-screen flex justify-center items-end relative ">
       <DarknedImage src={"/images/bg4.webp"} options="w-screen h-screen bg-right"/>
-      <div className="w-full flex flex-col gap-10 items-center md:w-[80%] z-10">
-        <p
-          className={`${font_accent.className} font-[10px] uppercase text-2xl md:text-4xl leading-normal tracking-wide text-center`}
-        >
-          Какой азиатский снек перевернёт ваше представление о сладостях?
-        </p>
-        <CustomButton options="w-2/3 lg:w-1/3" onClick={() => router.push("/catalog")} text={"За покупками"}/>
+      <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-1/4 justify-center lg:items-end mb-10 z-10 lg:pr-30">
+        <div className="mb-10">
+          <p className={`${font_light.className} ml-3 lg:ml-10 mb-5`}>Наш адрес:</p>
+          <p className="animate-address bg-accent px-3 lg:px-10 text-xl lg:text-3xl">Пермь, Бульвар Гагарина, 83</p>
+        </div>
+        <DayProduct cloudPath={cloudPath} product={dayProduct.rows[2]}/>
       </div>
-      {/* <div className="absolute w-full lg:w-1/4 top-[55%] lg:top-[35%] left-1/3 lg:left-[65%]">
-        <IntroAnimation
-          src="/video/hero.webm"
-        />
-      </div> */}
     </section>
   );
 }

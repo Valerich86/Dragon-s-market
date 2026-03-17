@@ -132,7 +132,7 @@ export default function Decor() {
 
   return (
     <div
-      className={`fixed dark:hidden top-0 left-0 w-screen h-screen pointer-events-none overflow-hidden`}
+      className={`fixed top-0 left-0 w-screen h-screen pointer-events-none overflow-hidden`}
     >
       {images.map((image, index) => (
         <DecorItem

@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
 import { font_default } from "@/lib/fonts";
-import Header from "@/components/UI/header";
+import { Metadata } from "next";
 import { ThemeProviderWrapper } from "@/components/theme-provider-wrapper";
-import "./globals.css";
+import Header from "@/components/UI/header";
 import Footer from "@/components/UI/footer";
 import Decor from "@/components/decor";
 import BackButton from "@/components/UI/back-button";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
@@ -24,20 +24,17 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head></head>
       <body className={`${font_default.className} antialiased`}>
-        <ThemeProviderWrapper>
-          {/* <Breadcrumbs /> */}
+        {/* <ThemeProviderWrapper> */}
           <Header />
-          <Decor />
+          {/* <Decor /> */}
           <BackButton />
           <div
-            className={`
-            dark:bg-secondary dark:text-primary blob:bg-primary blob:text-secondary 
-            fire:text-primary fire:bg-linear-to-r from-black  to-maskot3`}
+            className={`bg-primary text-secondary`}
           >
             {children}
           </div>
           <Footer />
-        </ThemeProviderWrapper>
+        {/* </ThemeProviderWrapper> */}
       </body>
     </html>
   );

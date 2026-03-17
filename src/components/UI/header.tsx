@@ -42,26 +42,33 @@ export default function Header() {
 
   return (
     <header
-      className={`w-full fixed h-15 left-0 top-0 flex justify-between items-center z-50
-        border-b border-gray-200 bg-primary x-spacing`}
+      className={`w-full fixed left-0 top-0 flex justify-between items-center z-50 bg-primary px-3 lg:pl-0`}
     >
       {/* левые ссылки */}
-      <div className="flex justify-start items-center gap-5 w-1/3 md:w-1/3">
-        <Link href={"/"} className="">
+      <div className="flex justify-start items-center h-13 lg:gap-5 w-full lg:w-1/3">
+        <BurgerMenu />
+        <Image
+          src={"/images/hieroglyphs.webp"}
+          alt="logo"
+          width={150}
+          height={150}
+          loading="eager"
+          className="h-1/2 lg:h-full w-auto select-none pointer-events-none hidden lg:block"
+        />
+        <Link href={"/"} className="h-[90%] lg:h-[110%]">
           <Image
             src={
               screenWidth > 500
-                ? `/images/logo-desktop.webp`
-                : `/images/logo-mobile.webp`
+                ? `/images/logo-white.webp`
+                : `/images/logo-white.webp`
             }
             alt="logo"
             width={150}
             height={100}
             loading="eager"
-            className="w-full select-none pointer-events-none "
+            className="h-full w-auto select-none pointer-events-none "
           />
         </Link>
-        <BurgerMenu />
       </div>
 
       {/* центральные ссылки */}
@@ -75,8 +82,8 @@ export default function Header() {
       </nav>
 
       {/* правые ссылки */}
-      <div className="flex justify-end items-center w-1/2 md:w-1/3 h-full">
-        <SearchInput screenWidth={screenWidth}/>
+      <div className="flex justify-end items-center w-1/2 lg:w-1/3 h-full">
+        <SearchInput screenWidth={screenWidth} />
         {rightLinks.map((item, index) => {
           return <NavIcon key={index} href={item.href} icon={item.icon} />;
         })}
