@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSwipeable } from "react-swipeable";
 import Headline from "../UI/headline";
 import type { Product } from "@/lib/types";
-import CarouselItem from "../list-items/carousel-item";
+import CarouselItem from "../cards/carousel-item";
 
 interface Props {
   cloudPath: string;
@@ -95,7 +95,7 @@ export default function CarouselSection({ cloudPath }: Props) {
   if (!products || products.length === 0) return null;
 
   return (
-    <section aria-label="новинки или акции" className="section x-spacing mt-20">
+    <section aria-label="новинки или акции" className="section x-spacing">
       {/* <Headline text={`Нежданный вкус -
 как первый луч в темноте...
 Сердце встрепенулось.`} /> */}

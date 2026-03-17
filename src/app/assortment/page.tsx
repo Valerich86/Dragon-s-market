@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { useCloudPath } from "@/lib/cloud";
 import { pool } from "@/lib/db";
 import NoInfo from "@/components/no-info";
-import InfoItem from "@/components/list-items/info-item";
+import InfoItem from "@/components/cards/info-item";
 
 export const metadata: Metadata = {
   title: "О товарах",

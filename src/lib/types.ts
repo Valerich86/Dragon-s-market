@@ -1,5 +1,5 @@
 export type Product = {
-  id: number;
+  id: string;
   name: string;
   weight?: number;
   description: string;
@@ -14,7 +14,7 @@ export type Product = {
 };
 
 export type Category = {
-  id: number;
+  id: string;
   name: string;
   description: string;
   image_url: string;

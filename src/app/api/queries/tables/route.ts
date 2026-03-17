@@ -8,10 +8,7 @@ const createTablesQuery = `
   CREATE TABLE IF NOT EXISTS categories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) NOT NULL,
-    description TEXT,
-    image_url VARCHAR(500),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    description TEXT
   );
 
   CREATE TABLE IF NOT EXISTS products (
@@ -28,7 +25,11 @@ const createTablesQuery = `
     status VARCHAR(10),
     to_carousel BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_products_category
+        FOREIGN KEY (category_id)
+        REFERENCES categories(id)
+        ON DELETE CASCADE
   );
 
   CREATE TABLE IF NOT EXISTS customers (
@@ -41,14 +42,18 @@ const createTablesQuery = `
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
   );
 
-  CREATE TABLE cart_items (
+  CREATE TABLE IF NOT EXISTS cart_items (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_id UUID REFERENCES customers(id),
     product_id UUID REFERENCES products(id),
     quantity INTEGER NOT NULL CHECK (quantity > 0),
     unit_price DECIMAL(10, 2) NOT NULL,
     total_price DECIMAL(10, 2) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_cart_items_products
+        FOREIGN KEY (product_id)
+        REFERENCES products(id)
+        ON DELETE CASCADE
   );
 
   CREATE TABLE IF NOT EXISTS customer_addresses (
@@ -82,7 +87,11 @@ const createTablesQuery = `
     product_id UUID REFERENCES products(id),
     quantity INTEGER NOT NULL,
     unit_price DECIMAL(10, 2) NOT NULL,
-    total_price DECIMAL(10, 2) NOT NULL
+    total_price DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT fk_order_items_products
+        FOREIGN KEY (product_id)
+        REFERENCES products(id)
+        ON DELETE CASCADE
   );
 
   CREATE TABLE IF NOT EXISTS reviews (
@@ -94,7 +103,11 @@ const createTablesQuery = `
     title VARCHAR(255),
     content TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_reviews_products
+        FOREIGN KEY (product_id)
+        REFERENCES products(id)
+        ON DELETE CASCADE
   );
 
   CREATE TABLE IF NOT EXISTS info (
@@ -204,19 +217,28 @@ const createIndexesQuery = `
 `;
 
 const enteringTestCategories = `
-  INSERT INTO categories (name, description, image_url) VALUES
-('Японские снеки', 'Чипсы нори, крекеры с васаби, рисовые шарики и другие традиционные японские закуски', 'japanese-snacks.webp'),
-('Корейские сладости', 'Рисовые пирожные, конфеты с традиционными вкусами Кореи', 'korean-sweets.webp'),
-('Китайские снеки', 'Орехи в карамели, сушёные фрукты, хрустящие водоросли', 'chinese-snacks.webp'),
-('Тайские сладости', 'Кокосовые конфеты, манго в сиропе, липкий рис с фруктами', 'thai-sweets.webp'),
-('Вьетнамские десерты', 'Рисовые лепёшки, фруктовые рулеты, карамелизованные сладости', 'vietnamese-desserts.webp'),
-('Малайзийские сладости', 'Традиционные кетупаты, сладкие кокосовые пудинги', 'malaysian-sweets.webp'),
-('Традиционный чай', 'Зелёный чай, улун, пуэр и другие сорта азиатского чая', 'traditional-tea.webp'),
-('Газированные напитки Азии', 'Уникальные газировки из Японии, Кореи, Таиланда', 'asian-sodas.webp'),
-('Энергетические напитки', 'Азиатские энергетики с женьшенем, гуараной и другими компонентами', 'energy-drinks.webp'),
-('Рисовые сладости', 'Моти, данго, другие десерты на основе клейкого риса', 'rice-sweets.webp'),
-('Орехи и сухофрукты', 'Жареные орехи, сушёные манго, драконий фрукт и другие', 'nuts-dried-fruits.webp'),
-('Морские снеки', 'Сушёные кальмары, рыба в соусе, морские водоросли', 'seafood-snacks.webp');
+  INSERT INTO categories (name) VALUES
+('Чипсы'),
+('Лапша'),
+('Напитки'),
+('Энергетики'),
+('Карточки коллекционные'),
+('Чай'),
+('Мармелад/Маршмеллоу/Желе'),
+('Токпокки'),
+('Жевательная резинка'),
+('Конфеты в упаковках'),
+('Соевые снеки малые'),
+('Соевые снеки большие'),
+('Игрушки с конфетами'),
+('Брелоки'),
+('Вафли/Печенье/Крекеры'),
+('Соусы/Заправки'),
+('Закуски'),
+('Конфеты весовые'),
+('Шоколад'),
+('Игрушки'),
+('Сухофрукты');
 `;
 
 const enteringTestInfo = `
@@ -291,69 +313,69 @@ const enteringTestProducts = `
   image_url, status, to_carousel) VALUES 
 
   -- Японские снеки
-  ('Чипсы нори Original', 50, 'Классические хрустящие чипсы из морских водорослей', 250.00, 280.00, 100, '6fdb3ec2-824a-47b0-95fa-a8dc39f2b5f4', 'nori.webp', 'sale', TRUE),
-  ('Крекеры с васаби', 80, 'Острые крекеры с добавлением настоящего васаби', 180.00, NULL, 75, '6fdb3ec2-824a-47b0-95fa-a8dc39f2b5f4', 'kreckers.webp', 'default', FALSE),
-  ('Рисовые шарики с кунжутом', 120, 'Традиционные японские рисовые шарики, обжаренные с кунжутом', 220.00, 240.00, 50, '6fdb3ec2-824a-47b0-95fa-a8dc39f2b5f4', 'shariki.webp', 'sale', FALSE),
-  ('Сушёный кальмар с соевым соусом', 60, 'Нежные полоски сушёного кальмара в соевом маринаде', 320.00, NULL, 40, '6fdb3ec2-824a-47b0-95fa-a8dc39f2b5f4', 'calmar.webp', 'default', FALSE),
+  ('Чипсы нори Original', 50, 'Классические хрустящие чипсы из морских водорослей', 250.00, 280.00, 100, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'nori.webp', 'sale', TRUE),
+  ('Крекеры с васаби', 80, 'Острые крекеры с добавлением настоящего васаби', 180.00, NULL, 75, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'kreckers.webp', 'default', FALSE),
+  ('Рисовые шарики с кунжутом', 120, 'Традиционные японские рисовые шарики, обжаренные с кунжутом', 220.00, 240.00, 50, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'shariki.webp', 'sale', FALSE),
+  ('Сушёный кальмар с соевым соусом', 60, 'Нежные полоски сушёного кальмара в соевом маринаде', 320.00, NULL, 40, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'calmar.webp', 'default', FALSE),
 
   -- Корейские сладости
-  ('Рисовое пирожное с красной фасолью', 90, 'Мягкое рисовое пирожное с начинкой из сладкой красной фасоли', 190.00, 210.00, 60, '55f59c34-ff75-4ab8-9ee1-c6e0569919e0', 'cake_fasol.webp', 'sale', FALSE),
-  ('Корейские конфеты Yujacha', 150, 'Цитрусовые конфеты с ароматом юджа', 280.00, NULL, 80, '55f59c34-ff75-4ab8-9ee1-c6e0569919e0', NULL, 'default', FALSE),
-  ('Печенье с мёдом и имбирём', 200, 'Хрустящее печенье с тёплым медово‑имбирным вкусом', 240.00, 260.00, 70, '55f59c34-ff75-4ab8-9ee1-c6e0569919e0', 'cookies_honey.webp', 'sale', FALSE),
+  ('Рисовое пирожное с красной фасолью', 90, 'Мягкое рисовое пирожное с начинкой из сладкой красной фасоли', 190.00, 210.00, 60, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'cake_fasol.webp', 'sale', FALSE),
+  ('Корейские конфеты Yujacha', 150, 'Цитрусовые конфеты с ароматом юджа', 280.00, NULL, 80, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', NULL, 'default', FALSE),
+  ('Печенье с мёдом и имбирём', 200, 'Хрустящее печенье с тёплым медово‑имбирным вкусом', 240.00, 260.00, 70, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'cookies_honey.webp', 'sale', FALSE),
 
   -- Китайские снеки
-  ('Орехи в карамели', 180, 'Арахис и кешью в хрустящей карамельной глазури', 350.00, NULL, 90, '63987dae-25b3-43b3-9a17-3d418b4944f6', 'nuts_caramello.webp', 'new', TRUE),
-  ('Сушёные манго полоски', 100, 'Натуральные полоски сушёного манго без добавок', 290.00, 320.00, 120, '63987dae-25b3-43b3-9a17-3d418b4944f6', 'mango_slices.webp', 'sale', FALSE),
-  ('Хрустящие водоросли', 45, 'Тонкие листы хрустящих морских водорослей с солью', 160.00, NULL, 150, '63987dae-25b3-43b3-9a17-3d418b4944f6', 'Yaki_Sushi.webp', 'default', FALSE),
+  ('Орехи в карамели', 180, 'Арахис и кешью в хрустящей карамельной глазури', 350.00, NULL, 90, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'nuts_caramello.webp', 'new', TRUE),
+  ('Сушёные манго полоски', 100, 'Натуральные полоски сушёного манго без добавок', 290.00, 320.00, 120, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'mango_slices.webp', 'sale', FALSE),
+  ('Хрустящие водоросли', 45, 'Тонкие листы хрустящих морских водорослей с солью', 160.00, NULL, 150, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'Yaki_Sushi.webp', 'default', FALSE),
 
   -- Тайские сладости
-  ('Кокосовые конфеты', 120, 'Нежные конфеты с натуральным кокосовым кремом', 270.00, 300.00, 85, '0d73484a-041a-4d05-9a94-9800921cdd36', 'my_chewy.webp', 'sale', FALSE),
-  ('Манго в сиропе', 250, 'Спелое манго в лёгком сахарном сиропе', 380.00, NULL, 65, '0d73484a-041a-4d05-9a94-9800921cdd36', 'mango_sirop.webp', 'default', FALSE),
-  ('Липкий рис с фруктами', 180, 'Традиционный десерт из клейкого риса с фруктовыми добавками', 310.00, 340.00, 45, '0d73484a-041a-4d05-9a94-9800921cdd36', 'rice_fruits.webp', 'sale', FALSE),
+  ('Кокосовые конфеты', 120, 'Нежные конфеты с натуральным кокосовым кремом', 270.00, 300.00, 85, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'my_chewy.webp', 'sale', FALSE),
+  ('Манго в сиропе', 250, 'Спелое манго в лёгком сахарном сиропе', 380.00, NULL, 65, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'mango_sirop.webp', 'default', FALSE),
+  ('Липкий рис с фруктами', 180, 'Традиционный десерт из клейкого риса с фруктовыми добавками', 310.00, 340.00, 45, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'rice_fruits.webp', 'sale', FALSE),
 
   -- Вьетнамские десерты
-  ('Рисовая лепёшка с кокосом', 110, 'Тонкая рисовая лепёшка с нежными кокосовыми нотками', 210.00, NULL, 70, 'ba899c3d-762a-4a6c-b25d-d6766b6fbc91', 'banh_trang.webp', 'default', FALSE),
-  ('Фруктовый рулет с манго', 130, 'Натуральный фруктовый рулет из сушёного манго', 260.00, 290.00, 55, 'ba899c3d-762a-4a6c-b25d-d6766b6fbc91', NULL, 'sale', FALSE),
-  ('Карамелизованные бананы', 160, 'Сушёные бананы в карамельной глазури', 230.00, NULL, 80, 'ba899c3d-762a-4a6c-b25d-d6766b6fbc91', 'banans_caramello.webp', 'new', TRUE),
+  ('Рисовая лепёшка с кокосом', 110, 'Тонкая рисовая лепёшка с нежными кокосовыми нотками', 210.00, NULL, 70, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'banh_trang.webp', 'default', FALSE),
+  ('Фруктовый рулет с манго', 130, 'Натуральный фруктовый рулет из сушёного манго', 260.00, 290.00, 55, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', NULL, 'sale', FALSE),
+  ('Карамелизованные бананы', 160, 'Сушёные бананы в карамельной глазури', 230.00, NULL, 80, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'banans_caramello.webp', 'new', TRUE),
 
   -- Малайзийские сладости
-  ('Кетупат с пальмовым сахаром', 140, 'Традиционные рисовые клецки с пальмовым сахаром', 280.00, 310.00, 40, 'a6fe91a1-55c0-42bc-b38d-b60f67ade0b8', 'ketupat.webp', 'sale', TRUE),
-  ('Кокосовый пудинг', 200, 'Нежный пудинг на основе кокосового молока', 320.00, NULL, 60, 'a6fe91a1-55c0-42bc-b38d-b60f67ade0b8', 'puding.webp', 'default', FALSE),
+  ('Кетупат с пальмовым сахаром', 140, 'Традиционные рисовые клецки с пальмовым сахаром', 280.00, 310.00, 40, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'ketupat.webp', 'sale', TRUE),
+  ('Кокосовый пудинг', 200, 'Нежный пудинг на основе кокосового молока', 320.00, NULL, 60, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'puding.webp', 'default', FALSE),
 
   -- Традиционный чай
-  ('Зелёный чай Сенча', 50, 'Японский зелёный чай с тонким травяным ароматом', 450.00, NULL, 30, '7123fdde-1f05-42ca-a1db-5abd7c278df1', 'sencha.webp', 'default', FALSE),
-  ('Улун молочный', 100, 'Полуферментированный чай с нежным молочным ароматом', 680.00, 720.00, 25, '7123fdde-1f05-42ca-a1db-5abd7c278df1', 'ulun.webp', 'sale', FALSE),
-  ('Пуэр Шу', 357, 'Выдержанный китайский пуэр в прессованном виде', 890.00, NULL, 20, '7123fdde-1f05-42ca-a1db-5abd7c278df1', 'puer_shu.webp', 'default', FALSE),
+  ('Зелёный чай Сенча', 50, 'Японский зелёный чай с тонким травяным ароматом', 450.00, NULL, 30, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'sencha.webp', 'default', FALSE),
+  ('Улун молочный', 100, 'Полуферментированный чай с нежным молочным ароматом', 680.00, 720.00, 25, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'ulun.webp', 'sale', FALSE),
+  ('Пуэр Шу', 357, 'Выдержанный китайский пуэр в прессованном виде', 890.00, NULL, 20, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'puer_shu.webp', 'default', FALSE),
 
   -- Газированные напитки Азии
-  ('Газировка Ramune', 330, 'Японская газировка в бутылке с шариком', 220.00, 240.00, 100, 'cb90f0df-eccb-4c68-864c-e7448174cd7c', 'ramune.webp', 'sale', TRUE),
-  ('Азиатский лимонад Юдзу', 500, 'Освежающий лимонад с цитрусом юдзу', 280.00, NULL, 80, 'cb90f0df-eccb-4c68-864c-e7448174cd7c', 'udzu.webp', 'default', FALSE),
-  ('Кола с личи', 330, 'Газировка с экзотическим вкусом личи', 190.00, NULL, 120, 'cb90f0df-eccb-4c68-864c-e7448174cd7c', 'cola_lichy.webp', 'new', TRUE),
+  ('Газировка Ramune', 330, 'Японская газировка в бутылке с шариком', 220.00, 240.00, 100, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'ramune.webp', 'sale', TRUE),
+  ('Азиатский лимонад Юдзу', 500, 'Освежающий лимонад с цитрусом юдзу', 280.00, NULL, 80, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'udzu.webp', 'default', FALSE),
+  ('Кола с личи', 330, 'Газировка с экзотическим вкусом личи', 190.00, NULL, 120, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'cola_lichy.webp', 'new', TRUE),
 
   -- Энергетические напитки
-  ('Энергетик с женьшенем', 250, 'Тонизирующий напиток с экстрактом женьшеня', 260.00, NULL, 70, '6f709f6a-cb84-4e65-a424-989efa998816', 'energy_ginseng.webp', 'default', FALSE),
-  ('Гуарана тропическая', 330, 'Энергетик с экстрактом гуараны и тропическими фруктами', 290.00, 320.00, 60, '6f709f6a-cb84-4e65-a424-989efa998816', 'guarana.webp', 'sale', TRUE),
+  ('Энергетик с женьшенем', 250, 'Тонизирующий напиток с экстрактом женьшеня', 260.00, NULL, 70, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'energy_ginseng.webp', 'default', FALSE),
+  ('Гуарана тропическая', 330, 'Энергетик с экстрактом гуараны и тропическими фруктами', 290.00, 320.00, 60, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'guarana.webp', 'sale', TRUE),
 
   -- Рисовые сладости
-  ('Моти с клубникой', 150, 'Японские рисовые пирожные с клубничной начинкой', 340.00, 370.00, 50, '30a14566-3784-413b-b0f7-78b9102b8824', 'moti_strawberry.webp', 'sale', FALSE),
-  ('Данго с соусом анко', 120, 'Рисовые клёцки с пастой из красной фасоли', 280.00, NULL, 40, '30a14566-3784-413b-b0f7-78b9102b8824', 'dango.webp', 'default', FALSE),
-  ('Рисовый пирог с кунжутом', 180, 'Традиционный японский десерт с чёрным кунжутом', 310.00, NULL, 35, '30a14566-3784-413b-b0f7-78b9102b8824', NULL, 'default', FALSE),
+  ('Моти с клубникой', 150, 'Японские рисовые пирожные с клубничной начинкой', 340.00, 370.00, 50, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'moti_strawberry.webp', 'sale', FALSE),
+  ('Данго с соусом анко', 120, 'Рисовые клёцки с пастой из красной фасоли', 280.00, NULL, 40, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'dango.webp', 'default', FALSE),
+  ('Рисовый пирог с кунжутом', 180, 'Традиционный японский десерт с чёрным кунжутом', 310.00, NULL, 35, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', NULL, 'default', FALSE),
 
   -- Орехи и сухофрукты
-  ('Жареный кешью', 200, 'Отборные кешью, обжаренные до золотистого цвета', 520.00, NULL, 45, '4b42c522-cd05-4911-9073-694b3567de18', 'keshiu.webp', 'default', FALSE),
-  ('Сушёный драконий фрукт', 150, 'Экзотические кусочки питахайи', 480.00, 510.00, 30, '4b42c522-cd05-4911-9073-694b3567de18', 'dragonfruit.webp', 'sale', FALSE),
+  ('Жареный кешью', 200, 'Отборные кешью, обжаренные до золотистого цвета', 520.00, NULL, 45, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'keshiu.webp', 'default', FALSE),
+  ('Сушёный драконий фрукт', 150, 'Экзотические кусочки питахайи', 480.00, 510.00, 30, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'dragonfruit.webp', 'sale', FALSE),
 
   -- Морские снеки
-  ('Сушёный кальмар с васаби', 80, 'Острые полоски сушёного кальмара с пикантным васаби', 380.00, 420.00, 60, '7171c3a7-9ece-4bee-9802-eee777e80774', 'calmar_vasabi.webp', 'sale', FALSE),
-  ('Хрустящие анчоусы', 50, 'Маринованные анчоусы в хрустящей панировке', 290.00, NULL, 85, '7171c3a7-9ece-4bee-9802-eee777e80774', 'anchous.webp', 'default', FALSE),
-  ('Кольца кальмара в соевом соусе', 120, 'Нежные кольца кальмара, маринованные в азиатском соевом соусе', 450.00, NULL, 40, '7171c3a7-9ece-4bee-9802-eee777e80774', NULL, 'default', FALSE),
-  ('Сушёные креветки с чили', 70, 'Ароматные креветки с острым тайским чили', 410.00, 440.00, 55, '7171c3a7-9ece-4bee-9802-eee777e80774', 'krevetka.webp', 'sale', FALSE)
+  ('Сушёный кальмар с васаби', 80, 'Острые полоски сушёного кальмара с пикантным васаби', 380.00, 420.00, 60, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'calmar_vasabi.webp', 'sale', FALSE),
+  ('Хрустящие анчоусы', 50, 'Маринованные анчоусы в хрустящей панировке', 290.00, NULL, 85, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'anchous.webp', 'default', FALSE),
+  ('Кольца кальмара в соевом соусе', 120, 'Нежные кольца кальмара, маринованные в азиатском соевом соусе', 450.00, NULL, 40, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', NULL, 'default', FALSE),
+  ('Сушёные креветки с чили', 70, 'Ароматные креветки с острым тайским чили', 410.00, 440.00, 55, '51baf9d7-06c1-4816-ab5d-5a18adcd7799', 'krevetka.webp', 'sale', FALSE)
   `;
 
 export async function GET() {
   try {
     await pool.query("BEGIN");
-    // await pool.query(createTablesQuery);
+    await pool.query(createTablesQuery);
     // await pool.query(createIndexesQuery);
     // await pool.query(enteringTestCategories);
     await pool.query(enteringTestProducts);

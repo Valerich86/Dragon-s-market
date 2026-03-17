@@ -2,7 +2,7 @@ import { font_accent } from "@/lib/fonts";
 import NavLink from "../UI/nav-link";
 import { pool } from "@/lib/db";
 import NoInfo from "../no-info";
-import InfoItem from "../list-items/info-item";
+import InfoItem from "../cards/info-item";
 
 export default async function NewsSection({
   cloudPath,

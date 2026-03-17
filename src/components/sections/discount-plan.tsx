@@ -20,7 +20,7 @@ const daysInfo1 = [
     categories: "Конфеты в упаковках • Жвачки",
     bgColor: "#BDDCEB",
     borderColor: "#9999FF",
-    icon: "/images/icons/4.webp",
+    icon: "/images/icons/4.png",
   },
   {
     day: "Вторник",
@@ -28,7 +28,7 @@ const daysInfo1 = [
     categories: "Напитки • Лапша • Соусы",
     bgColor: " #FC9B5E",
     borderColor: "#FF6600",
-    icon: "/images/icons/5.webp",
+    icon: "/images/icons/5.png",
   },
   {
     day: "Среда",
@@ -36,7 +36,7 @@ const daysInfo1 = [
     categories: "Мармелад • Сухофрукты • Желе",
     bgColor: "#FEB9C3",
     borderColor: "#FF99CC",
-    icon: "/images/icons/6.webp",
+    icon: "/images/icons/6.png",
   },
   {
     day: "Четверг",
@@ -44,7 +44,7 @@ const daysInfo1 = [
     categories: "Шоколад • Чай • Печенье",
     bgColor: " #A7CF9A",
     borderColor: "#336666",
-    icon: "/images/icons/7.webp",
+    icon: "/images/icons/7.png",
   },
 ];
 
@@ -55,7 +55,7 @@ const daysInfo2 = [
     categories: "Чипсы • Токпокки • Закуски",
     bgColor: "#BB99CC",
     borderColor: "#9900CC",
-    icon: "/images/icons/1.webp",
+    icon: "/images/icons/1.png",
   },
   {
     day: "Суббота",
@@ -63,7 +63,7 @@ const daysInfo2 = [
     categories: "Соевые снеки • Брелоки • Карточки",
     bgColor: "#FED17F",
     borderColor: "#FFBA24",
-    icon: "/images/icons/2.webp",
+    icon: "/images/icons/2.png",
   },
   {
     day: "Воскресенье",
@@ -71,7 +71,7 @@ const daysInfo2 = [
     categories: "Моти • Игрушки • Весовые конфеты",
     bgColor: "#FA7D7D",
     borderColor: "#FF0000",
-    icon: "/images/icons/3.webp",
+    icon: "/images/icons/3.png",
   },
 ];
 
@@ -94,7 +94,7 @@ export default function DiscountPlan() {
           width={300}
           height={300}
           loading="lazy"
-          className="h-full lg:h-[140%] w-auto absolute -left-5 top-1/2 -translate-y-[50%] hover:cursor-pointer hover:scale-110 hover:rotate-10 active:rotate-10 active:scale-110 transition-transform duration-300"
+          className="h-[120%] lg:h-[130%] z-10 w-auto absolute -left-4 top-1/2 -translate-y-[50%] hover:cursor-pointer hover:scale-110 hover:rotate-10 active:rotate-10 active:scale-110 transition-transform duration-300"
         />
       </div>
     );
@@ -103,13 +103,13 @@ export default function DiscountPlan() {
   return (
     <section area-label="план скидок" className="section x-spacing">
       <Headline text="Драконий план скидок" emojiIndex={19}/>
-      <div className="w-full flex flex-wrap gap-10 justify-center text-sm lg:text-lg">
-        <div className="flex flex-col gap-10 w-full lg:w-[45%]">
+      <div className="w-full flex flex-wrap gap-1 lg:gap-2 justify-center text-xs lg:text-lg">
+        <div className="flex flex-col gap-1 lg:gap-2 w-full lg:w-[45%]">
           {daysInfo1.map((item, index) => (
             <DayItem key={index} item={item} />
           ))}
         </div>
-        <div className="flex flex-col gap-10 w-full lg:w-[45%]">
+        <div className="flex flex-col gap-1 lg:gap-2 w-full lg:w-[45%]">
           {daysInfo2.map((item, index) => (
             <DayItem key={index} item={item} />
           ))}
