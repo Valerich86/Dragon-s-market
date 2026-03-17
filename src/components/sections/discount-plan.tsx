@@ -93,7 +93,7 @@ export default function DiscountPlan() {
           width={200}
           height={200}
           loading="lazy"
-          className="h-[80%] lg:h-full w-auto absolute -top-8 -left-4 lg:-left-8 lg:top-1/2 lg:-translate-y-[50%] hover:cursor-pointer hover:scale-110 hover:rotate-10 active:animate-ping transition-transform duration-300"
+          className="h-[80%] lg:h-full w-auto absolute -top-8 -left-4 lg:-left-8 lg:top-1/2 lg:-translate-y-[50%] hover:cursor-pointer hover:scale-110 hover:rotate-10 active:rotate-10 active:scale-110 transition-transform duration-300"
         />
       </div>
     );

@@ -12,7 +12,7 @@ export default function CustomButton({ onClick, options, text }: Props) {
       onClick={onClick}
       className={`${options} bg-accent z-10
           p-2 rounded-full text-secondary hover:shadow-[0px_0px_20px_-5px_#E23324] 
-          theme-5:hover:shadow-[0px_0px_20px_-5px_#591628] transition duration-200 
+          theme-5:hover:shadow-[0px_0px_20px_-5px_#591628] transition duration-400 
           cursor-pointer outline-none active:scale-98`}
     >
       {text}
