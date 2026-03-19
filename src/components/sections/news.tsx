@@ -9,16 +9,16 @@ export default async function NewsSection({
 }: {
   cloudPath: string;
 }) {
-  const data = await pool.query(
-    `SELECT * FROM info WHERE info_type = 'news' ORDER BY created_at DESC LIMIT 2`,
-  );
+  // const data = await pool.query(
+  //   `SELECT * FROM info WHERE info_type = 'news' ORDER BY created_at DESC LIMIT 2`,
+  // );
 
-  if (!data || data.rows.length === 0) return <NoInfo />
+  // if (!data || data.rows.length === 0) return <NoInfo />
 
   return (
     <section area-label="новости или конкурсы" className="section">
       <h1 className={`${font_accent.className} heading`}>Что нового?</h1>
-      <div
+      {/* <div
         className="w-full flex flex-col justify-center items-center gap-10 md:gap-0"
       >
         {data.rows.map((item) => (
@@ -31,7 +31,7 @@ export default async function NewsSection({
           name="Все новости ⇨"
           options="text-accent fire:text-gray-200 animate-pulse"
         />
-      </div>
+      </div> */}
     </section>
   );
 }

@@ -9,16 +9,16 @@ export default async function AboutSection({
 }: {
   cloudPath: string;
 }) {
-  const data = await pool.query(
-    `SELECT * FROM info WHERE info_type = 'about' ORDER BY created_at DESC LIMIT 1`,
-  );
+  // const data = await pool.query(
+  //   `SELECT * FROM info WHERE info_type = 'about' ORDER BY created_at DESC LIMIT 1`,
+  // );
 
-  if (!data || data.rows.length === 0) return <NoInfo />;
+  // if (!data || data.rows.length === 0) return <NoInfo />;
 
   return (
     <section area-label="о нас" className="section">
       <h1 className={`${font_accent.className} heading`}>Немного о нас</h1>
-      <div
+      {/* <div
         className="w-full flex flex-col justify-center items-center gap-10 md:gap-0"
       >
         {data.rows.map((item) => (
@@ -31,7 +31,7 @@ export default async function AboutSection({
           name="Подробнее о нас ⇨"
           options="text-accent fire:text-gray-200 animate-pulse"
         />
-      </div>
+      </div> */}
     </section>
   );
 }
