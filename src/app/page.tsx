@@ -16,7 +16,6 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const cloudPath = await useCloudPath();
-  // const carouselProducts = await pool.query(`SELECT * FROM products WHERE to_carousel=TRUE AND is_active=TRUE AND remains>0`);
 
   return (
     <main area-label='главная страница' className={
