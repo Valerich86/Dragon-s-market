@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useInView, motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,6 +24,7 @@ export default function ProductCard({
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
   const router = useRouter();
+  const [src, setSrc] = useState(`${cloudPath}/products/${item.id}.webp`);
 
   return (
     <motion.div
@@ -39,45 +40,43 @@ export default function ProductCard({
       >
         <div className="h-1/2 w-full p-3">
           <Image
-            src={
-              item.image_url
-                ? `${cloudPath}/products/${item.image_url}`
-                : "/images/stickers/please_buy.webp"
-            }
-            alt="изображение товара"
+            src={src}
+            alt=""
             width={200}
             height={200}
-            loading="eager"
+            loading="lazy"
             className="h-full w-full object-contain rounded-2xl animate-shining"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = "/images/stickers/please_buy.webp";
-              target.onerror = null;
-            }}
+            onError={() => setSrc('/images/stickers/please_buy.webp')}
           />
         </div>
         <div className="h-1/2 w-full flex flex-col gap-1 lg:gap-2 justify-between p-2 border-t-2 border-gray-300 rounded-b-xl text-xs">
-          <div className="w-full flex flex-col gap-1 lg:gap-3">
-            <Link href={href} className="text-primary">
-            {item.name}
-          </Link>
-          <p className="text-gray-600">{item.weight} гр</p>
+          <p className="text-primary">{item.name}</p>
+          <div className="w-full flex flex-col gap-1">
+            <p className="text-gray-600">
+              {item.weight}
+              {item.unit}
+            </p>
+            <p className="">
+              <span
+                className={`${item.status === "sale" ? "line-through decoration-accent text-xs" : font_bold.className}`}
+              >
+                {item.price} ₽
+              </span>
+              {item.status === "sale" && (
+                <span className={`ml-2 ${font_bold.className}`}>
+                  {item.old_price} ₽
+                </span>
+              )}
+            </p>
+            <CustomButton
+              onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                event.stopPropagation();
+                console.log("Добавлено");
+              }}
+              text="В корзину"
+              options={"w-full"}
+            />
           </div>
-          <p className="">
-            <span
-              className={`${item.status === "sale" ? "line-through decoration-accent text-xs" : font_bold.className}`}
-            >
-              {item.price} ₽
-            </span>
-            {item.status === "sale" && (
-              <span className={`ml-2 ${font_bold.className}`}>{item.old_price} ₽</span>
-            )}
-          </p>
-          <CustomButton
-            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {event.stopPropagation(); console.log("Добавлено")}}
-            text="В корзину"
-            options={"w-full"}
-          />
         </div>
       </div>
     </motion.div>

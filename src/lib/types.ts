@@ -1,23 +1,22 @@
 export type Product = {
   id: string;
   name: string;
-  weight?: number;
+  weight: number;
+  unit: string;
   description: string;
+  composition: string;
   price: number;
   old_price?: number;
-  stock_quantity: number;
-  image_url?: string;
+  category_id: number;
+  remains: number;
   is_active: boolean;
   to_carousel: boolean;
-  status: "new" | "sale" | "default";
-  category_id: string;
+  status: string;
 };
 
 export type Category = {
-  id: string;
+  id: number;
   name: string;
-  description: string;
-  image_url: string;
 };
 
 export type Info = {
@@ -50,3 +49,30 @@ export type Order = {
   created_at: string;
   updated_at: string;
 };
+
+export type User = {
+  id: string;
+  email: string;
+  password: string;
+};
+
+export type RegisterFormErrors = {
+  first_name?: string[];
+  last_name?: string[];
+  password?: string[];
+  confirmPassword?: string[];
+  phone?: string[];
+  city?: string[];
+  street?: string[];
+  house?: string[];
+  entrance?: string[];
+  floor?: string[];
+  apartment?: string[];
+  intercom_number?: string[];
+  additional_info?: string[];
+};
+
+export type LoginFormErrors = {
+  phone?: string[];
+  password?: string[];
+}

@@ -16,6 +16,7 @@ export default function CarouselItem ({
     cloudPath
   }:Props) {
     const href = `/catalog/${product.category_id}/${product.id}?productName=${product.name}`;
+    
     return (
       <Link href={href}
         className={`bg-secondary h-full w-full flex flex-col md:flex-row text-secondary hover:opacity-95`}
@@ -27,7 +28,8 @@ export default function CarouselItem ({
           <h3 className={`text-xl font-extrabold uppercase`}>
             {product.name}
           </h3>
-          <p className="">{product.description}</p>
+          {/* <p className="">{product.description}</p> */}
+          <p>{product.weight}{product.unit}</p>
           <div className="w-full">
             <p className="">
               <span

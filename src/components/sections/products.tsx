@@ -9,31 +9,37 @@ export default function ProductsSection({
   products,
   cloudPath,
   isLoading,
-  currentCategory
+  currentCategory,
 }: {
-  products: Product[]
+  products: Product[];
   cloudPath: string;
   isLoading: boolean;
-  currentCategory: Category
+  currentCategory: Category;
 }) {
-
   // if (isLoading) return <Loading />;
 
-  if (!products || products.length === 0) return <NoInfo text={`Продукты не найдены`}/>;
+  if (isLoading) return <div className="h-[50vh]"></div>;
+
+  if (!products || products.length === 0)
+    return (
+      <NoInfo
+        text={`Продукты в категории ${currentCategory.name} не найдены`}
+      />
+    );
 
   return (
     <section
-        aria-label="товары"
-        className="w-full flex flex-wrap gap-4 items-center justify-between py-15"
-      >
-        {products.map((item) => (
-          <ProductCard
-            key={item.id}
-            item={item}
-            currentCategory={currentCategory}
-            cloudPath={cloudPath}
-          />
-        ))}
-      </section>
+      aria-label="товары"
+      className="w-full flex flex-wrap gap-4 items-center justify-between py-15"
+    >
+      {products.map((item) => (
+        <ProductCard
+          key={item.id}
+          item={item}
+          currentCategory={currentCategory}
+          cloudPath={cloudPath}
+        />
+      ))}
+    </section>
   );
 }

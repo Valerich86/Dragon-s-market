@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { font_asian1 } from "@/lib/fonts";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Product } from "@/lib/types";
 
@@ -10,7 +10,13 @@ interface Props {
   captionOptions?: string;
 }
 
-export default function ProductImage({ product, cloudPath, captionOptions="" }: Props) {
+export default function ProductImage({
+  product,
+  cloudPath,
+  captionOptions = "",
+}: Props) {
+  const [src, setSrc] = useState(`${cloudPath}/products/${product.id}.webp`);
+
   return (
     <>
       {/* <span
@@ -23,21 +29,13 @@ export default function ProductImage({ product, cloudPath, captionOptions="" }: 
             : ""}
       </span> */}
       <Image
-        src={
-          product.image_url
-            ? `${cloudPath}/products/${product.image_url}`
-            : "/images/stickers/please_buy.webp"
-        }
+        src={src}
         alt="изображение товара"
         width={200}
         height={200}
-        loading="eager"
+        loading="lazy"
         className="h-full w-full object-contain rounded-2xl animate-shining"
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.src = "/images/stickers/please_buy.webp";
-          target.onerror = null;
-        }}
+        onError={() => setSrc('/images/stickers/please_buy.webp')}
       />
     </>
   );

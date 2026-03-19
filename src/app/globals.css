@@ -137,3 +137,15 @@ video::--webkit-media-controls-start-playback-button {
 .heading {
   @apply text-3xl lg:text-4xl lg:my-50 text-center;
 }
+
+.form {
+  @apply flex flex-col mt-5 gap-2 w-full;
+}
+
+.label {
+  @apply text-sm;
+}
+
+.input {
+  @apply w-full text-primary rounded-md border-none p-2 text-sm outline-none bg-secondary placeholder:text-gray-400;
+}

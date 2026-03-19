@@ -25,9 +25,10 @@ export default function ProductSection ({product, cloudPath}:Props) {
         <div className="w-full lg:w-1/3 lg:p-10">
           <div className="w-full flex flex-col gap-5 ">
             <p className={`${font_accent.className} font-extrabold uppercase`}>
-              {product.name}, {product.weight}г.
+              {product.name}
             </p>
-            <p className={``}>{product.description}</p>
+            {/* <p className={``}>{product.description}</p> */}
+            <p>{product.weight}{product.unit}</p>
             <p className="">
               <span
                 className={`${product.status === "sale" ? "line-through decoration-accent text-xs" : "font-extrabold"}`}

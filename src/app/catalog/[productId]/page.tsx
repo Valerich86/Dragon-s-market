@@ -13,20 +13,16 @@ export async function generateMetadata(
     searchParams,
   }: {
     params: Promise<{ productId: string }>;
-    searchParams: Promise<{ categoryName: string; productName: string }>;
+    searchParams: Promise<{ productName: string }>;
   },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { categoryName, productName } = await searchParams;
+  const { productName } = await searchParams;
   let product = "Неизвестный товар";
   if (productName) {
     product = decodeURIComponent(productName);
   }
-  let category = "Неизвестная категория";
-  if (categoryName) {
-    category = decodeURIComponent(categoryName);
-  }
-  const title = `${category} | ${product}`;
+  const title = product;
   const description = `Купить ${product.toLowerCase()} в магазине азиатских снеков "Драконий базар", Пермь`;
   return {
     title,
@@ -37,10 +33,8 @@ export async function generateMetadata(
 
 export default async function ProductPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ productId: string }>;
-  searchParams: Promise<{ name: string }>;
 }) {
   const { productId } = await params;
   const cloudPath = await useCloudPath();
@@ -59,7 +53,7 @@ export default async function ProductPage({
   return (
     <main area-label="товар" className={`w-full overflow-x-hidden z-50`}>
       <BGBlob src={"/images/bg-blob.webp"} />
-      <ProductSection product={product} cloudPath={cloudPath}/>
+      <ProductSection product={product} cloudPath={cloudPath} />
     </main>
   );
 }

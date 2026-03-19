@@ -3,15 +3,22 @@
 import { useState, useRef, useEffect } from "react";
 import { SlMagnifier } from "react-icons/sl";
 import { motion, AnimatePresence } from "framer-motion";
+import { Product } from "@/lib/types";
+import Link from "next/link";
+import ProductImage from "./product-image";
 
-interface Props {
-  screenWidth: number;
-}
-
-export default function SearchInput({ screenWidth }: Props) {
+export default function SearchInput({
+  allProducts,
+  cloudPath,
+}: {
+  allProducts: Product[];
+  cloudPath: string;
+}) {
   const [isOpened, setIsOpened] = useState(false);
-  const elementRef = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<HTMLInputElement>(null);
   const iconRef = useRef<HTMLButtonElement>(null);
+  const [value, setValue] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent): void {
@@ -20,53 +27,80 @@ export default function SearchInput({ screenWidth }: Props) {
         !elementRef.current.contains(event.target as Node) &&
         !iconRef.current?.contains(event.target as Node)
       ) {
+        setValue("");
+        setFilteredProducts([]);
         setIsOpened(false);
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [elementRef]);
 
-  const handleSwipe = (direction: number) => {
-    // Свайп влево: направление < 0, достаточно большое движение
-    if (direction > 50) {
-      setIsOpened(false);
-    }
-  };
+  useEffect(() => {
+    if (value.length < 3) return;
+    const foundItems = allProducts.filter((item) =>
+      item.name.toLowerCase().includes(value.toLowerCase()),
+    );
+    setFilteredProducts(foundItems);
+  }, [value]);
 
   return (
     <>
-      <button
-        ref={iconRef}
-        className="px-3 h-full flex items-center"
-        onClick={() => setIsOpened(!isOpened)}
-      >
-        <SlMagnifier
-          size={screenWidth > 500 ? 15 : 20}
-          className="link text-secondary"
-        />
-      </button>
+      {!isOpened && (
+        <button
+          className="px-3 h-full flex items-center"
+          onClick={() => setIsOpened(!isOpened)}
+        >
+          <SlMagnifier size={30} className="link text-secondary" />
+        </button>
+      )}
       <AnimatePresence>
         {isOpened && (
           <motion.div
-            ref={elementRef}
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ duration: 0.1, ease: "easeOut" }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            onDragEnd={(event, info) => {
-              const swipeDistance = info.offset.x;
-              handleSwipe(swipeDistance);
-            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             area-label="поиск"
-            className={`x-spacing w-full lg:w-1/2 absolute right-0 top-15`}
+            className={`w-full h-screen fixed bg-primary/90 flex flex-col gap-3 items-center left-1/2 -translate-x-[50%] top-0 z-50 py-[10vh] px-[5vw] md:px-[30vw]`}
           >
-            <div className="w-full h-20 bg-primary p-2 rounded-b-xl text-secondary shadow-xl flex gap-5 border border-gray-200"></div>
+            <input
+              ref={elementRef}
+              className="input"
+              value={value}
+              autoFocus
+              placeholder="Введите название товара"
+              onChange={(e) => setValue(e.target.value)}
+            />
+            <div className="w-full flex flex-col gap-2 overflow-y-scroll [scrollbar-width:none]">
+              {value.length >= 3 &&
+                filteredProducts.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                      duration: 0.1,
+                      ease: "easeOut",
+                      delay: index / 10,
+                    }}
+                    className="w-full"
+                  >
+                    <Link
+                      href={`/catalog/${item.id}?productName=${item.name} w-full`}
+                    >
+                      <div className="w-full flex items-center gap-2">
+                        <div className="w-10 h-10">
+                          <ProductImage product={item} cloudPath={cloudPath} />
+                        </div>
+                        <span className="text-xs">{item.name}</span>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

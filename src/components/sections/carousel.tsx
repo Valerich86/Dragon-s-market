@@ -96,9 +96,6 @@ export default function CarouselSection({ cloudPath }: Props) {
 
   return (
     <section aria-label="новинки или акции" className="section x-spacing">
-      {/* <Headline text={`Нежданный вкус -
-как первый луч в темноте...
-Сердце встрепенулось.`} /> */}
 
       <div
         className="w-full h-[80vh] overflow-x-hidden rounded-2xl relative shadow-xl/20 shadow-secondary"

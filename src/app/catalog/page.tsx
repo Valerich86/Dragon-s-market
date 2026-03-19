@@ -5,32 +5,37 @@ import { font_light } from "@/lib/fonts";
 import { Category, Product } from "@/lib/types";
 import Loading from "../loading";
 import NoInfo from "@/components/no-info";
-import ProductItem from "@/components/cards/product-card";
 import ProductsSection from "@/components/sections/products";
+import SearchInput from "@/components/UI/search-input";
 
 export default function CatalogPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
   const [cloudPath, setCloudPath] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [porductsLoading, setProductsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchData = async () => {
       try {
         const response = await fetch(`/api/categories`);
         const { data, cloudPath } = await response.json();
         setCloudPath(cloudPath);
         setCategories(data);
         setCurrentCategory(data[0]);
+        const response2 = await fetch(`/api/products`);
+        const result = await response2.json();
+        console.log(result.data.length)
+        setAllProducts(result.data);
       } catch (error) {
         console.error(error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchCategories();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -38,8 +43,7 @@ export default function CatalogPage() {
       setProductsLoading(true);
       try {
         const response = await fetch(
-          // `/api/products?categoryId=${currentCategory?.id}`,
-          `/api/products?categoryId=51baf9d7-06c1-4816-ab5d-5a18adcd7799`,
+          `/api/products?categoryId=${currentCategory?.id}`,
         );
         const { data } = await response.json();
         setProducts(data);
@@ -54,19 +58,23 @@ export default function CatalogPage() {
 
   if (isLoading) return <Loading />;
 
-  if (!categories || !currentCategory || categories.length === 0) return <NoInfo />;
+  if (!categories || !currentCategory || categories.length === 0)
+    return <NoInfo />;
 
   return (
     <main area-label="каталог" className={`w-full overflow-x-hidden x-spacing`}>
       <section aria-label="категории" className="w-full flex flex-wrap gap-5">
-        <h1 className={`${font_light.className} uppercase`}>Каталог</h1>
+        <div className="w-full flex justify-between items-center h-10">
+          <h1 className={`${font_light.className} uppercase`}>Каталог</h1>
+          <SearchInput allProducts={allProducts} cloudPath={cloudPath}/>
+        </div>
         <div className="w-full flex flex-wrap gap-5 text-xs lg:text-sm justify-between">
           {categories.map((item) => (
             <div
               key={item.id}
               className={`link ${currentCategory === item ? "bg-accent" : ""} rounded p-1`}
-              onClick={() => {setCurrentCategory(item);
-                console.log(currentCategory.name)
+              onClick={() => {
+                setCurrentCategory(item);
               }}
             >
               {item.name}
@@ -74,7 +82,12 @@ export default function CatalogPage() {
           ))}
         </div>
       </section>
-      <ProductsSection products={products} isLoading={porductsLoading} cloudPath={cloudPath} currentCategory={currentCategory}/>
+      <ProductsSection
+        products={products}
+        isLoading={porductsLoading}
+        cloudPath={cloudPath}
+        currentCategory={currentCategory}
+      />
     </main>
   );
 }

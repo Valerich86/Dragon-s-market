@@ -42,7 +42,7 @@ export default function Header() {
 
   return (
     <header
-      className={`w-full fixed left-0 top-0 flex justify-between items-center z-50 bg-primary h-13 px-3 lg:pl-0 border border-gray-600`}
+      className={`w-full fixed left-0 top-0 flex justify-between items-center z-50 bg-primary h-13 pl-3 lg:pl-0 border border-gray-600`}
     >
       {/* левые ссылки */}
       <div className="flex justify-start items-center h-13 lg:gap-5 w-full lg:w-1/3">
@@ -83,7 +83,7 @@ export default function Header() {
 
       {/* правые ссылки */}
       <div className="flex justify-end items-center w-1/2 lg:w-1/3 h-full">
-        <SearchInput screenWidth={screenWidth} />
+        {/* <SearchInput screenWidth={screenWidth} /> */}
         {rightLinks.map((item, index) => {
           return <NavIcon key={index} href={item.href} icon={item.icon} />;
         })}

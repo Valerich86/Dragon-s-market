@@ -11,14 +11,14 @@ export async function GET(request: NextRequest) {
     let params: any[];
 
     if (toCarousel) {
-      query = `SELECT * FROM products WHERE to_carousel=TRUE AND is_active=TRUE ORDER BY created_at DESC`;
+      query = `SELECT * FROM products WHERE to_carousel=TRUE AND is_active=TRUE AND remains>0 ORDER BY name ASC`;
       params = [];
-    } else if (categoryId !== null) {
-      query = `SELECT * FROM products WHERE category_id=$1 AND is_active=TRUE ORDER BY created_at DESC`;
+    } else if (categoryId !== undefined) {
+      query = `SELECT * FROM products WHERE category_id=$1 AND is_active=TRUE AND remains>0 ORDER BY name ASC`;
       params = [categoryId];
     } else {
-      // Если limit не указан или некорректен — просто не используем LIMIT
-      query = `SELECT * FROM products`;
+      console.log ("response")
+      query = `SELECT * FROM products WHERE remains>0 ORDER BY name ASC`;
       params = [];
     }
     const data = await pool.query(query, params);
