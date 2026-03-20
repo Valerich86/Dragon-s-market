@@ -16,9 +16,10 @@ export default function ProductsSection({
   isLoading: boolean;
   currentCategory: Category;
 }) {
-  // if (isLoading) return <Loading />;
 
-  if (isLoading) return <div className="h-[50vh]"></div>;
+  if (isLoading) return (
+    <div className="h-[50vh] w-full"></div>
+  );
 
   if (!products || products.length === 0)
     return (

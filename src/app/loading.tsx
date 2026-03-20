@@ -8,7 +8,7 @@ export default function Loading() {
         {/* <PiSpinnerBall size={80} className="animate-spin mb-20"/> */}
         <div className="w-30 h-30 animate-spin">
           <Image
-            src={"/images/stickers/heart.webp"}
+            src={"/images/stickers/party.webp"}
             alt="загрузка..."
             width={200}
             height={200}

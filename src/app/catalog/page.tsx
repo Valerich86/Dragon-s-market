@@ -22,12 +22,12 @@ export default function CatalogPage() {
       try {
         const response = await fetch(`/api/categories`);
         const { data, cloudPath } = await response.json();
+        const allCategory = {id: 0, name: "Все"};
         setCloudPath(cloudPath);
-        setCategories(data);
-        setCurrentCategory(data[0]);
+        setCategories([allCategory, ...data]);
+        setCurrentCategory(allCategory);
         const response2 = await fetch(`/api/products`);
         const result = await response2.json();
-        console.log(result.data.length)
         setAllProducts(result.data);
       } catch (error) {
         console.error(error);
@@ -40,11 +40,10 @@ export default function CatalogPage() {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      const api = currentCategory?.id === 0 ? `/api/products?random=true` : `/api/products?categoryId=${currentCategory?.id}`
       setProductsLoading(true);
       try {
-        const response = await fetch(
-          `/api/products?categoryId=${currentCategory?.id}`,
-        );
+        const response = await fetch(api);
         const { data } = await response.json();
         setProducts(data);
       } catch (error) {

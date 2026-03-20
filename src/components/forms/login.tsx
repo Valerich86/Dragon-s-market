@@ -10,7 +10,7 @@ import { LoginFormErrors } from "@/lib/types";
 export default function LoginForm() {
   const [form, setForm] = useState({
     password: "",
-    phone: ""
+    phone: "+7"
   });
   const [errors, setErrors] = useState<LoginFormErrors | undefined>(
     undefined,
@@ -37,8 +37,7 @@ export default function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="form">
-
+    <form onSubmit={handleSubmit} className="flex flex-col mt-5 gap-2 w-full md:w-2/3 lg:w-1/2">
       {/* телефон */}
       <fieldset>
         <label className="label">Логин (Номер телефона)*</label>

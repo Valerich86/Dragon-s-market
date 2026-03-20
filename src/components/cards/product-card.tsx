@@ -46,28 +46,25 @@ export default function ProductCard({
             height={200}
             loading="lazy"
             className="h-full w-full object-contain rounded-2xl animate-shining"
-            onError={() => setSrc('/images/stickers/please_buy.webp')}
+            onError={() => setSrc("/images/stickers/please_buy.webp")}
           />
         </div>
-        <div className="h-1/2 w-full flex flex-col gap-1 lg:gap-2 justify-between p-2 border-t-2 border-gray-300 rounded-b-xl text-xs">
-          <p className="text-primary">{item.name}</p>
-          <div className="w-full flex flex-col gap-1">
-            <p className="text-gray-600">
-              {item.weight}
-              {item.unit}
-            </p>
-            <p className="">
-              <span
-                className={`${item.status === "sale" ? "line-through decoration-accent text-xs" : font_bold.className}`}
-              >
-                {item.price} ₽
-              </span>
-              {item.status === "sale" && (
-                <span className={`ml-2 ${font_bold.className}`}>
-                  {item.old_price} ₽
-                </span>
-              )}
-            </p>
+        <div className="h-1/2 w-full flex flex-col lg:gap-2 justify-between p-1 lg:p-2 border-t-2 border-gray-300 rounded-b-xl text-xs">
+          <p className="text-primary line-clamp-3 lg:text-sm lg:min-h-15">
+            {item.name}
+          </p>
+          <p className="text-gray-600 hidden lg:block">
+            {item.weight}
+            {item.unit}
+          </p>
+          <div className="w-full flex flex-col lg:flex-row gap-1">
+            <div className="flex justify-between items-baseline w-full">
+              <p className="text-gray-600 lg:hidden">
+                {item.weight}
+                {item.unit}
+              </p>
+              <p className={`${font_bold.className} ${item.price.toString().length > 6 ? "tracking-tighter": ""} text-lg`}>{item.price}₽</p>
+            </div>
             <CustomButton
               onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                 event.stopPropagation();

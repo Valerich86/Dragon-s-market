@@ -13,7 +13,7 @@ export default function RegisterForm() {
     last_name: "",
     password: "",
     confirmPassword: "",
-    phone: "",
+    phone: "+7",
     city: "",
     street: "",
     house: "",
@@ -50,7 +50,7 @@ export default function RegisterForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="form lg:flex-row flex-wrap justify-between"
+      className="flex flex-col mt-5 gap-2 w-full lg:flex-row flex-wrap justify-between"
     >
       <div className="flex flex-col gap-2 lg:w-[45%]">
         <fieldset className="border-t border-gray-400 mt-5">

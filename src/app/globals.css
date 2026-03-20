@@ -138,10 +138,6 @@ video::--webkit-media-controls-start-playback-button {
   @apply text-3xl lg:text-4xl lg:my-50 text-center;
 }
 
-.form {
-  @apply flex flex-col mt-5 gap-2 w-full;
-}
-
 .label {
   @apply text-sm;
 }

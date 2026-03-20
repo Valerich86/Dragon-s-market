@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Product } from "@/lib/types";
 import Link from "next/link";
 import ProductImage from "./product-image";
+import { font_bold } from "@/lib/fonts";
 
 export default function SearchInput({
   allProducts,
@@ -74,7 +75,7 @@ export default function SearchInput({
               placeholder="Введите название товара"
               onChange={(e) => setValue(e.target.value)}
             />
-            <div className="w-full flex flex-col gap-2 overflow-y-scroll [scrollbar-width:none]">
+            <div className="w-full flex flex-col gap-5 overflow-y-scroll [scrollbar-width:none]">
               {value.length >= 3 &&
                 filteredProducts.map((item, index) => (
                   <motion.div
@@ -86,16 +87,22 @@ export default function SearchInput({
                       ease: "easeOut",
                       delay: index / 10,
                     }}
-                    className="w-full"
+                    className="w-full border-b border-gray-900"
                   >
                     <Link
                       href={`/catalog/${item.id}?productName=${item.name} w-full`}
                     >
-                      <div className="w-full flex items-center gap-2">
-                        <div className="w-10 h-10">
-                          <ProductImage product={item} cloudPath={cloudPath} />
+                      <div className="w-full flex items-baseline justify-between gap-10">
+                        <div className="flex gap-2 items-baseline-last">
+                          <div className="w-10 h-10">
+                            <ProductImage
+                              product={item}
+                              cloudPath={cloudPath}
+                            />
+                          </div>
+                          <span className="text-xs line-clamp-2">{item.name}</span>
                         </div>
-                        <span className="text-xs">{item.name}</span>
+                        <span className={`${font_bold}`}>{item.price}₽</span>
                       </div>
                     </Link>
                   </motion.div>

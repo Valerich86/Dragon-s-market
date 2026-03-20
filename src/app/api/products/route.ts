@@ -4,11 +4,12 @@ import { pool } from "@/lib/db";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
-    const { categoryId, toCarousel } = Object.fromEntries(
+    const { categoryId, toCarousel, random } = Object.fromEntries(
       searchParams.entries(),
     );
     let query: string;
     let params: any[];
+    console.log(random)
 
     if (toCarousel) {
       query = `SELECT * FROM products WHERE to_carousel=TRUE AND is_active=TRUE AND remains>0 ORDER BY name ASC`;
@@ -17,16 +18,17 @@ export async function GET(request: NextRequest) {
       query = `SELECT * FROM products WHERE category_id=$1 AND is_active=TRUE AND remains>0 ORDER BY name ASC`;
       params = [categoryId];
     } else {
-      console.log ("response")
       query = `SELECT * FROM products WHERE remains>0 ORDER BY name ASC`;
       params = [];
     }
     const data = await pool.query(query, params);
+    let result = data.rows;
+    if (random) result = [...data.rows].sort(() => Math.random() - 0.5);
 
     return NextResponse.json(
       {
         success: true,
-        data: data.rows,
+        data: result,
       },
       { status: 200 },
     );

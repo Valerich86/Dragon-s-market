@@ -13,7 +13,8 @@ export default function LoginPage() {
     <div
       className={`flex flex-col w-full min-h-screen py-30 x-spacing`}
     >
-      <h1 className={`${font_light} text-2xl`}>Вход</h1>
+      <h1 className={`${font_light} text-2xl`}>Авторизуйтесь, </h1>
+      <span className="text-xs">чтобы полноценно использовать приложение</span>
       <LoginForm />
     </div>
   );
