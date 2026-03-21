@@ -51,9 +51,29 @@ export type Order = {
 };
 
 export type User = {
-  id: string;
-  email: string;
-  password: string;
+  id: number;
+  first_name: string;
+  phone: string;
+  created_at: string;
+};
+
+export type Address = {
+  id: number;
+  customer_id: number;
+  country: string;
+  city: string;
+  address?: string;
+  street: string;
+  house: string;
+  entrance: string;
+  floor: string;
+  apartment: string;
+  intercom_number?: string;
+  postal_code?: string;
+  additional_info?: string;
+  is_default: boolean;
+  created_at: string;
+  updated_at?: string;
 };
 
 export type RegisterFormErrors = {
@@ -71,4 +91,3 @@ export type RegisterFormErrors = {
   intercom_number?: string[];
   additional_info?: string[];
 };
-

@@ -61,7 +61,7 @@ export default function CatalogPage() {
     return <NoInfo />;
 
   return (
-    <main area-label="каталог" className={`w-full overflow-x-hidden x-spacing`}>
+    <main aria-label="каталог" className={`w-full overflow-x-hidden x-spacing`}>
       <section aria-label="категории" className="w-full flex flex-wrap gap-5">
         <div className="w-full flex justify-between items-center h-10">
           <h1 className={`${font_light.className} uppercase`}>Каталог</h1>

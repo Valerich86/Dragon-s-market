@@ -42,7 +42,7 @@ export default function Header() {
 
   return (
     <header
-      className={`w-full fixed left-0 top-0 flex justify-between items-center z-50 bg-primary h-13 pl-3 lg:pl-0 border border-gray-600`}
+      className={`w-full fixed left-0 top-0 flex justify-between items-center z-50 bg-primary h-13 pl-3 lg:pl-0 border border-gray-700`}
     >
       {/* левые ссылки */}
       <div className="flex justify-start items-center h-13 lg:gap-5 w-full lg:w-1/3">
@@ -73,7 +73,7 @@ export default function Header() {
 
       {/* центральные ссылки */}
       <nav
-        area-label="основная навигация (десктоп)"
+        aria-label="основная навигация (десктоп)"
         className="hidden lg:flex justify-center items-center w-1/2 h-full"
       >
         {centeredLinks.map((item, index) => (

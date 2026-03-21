@@ -4,11 +4,12 @@ import { redirect } from "next/navigation";
 import { getUserInfo } from "@/lib/actions";
 import { font_light } from "@/lib/fonts";
 import ProfileOptions from "@/components/sections/profile-options";
+import UserProvider from "@/components/user-provider";
 
 export const metadata: Metadata = {
   title: {
-    template: "Драконий базар | Профиль | %s",
-    default: "Профиль",
+    template: "Драконий базар | Профиль пользователя | %s",
+    default: "Профиль пользователя",
   },
   description: 'Профиль пользователя сайта магазина "Драконий базар", г. Пермь',
   keywords: ["учетная запись", "пользователь", "профиль", "Драконий базар"],
@@ -22,19 +23,18 @@ export default async function ProfileLayout({
   const session = await verifySession();
   if (!session) redirect("/auth/login");
   const { user } = await getUserInfo(session.userId);
-  
+
   return (
     <main
-      area-label="Профиль"
+      aria-label="Профиль"
       className={`w-full overflow-x-hidden min-h-screen x-spacing py-30 flex flex-col`}
     >
       <h1 className={`${font_light.className} uppercase`}>
-        Добрый день, {user.first_name} !
+        Добрый день, {user.general.first_name} !
       </h1>
-      <p className="text-xs">тел: {user.phone}</p>
+      <p className="text-xs">тел: {user.general.phone}</p>
       <ProfileOptions />
-
-      {children}
+      <UserProvider user={user}>{children}</UserProvider>
     </main>
   );
 }

@@ -16,7 +16,7 @@ export default async function NewsSection({
   // if (!data || data.rows.length === 0) return <NoInfo />
 
   return (
-    <section area-label="новости или конкурсы" className="section">
+    <section aria-label="новости или конкурсы" className="section">
       <h1 className={`${font_accent.className} heading`}>Что нового?</h1>
       {/* <div
         className="w-full flex flex-col justify-center items-center gap-10 md:gap-0"

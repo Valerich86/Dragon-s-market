@@ -22,7 +22,7 @@ export default async function HeroSection({
 
   return (
     <section
-      area-label="hero-секция"
+      aria-label="hero-секция"
       className="w-full h-screen flex flex-col gap-20 lg:gap-5 justify-end relative"
     >
       <DarknedImage

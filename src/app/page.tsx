@@ -19,7 +19,7 @@ export default async function Home() {
   const cloudPath = await useCloudPath();
 
   return (
-    <main area-label='главная страница' className={
+    <main aria-label='главная страница' className={
       `w-full overflow-x-hidden pb-50`
     }>
       <BGBlob src={"/images/bg-blob.webp"} />

@@ -16,7 +16,7 @@ export default async function AssortmentSection({
   // if (!data || data.rows.length === 0) return <NoInfo />;
 
   return (
-    <section area-label="ассортимент" className="section">
+    <section aria-label="ассортимент" className="section">
       <h1 className={`${font_accent.className} heading`}>У нас на полках</h1>
       {/* <div className="w-full flex flex-col justify-center items-center gap-10 md:gap-0">
         {data.rows.map((item) => (

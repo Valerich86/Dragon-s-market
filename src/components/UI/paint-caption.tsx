@@ -1,9 +1,9 @@
 interface Props {
-  caption: string;
+  caption?: string;
   options?: string;
 }
 
-export default function PaintCaption({caption, options=""}: Props) {
+export default function PaintCaption({caption="Товар дня", options=""}: Props) {
   return (
     <div
       className={
@@ -12,7 +12,7 @@ export default function PaintCaption({caption, options=""}: Props) {
         ${options}`
       }
     >
-      Товар дня
+      <span>{caption}</span>
     </div>
   );
 }

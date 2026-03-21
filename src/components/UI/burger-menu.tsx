@@ -74,7 +74,7 @@ function BurgerMenu() {
               const swipeDistance = info.offset.x;
               handleSwipe(swipeDistance);
             }}
-            area-label="основная навигация (смартфон)"
+            aria-label="основная навигация (смартфон)"
             className={` py-5 px-5 rounded-r-xl absolute left-0 top-15 z-50 bg-primary text-secondary
               shadow-[2px_2px_20px_-5px_#fefefe] flex flex-col gap-5`}
           >

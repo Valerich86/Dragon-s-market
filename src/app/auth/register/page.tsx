@@ -17,10 +17,10 @@ export default async function RegisterPage() {
 
   return (
     <main
-      area-label="логин"
+      aria-label="логин"
       className={`flex flex-col w-full min-h-screen py-30 x-spacing`}
     >
-      <h1 className={`${font_light} text-2xl`}>Зарегистрируйтесь, </h1>
+      <h1 className={`${font_light.className} text-2xl`}>Зарегистрируйтесь, </h1>
       <span className="text-xs">чтобы получить свою учётную запись</span>
       <span className="text-xs">и полноценно использовать приложение</span>
       <p className="text-accent text-xs mt-10">* - обязательное поле</p>

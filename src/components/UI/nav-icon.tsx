@@ -31,9 +31,14 @@ export default function NavIcon({ href, icon }: NavLinkProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  function getFirstSegment(pathname: string): string {
+    const segments = pathname.split("/");
+    return "/" + (segments[1] || "");
+  }
+
   return (
     <div
-      className={`${pathName === href ? "bg-accent text-primary" : "bg-none text-secondary"} px-3 h-full flex items-center`}
+      className={`${getFirstSegment(pathName) === href ? "bg-accent" : "bg-none"} text-secondary px-3 h-full flex items-center`}
     >
       <Link href={href} className="link">
         <Icon size={screenWidth > 500 ? 15 : 20} />

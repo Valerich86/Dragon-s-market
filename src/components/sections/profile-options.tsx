@@ -2,25 +2,25 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 const options = [
-  { name: "Общая информация", href: "/profile" },
-  { name: "Мои адреса", href: "/profile/addresses" },
-  { name: "Мои заказы", href: "/profile/orders" },
-  { name: "Избранное", href: "/profile/favourites" },
-  { name: "Оставить отзыв", href: "/profile/review" },
+  { name: "Общее", href: "/profile" },
+  { name: "Адреса", href: "/profile/addresses" },
+  { name: "Заказы", href: "/profile/orders" },
 ];
 
 export default function ProfileOptions() {
   const [currentOption, setCurrentOption] = useState(options[0]);
+  const pathName = usePathname();
 
   return (
-    <div className="w-full flex flex-wrap gap-5 text-xs lg:text-sm justify-between my-10">
+    <div className="w-full flex flex-wrap gap-10 text-xs lg:text-sm justify-between lg:justify-start my-10 border-b border-accent">
       {options.map((item) => (
         <Link
           key={item.href}
           href={item.href}
-          className={`link ${currentOption === item ? "bg-accent" : ""} rounded p-1`}
+          className={`link ${pathName === item.href ? "bg-accent" : ""} rounded-t p-1`}
           onClick={() => {
             setCurrentOption(item);
           }}

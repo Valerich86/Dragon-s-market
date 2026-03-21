@@ -24,7 +24,7 @@ export default function ProductCard({
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
   const router = useRouter();
-  const [src, setSrc] = useState(`${cloudPath}/products/${item.id}.webp`);
+  const [src, setSrc] = useState(`${cloudPath}/products/${item.id}.png`);
 
   return (
     <motion.div
@@ -38,14 +38,14 @@ export default function ProductCard({
       <div
         className={`w-full h-full flex flex-col items-center rounded-xl shadow-xl border border-gray-200 relative`}
       >
-        <div className="h-1/2 w-full p-3">
+        <div className="h-1/2 w-full">
           <Image
             src={src}
             alt=""
             width={200}
             height={200}
             loading="lazy"
-            className="h-full w-full object-contain rounded-2xl animate-shining"
+            className="h-full w-full object-cover rounded-2xl animate-shining"
             onError={() => setSrc("/images/stickers/please_buy.webp")}
           />
         </div>

@@ -16,10 +16,10 @@ export default async function LoginPage() {
 
   return (
     <main
-      area-label="логин"
+      aria-label="логин"
       className={`flex flex-col w-full min-h-screen py-30 x-spacing`}
     >
-      <h1 className={`${font_light} text-2xl`}>Авторизуйтесь, </h1>
+      <h1 className={`${font_light.className} text-2xl`}>Авторизуйтесь, </h1>
       <span className="text-xs">чтобы полноценно использовать приложение</span>
       <p className="text-accent text-xs mt-10 mb-5">* - обязательное поле</p>
       <LoginForm />
