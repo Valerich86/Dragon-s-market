@@ -8,6 +8,7 @@ import AssortmentSection from "@/components/sections/assortment";
 import { useCloudPath } from "@/lib/cloud";
 import { pool } from "@/lib/db";
 import DiscountPlan from "@/components/sections/discount-plan";
+import VideoCarouselSection from "@/components/sections/video-carousel";
 
 export const metadata: Metadata = {
   // title: "Главная",
@@ -24,7 +25,8 @@ export default async function Home() {
       <BGBlob src={"/images/bg-blob.webp"} />
       <HeroSection cloudPath={cloudPath}/>
       <DiscountPlan />
-      <CarouselSection cloudPath={cloudPath}/>
+      <VideoCarouselSection cloudPath={cloudPath}/>
+      {/* <CarouselSection cloudPath={cloudPath}/> */}
       {/* <NewsSection cloudPath={cloudPath}/> */}
       {/* <AboutSection cloudPath={cloudPath}/> */}
       {/* <AssortmentSection cloudPath={cloudPath}/> */}

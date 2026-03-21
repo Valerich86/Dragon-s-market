@@ -72,7 +72,7 @@ const RegistrationFormSchema = z
         /^[0-9a-zA-Zа-яА-ЯёЁ\-\s]+$/,
         "Недопустимые символы в номере квартиры",
       ),
-    intercom_number: z.string().trim().min(1, "Введите значение"),
+    intercom_number: z.string().trim().optional().default(""),
     additional_info: z.string().trim().optional().default(""),
     password: z.string().trim().min(4, "Минимум 4 символа"),
     confirmPassword: z.string(),
@@ -149,7 +149,7 @@ export async function POST(req: Request) {
     await pool.query("COMMIT");
 
     // Создание токена сессии
-    const token = await createSessionToken(id, first_name);
+    const token = await createSessionToken(id);
 
     if (!token) {
       return new Response(

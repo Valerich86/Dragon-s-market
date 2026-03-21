@@ -21,7 +21,7 @@ export default async function CatalogLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="pb-50 pt-30">
+    <div className="py-30">
       {children}
     </div>
   );

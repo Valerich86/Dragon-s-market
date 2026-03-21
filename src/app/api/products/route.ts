@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     );
     let query: string;
     let params: any[];
-    console.log(random)
+    console.log(random);
 
     if (toCarousel) {
       query = `SELECT * FROM products WHERE to_carousel=TRUE AND is_active=TRUE AND remains>0 ORDER BY name ASC`;
@@ -17,8 +17,11 @@ export async function GET(request: NextRequest) {
     } else if (categoryId !== undefined) {
       query = `SELECT * FROM products WHERE category_id=$1 AND is_active=TRUE AND remains>0 ORDER BY name ASC`;
       params = [categoryId];
+    } else if (random) {
+      query = `SELECT * FROM products WHERE remains>0 AND is_active=TRUE ORDER BY name ASC LIMIT 100`;
+      params = [];
     } else {
-      query = `SELECT * FROM products WHERE remains>0 ORDER BY name ASC`;
+      query = `SELECT * FROM products WHERE remains>0 AND is_active=TRUE ORDER BY name ASC`;
       params = [];
     }
     const data = await pool.query(query, params);

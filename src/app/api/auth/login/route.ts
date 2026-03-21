@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 
 async function validateUserCredentials(phone: string, password: string): Promise<{
   isValid: boolean;
-  userId?: string;
+  userId?: number;
   userName?: string;
 }> {
   try {
@@ -27,7 +27,6 @@ async function validateUserCredentials(phone: string, password: string): Promise
     return {
       isValid: isPasswordValid,
       userId: user.id,
-      userName: user.first_name
     };
   } catch (error) {
     console.error("Ошибка проверки учётных данных:", error);
@@ -35,60 +34,19 @@ async function validateUserCredentials(phone: string, password: string): Promise
   }
 }
 
-const LoginFormSchema = z
-  .object({
-    phone: z
-      .string()
-      .regex(
-        /^(\+7|8)?[\s\-]?\(?[0-9]{3}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/,
-        "Телефон должен соответствовать формату: +7XXXXXXXXXX или 8XXXXXXXXXX"
-      )
-      .transform((phone) => {
-        const digits = phone.replace(/\D/g, "");
-        if (digits.startsWith("8") || digits.startsWith("7")) {
-          return `+7${digits.slice(1)}`;
-        }
-        return `+${digits}`;
-      }),
-    password: z.string().trim().min(4, "Минимум 4 символа")
-  })
-  .refine(
-    async (data) => {
-      const validationResult = await validateUserCredentials(data.phone, data.password);
-      return validationResult.isValid;
-    },
-    {
-      message: "Неверный телефон или пароль",
-      path: ["phone"] // Ошибка будет привязана к полю телефона
-    }
-  );
-
-
 export async function POST(req: Request) {
-  const body = await req.json();
-  const validatedFields = await LoginFormSchema.safeParseAsync(body);
-
-  if (!validatedFields.success) {
-    return NextResponse.json(
-      { errors: validatedFields.error.flatten().fieldErrors },
-      { status: 400 }
-    );
-  }
-
-  const { phone, password } = validatedFields.data;
-
+  const { phone, password } = await req.json();
   try {
     const validationResult = await validateUserCredentials(phone, password);
 
     if (!validationResult.isValid) {
       return NextResponse.json(
-        { error: "Неверный телефон или пароль" },
+        { error: "Неверный логин или пароль" },
         { status: 401 }
       );
     }
-
     // Создаём токен сессии
-    const token = await createSessionToken(validationResult.userId!, validationResult.userName!);
+    const token = await createSessionToken(validationResult.userId);
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,

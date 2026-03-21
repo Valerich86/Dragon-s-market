@@ -72,7 +72,3 @@ export type RegisterFormErrors = {
   additional_info?: string[];
 };
 
-export type LoginFormErrors = {
-  phone?: string[];
-  password?: string[];
-}

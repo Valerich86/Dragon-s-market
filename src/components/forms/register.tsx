@@ -50,7 +50,7 @@ export default function RegisterForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col mt-5 gap-2 w-full lg:flex-row flex-wrap justify-between"
+      className="flex flex-col gap-2 w-full lg:flex-row flex-wrap justify-between"
     >
       <div className="flex flex-col gap-2 lg:w-[45%]">
         <fieldset className="border-t border-gray-400 mt-5">
@@ -60,7 +60,7 @@ export default function RegisterForm() {
         </fieldset>
         {/* имя  */}
         <fieldset>
-          <label className="label">Имя*</label>
+          <label className="label">Имя <span className="text-accent">*</span></label>
           <input
             className="input"
             value={form.first_name}
@@ -78,7 +78,7 @@ export default function RegisterForm() {
 
         {/* фамилия */}
         <fieldset>
-          <label className="label">Фамилия*</label>
+          <label className="label">Фамилия <span className="text-accent">*</span></label>
           <input
             className="input"
             value={form.last_name}
@@ -95,7 +95,7 @@ export default function RegisterForm() {
 
         {/* телефон */}
         <fieldset>
-          <label className="label">Номер телефона*</label>
+          <label className="label">Номер телефона <span className="text-accent">*</span></label>
           <input
             className="input"
             type="tel"
@@ -114,7 +114,7 @@ export default function RegisterForm() {
 
         {/* пароль */}
         <fieldset>
-          <label className="label">Пароль*</label>
+          <label className="label">Пароль <span className="text-accent">*</span></label>
           <input
             className="input"
             type="password"
@@ -133,7 +133,7 @@ export default function RegisterForm() {
 
         {/* пароль 2 */}
         <fieldset>
-          <label className="label">Повторите пароль*</label>
+          <label className="label">Повторите пароль <span className="text-accent">*</span></label>
           <input
             className="input"
             type="password"
@@ -161,7 +161,7 @@ export default function RegisterForm() {
 
         {/* город */}
         <fieldset>
-          <label className="label">Город*</label>
+          <label className="label">Город <span className="text-accent">*</span></label>
           <input
             className="input"
             value={form.city}
@@ -179,7 +179,7 @@ export default function RegisterForm() {
 
         {/* улица */}
         <fieldset>
-          <label className="label">Улица*</label>
+          <label className="label">Улица <span className="text-accent">*</span></label>
           <input
             className="input"
             value={form.street}
@@ -197,7 +197,7 @@ export default function RegisterForm() {
         <div className="w-full flex justify-between gap-1">
           {/* дом */}
           <fieldset className="w-1/3">
-            <label className="label">Дом*</label>
+            <label className="label">Дом <span className="text-accent">*</span></label>
             <input
               className="input"
               value={form.house}
@@ -213,7 +213,7 @@ export default function RegisterForm() {
           </fieldset>
           {/* Подъезд */}
           <fieldset className="w-1/3">
-            <label className="label">Подъезд*</label>
+            <label className="label">Подъезд <span className="text-accent">*</span></label>
             <input
               className="input"
               value={form.entrance}
@@ -229,7 +229,7 @@ export default function RegisterForm() {
           </fieldset>
           {/* Этаж */}
           <fieldset className="w-1/3">
-            <label className="label">Этаж*</label>
+            <label className="label">Этаж <span className="text-accent">*</span></label>
             <input
               className="input"
               value={form.floor}
@@ -248,7 +248,7 @@ export default function RegisterForm() {
         <div className="w-full flex gap-1 justify-between">
           {/* квартира */}
           <fieldset className="w-1/2">
-            <label className="label">Квартира*</label>
+            <label className="label">Квартира <span className="text-accent">*</span></label>
             <input
               className="input"
               value={form.apartment}
@@ -264,11 +264,10 @@ export default function RegisterForm() {
           </fieldset>
           {/* домофон */}
           <fieldset className="w-1/2">
-            <label className="label">Номер домофона*</label>
+            <label className="label">Номер домофона</label>
             <input
               className="input"
               value={form.intercom_number}
-              required
               onChange={(e) =>
                 setForm({ ...form, intercom_number: e.target.value })
               }
@@ -301,17 +300,17 @@ export default function RegisterForm() {
           </div>
         </fieldset>
       </div>
-      <CustomButton
+        <CustomButton
         text="Зарегистрироваться"
         buttonType="submit"
-        options="h-10 mt-6 px-3"
+        options="h-10 mt-6 px-6 min-w-70"
         isLoading={isLoading}
       />
       <Link
         href={"/auth/login"}
         className="link mt-2 lg:mt-5 italic h-10 flex items-center justify-center text-xs text-gray-200 text-right"
       >
-        Уже зарегистрирован? ⭢
+        Уже зарегистрированы? ⭢
       </Link>
     </form>
   );

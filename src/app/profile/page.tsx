@@ -1,10 +1,11 @@
-export default function ProfilePage() {
+
+
+
+export default async function ProfilePage() {
 
   return (
-    <div className="w-full h-screen flex justify-center items-center">
-      <h1 className="text-2xl">
-        Страница "профиль"
-      </h1>
-    </div>
-  )
+    <section>
+
+    </section>
+  );
 }
