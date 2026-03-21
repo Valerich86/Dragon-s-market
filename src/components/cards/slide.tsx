@@ -47,19 +47,20 @@ export default function Slide({ onVideoEnded, slideItem, cloudPath }: Props) {
         onContextMenu={(e) => e.preventDefault()}
         ref={videoRef}
         onEnded={onVideoEnded}
-        // autoPlay
+        autoPlay
+        preload="auto"
         muted
         playsInline
         disablePictureInPicture
         disableRemotePlayback
         loop={false}
         controls={false}
-        className={`absolute top-0 left-0 w-full h-full object-cover pointer-events-none select-none`}
+        className={`absolute top-0 left-0 w-full h-full object-cover pointer-events-none select-none border border-primary`}
       >
-        <source src={`${cloudPath}/video/${slideItem.video}`} type="video/webm" />
+        <source src={`${cloudPath}/video/${slideItem.video}`} type="video/mp4" />
         Ваш браузер не поддерживает видео.
       </video>
-      <div className="absolute inset-0 bg-linear-to-b from-primary via-transparent to-primary z-10 x-spacing">
+      <div className="absolute inset-0 z-10 x-spacing bg-primary/50 px-5">
         <h2
           className={`${font_mg.className} animate-tremor text-xl lg:text-4xl lg:w-3/4 leading-loose`}
         >
