@@ -77,6 +77,7 @@ export default function VideoCarouselSection({ cloudPath }: Props) {
                 key={index}
                 slideItem={item}
                 onVideoEnded={nextSlide}
+                cloudPath={cloudPath}
               />
             ))}
           </div>
