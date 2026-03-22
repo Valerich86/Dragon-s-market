@@ -20,10 +20,7 @@ export default function InfoItem ({ item, cloudPath }:Props) {
           `w-full min-h-screen flex flex-col md:flex-row gap-10 
           justify-center items-center x-spacing ${item.title ? "mt-70" : "mt-20"}`
         }>
-          {/* изображение или анимация */}
-          {item.media_type === "video" && item.media_url && (
-            <MaskotAnimation src={`${cloudPath}/info/${item.media_url}`} />
-          )}
+          
           {item.media_type === "image" && item.media_url && (
             <motion.div
               initial={{ scale: 0.9 }}
