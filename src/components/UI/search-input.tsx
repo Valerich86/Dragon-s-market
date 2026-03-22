@@ -90,7 +90,7 @@ export default function SearchInput({
                     className="w-full border-b border-gray-900"
                   >
                     <Link
-                      href={`/catalog/${item.id}?productName=${item.name}`}
+                      href={`/product/${item.id}?productName=${item.name}`}
                       className="w-full"
                     >
                       <div className="w-full flex items-baseline justify-between gap-10">

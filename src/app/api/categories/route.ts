@@ -5,7 +5,7 @@ import { useCloudPath } from '@/lib/cloud';
 export async function GET() {
   try {
     const data = await pool.query("SELECT * FROM categories ORDER BY name ASC");
-    const cloudPath = await useCloudPath();
+    const cloudPath = useCloudPath();
 
     return NextResponse.json(
       {

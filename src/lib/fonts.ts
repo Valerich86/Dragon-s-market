@@ -24,7 +24,7 @@ export const font_asian3 = localFont({
 //   weight: "400",
 // });
 
-export const font_decor = Great_Vibes({
+export const font_decor = Montserrat_Alternates({
   weight: "400",
 });
 

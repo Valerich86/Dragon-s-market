@@ -13,8 +13,13 @@ interface NavLinkProps {
 export default function NavLink({ href, name, options="" }: NavLinkProps) {
   const pathName = usePathname();
 
+  function getFirstSegment(pathname: string): string {
+    const segments = pathname.split("/");
+    return "/" + (segments[1] || "");
+  }
+
   return (
-    <div className={`${pathName === href ? "bg-accent" : "bg-none"} text-secondary text-sm px-4 h-full flex hover:bg-accent transition-colors duration-500 items-center`}>
+    <div className={`${getFirstSegment(pathName) === href ? "bg-accent" : "bg-none"} text-secondary text-sm px-4 h-full flex hover:bg-accent transition-colors duration-500 items-center`}>
       <Link href={href} className={`flex items-baseline ${options}`}>
         {/* <span className={`${font_decor.className} italic text-xl`}>
           {name[0]}

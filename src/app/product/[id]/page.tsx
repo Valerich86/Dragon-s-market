@@ -9,21 +9,22 @@ import ProductSection from "@/components/sections/product";
 
 export async function generateMetadata(
   {
-    params,
     searchParams,
   }: {
-    params: Promise<{ productId: string }>;
-    searchParams: Promise<{ productName: string }>;
+    searchParams: Promise<{ productName: string, categoryName: string }>;
   },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { productName } = await searchParams;
-  let product = "Неизвестный товар";
+  const { productName, categoryName } = await searchParams;
+  let product = "Неизвестный товар", category;
   if (productName) {
     product = decodeURIComponent(productName);
   }
-  const title = product;
-  const description = `Купить ${product.toLowerCase()} в магазине азиатских снеков "Драконий базар", Пермь`;
+  if (category) {
+    category = decodeURIComponent(categoryName);
+  }
+  const title = category ? `${category} | ${product}`: product;
+  const description = `Купить "${product}" в магазине азиатских снеков "Драконий базар", Пермь`;
   return {
     title,
     description,
@@ -34,12 +35,12 @@ export async function generateMetadata(
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ productId: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  const { productId } = await params;
-  const cloudPath = await useCloudPath();
+  const { id } = await params;
+  const cloudPath = useCloudPath();
   const data = await pool.query(`SELECT * FROM products WHERE id=$1`, [
-    productId,
+    id,
   ]);
   const product = data.rows[0];
 
@@ -51,8 +52,7 @@ export default async function ProductPage({
     );
 
   return (
-    <main aria-label="товар" className={`w-full overflow-x-hidden z-50`}>
-      <BGBlob src={"/images/bg-blob.webp"} />
+    <main aria-label="товар" className={`w-full h-screen overflow-x-hidden x-spacing flex justify-center items-center`}>
       <ProductSection product={product} cloudPath={cloudPath} />
     </main>
   );

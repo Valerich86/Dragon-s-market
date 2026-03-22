@@ -1,66 +1,79 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { font_bold } from "@/lib/fonts";
 
 interface Props {
-  src: string;
-  options?: string;
-  loop?: boolean;
+  src?: string;
+  onComplete: () => void; // Опциональный колбэк для уведомления родителя
 }
 
 export default function MaskotAnimation({
-  src,
-  options = '',
-  loop = false,
+  src = "/video/maskot.webm",
+  onComplete,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [hasBeenClicked, setHasBeenClicked] = useState(false); // Флаг, что клик уже был
+  const [animationClass, setAnimationClass] = useState("animate-shining");
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
-
-    // Инициализируем Intersection Observer
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-      },
-      {
-        rootMargin: '50px 0px', // Наблюдаем за элементами в 50px от вьюпорта
-        threshold: 0.1 // Срабатывает, когда 10% элемента видно
-      }
-    );
-
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  // Эффект для управления воспроизведением при изменении видимости
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (isVisible) {
-      // Перезапускаем видео с начала при появлении во вьюпорте
-      video.currentTime = 0;
-      video.play().catch((e) => {
-        console.log('Автовоспроизведение заблокировано:', e);
+    if (video) {
+      // Запускаем видео при монтировании
+      video.play().catch((error) => {
+        console.warn("Автовоспроизведение видео заблокировано:", error);
       });
-    } else {
-      // Ставим на паузу и сбрасываем позицию при уходе из вьюпорта
-      video.pause();
-      video.currentTime = 0;
+
+      // Обработчик для отслеживания прогресса видео
+      const handleTimeUpdate = () => {
+        const currentTime = video.currentTime;
+        const duration = video.duration;
+
+        if (!hasBeenClicked && duration > 0 && currentTime / duration >= 0.5) {
+          setAnimationClass("animate-hide");
+          setTimeout(() => {
+            onComplete(); // Гарантированно вызываем колбэк после анимации
+          }, 1000);
+        }
+      };
+
+      video.addEventListener("timeupdate", handleTimeUpdate);
+
+      return () => {
+        video.removeEventListener("timeupdate", handleTimeUpdate);
+      };
     }
-  }, [isVisible]);
+  }, [onComplete, hasBeenClicked]); // Добавляем hasBeenClicked в зависимости
+
+  // Обработчик клика по контейнеру
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    if (hasBeenClicked) return; // Предотвращаем множественные клики
+    setAnimationClass("animate-gotcha");
+    setHasBeenClicked(true);
+    const video = videoRef.current;
+
+    if (video) {
+      const duration = video.duration;
+      if (duration > 0) {
+        video.currentTime = duration * 0.9;
+        video.play().catch((error) => {
+          console.warn("Ошибка воспроизведения после клика:", error);
+        });
+      }
+    }
+    setTimeout(() => {
+      onComplete();
+    }, 1000);
+  };
 
   return (
-    <div className={`md:w-1/3 ${isVisible ? "animate-shining" : ""}`}>
+    <div
+      onClick={(e) => handleClick(e)}
+      className={`${animationClass}
+      absolute bottom-0 -left-14 md:-left-19 w-1/2 z-10 -rotate-15`}
+    >
       <video
         onContextMenu={(e) => e.preventDefault()}
         ref={videoRef}
@@ -69,17 +82,28 @@ export default function MaskotAnimation({
         disablePictureInPicture
         disableRemotePlayback
         style={{
-          width: '100%',
-          height: 'auto',
-          display: 'block',
-          userSelect: 'none',
+          width: "100%",
+          height: "auto",
+          userSelect: "none",
         }}
-        loop={loop}
+        loop={false}
         controls={false}
       >
         <source src={src} type="video/webm" />
         Ваш браузер не поддерживает видео.
       </video>
+      {hasBeenClicked && (
+        <motion.div
+          initial={{opacity: 1, y: 0}}
+          animate={{opacity: 0, y: "-400%"}}
+          transition={{duration: 3}}
+          className={
+            `${font_bold} text-accent text-shadow-lg text-shadow-amber-50 text-5xl absolute left-1/2 -translate-y-[50%] top-0 w-full`
+          }
+        >
+          + 1
+        </motion.div>
+      )}
     </div>
   );
 }

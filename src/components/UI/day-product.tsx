@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function DayProduct({ product, cloudPath }: Props) {
-  const href = `/catalog/${product.id}?productName=${product.name}`;
+  const href = `/product/${product.id}?productName=${product.name}`;
   return (
     <Link href={href} className="w-full lg:w-auto flex justify-center">
       <div className="w-1/2 lg:w-full relative">

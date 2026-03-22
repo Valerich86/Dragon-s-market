@@ -4,6 +4,9 @@ import {
   font_bold,
   font_mg,
   font_heading,
+  font_asian1,
+  font_asian2,
+  font_asian3,
 } from "@/lib/fonts";
 import DarknedImage from "../UI/darkned-image";
 import DayProduct from "../UI/day-product";

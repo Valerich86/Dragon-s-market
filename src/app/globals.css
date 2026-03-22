@@ -41,11 +41,64 @@ video::--webkit-media-controls-start-playback-button {
 
 @theme {
   --animate-shining: shining 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  --animate-hide: hide 1.5s ease-in-out;
+  --animate-gotcha: gotcha 1s ease-in-out;
   --animate-tremor: tremor 0.3s ease-in-out infinite alternate;
-  --animate-shining-intro: shining 2s ease-in-out forwards;
   --animate-spin: spin 5s linear infinite;
   --animate-emodji: emodji 7s ease-in infinite;
+  --animate-swing: swing 8s infinite;
   --animate-address: address 0.7s ease-in;
+
+  @keyframes swing {
+  0%, 100% {
+    transform: rotate(0deg);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+  10% {
+    transform: rotate(-10deg);
+    animation-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
+  }
+  45% {
+    transform: rotate(7deg);
+    animation-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
+  }
+  60% {
+    transform: rotate(-5deg);
+    animation-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
+  }
+  75% {
+    transform: rotate(3deg);
+    animation-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
+  }
+  90% {
+    transform: rotate(-1deg);
+  }
+}
+
+  @keyframes gotcha {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-50%);
+    }
+  }
+
+  @keyframes hide {
+    0% {
+      opacity: 1;
+      filter: blur(0) brightness(1) drop-shadow(0);
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      filter: blur(20px) brightness(1.8)
+        drop-shadow(0 0 25px rgba(255, 200, 100, 0.8));
+      transform: scale(0.8);
+    }
+  }
 
   @keyframes tremor {
     0%, 100% {

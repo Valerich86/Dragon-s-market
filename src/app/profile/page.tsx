@@ -1,11 +1,11 @@
 'use client';
 
 import PaintCaption from "@/components/UI/paint-caption";
-import { useUser } from "@/context/user-context";
+import { useProfile } from "@/context/profile-context";
 import { font_bold, font_light, font_mg } from "@/lib/fonts";
 
 export default function General() {
-  const {general} = useUser();
+  const {general} = useProfile();
 
   return (
     <section aria-label="Общая информация" className="w-full">

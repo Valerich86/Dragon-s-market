@@ -8,19 +8,28 @@ import Image from "next/image";
 import type { Category, Product } from "@/lib/types";
 import CustomButton from "../UI/custom-button";
 import { font_bold } from "@/lib/fonts";
+import MaskotAnimation from "../animation/maskot";
 
 interface Props {
   item: Product;
   currentCategory?: Category;
   cloudPath: string;
+  index: number;
+  maskotPosition: number;
+  changeMaskotPosition: () => void;
+  maskotKey: number;
 }
 
 export default function ProductCard({
   item,
   currentCategory,
   cloudPath,
+  index,
+  maskotPosition,
+  changeMaskotPosition,
+  maskotKey,
 }: Props) {
-  const href = `/catalog/${item.id}?categoryName=${currentCategory?.name}&productName=${item.name}`;
+  const href = `/product/${item.id}?categoryName=${currentCategory?.name}&productName=${item.name}`;
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
   const router = useRouter();
@@ -32,7 +41,9 @@ export default function ProductCard({
       initial={{ scale: 0.9 }}
       animate={inView ? { scale: 1 } : {}}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-[47%] lg:w-50 aspect-2/3 text-primary bg-secondary hover:bg-linear-to-r from-secondary to-gray-200 transition-colors duration-500 cursor-pointer rounded-xl"
+      className={`w-[47%] lg:w-50 aspect-2/3 text-primary bg-secondary
+         hover:bg-linear-to-r from-secondary to-gray-200 transition-colors 
+         duration-500 cursor-pointer rounded-xl relative ${index === maskotPosition ? "animate-swing": ""}`}
       onClick={() => router.push(href)}
     >
       <div
@@ -63,7 +74,11 @@ export default function ProductCard({
                 {item.weight}
                 {item.unit}
               </p>
-              <p className={`${font_bold.className} ${item.price.toString().length > 6 ? "tracking-tighter": ""} text-lg`}>{item.price}₽</p>
+              <p
+                className={`${font_bold.className} ${item.price.toString().length > 6 ? "tracking-tighter" : ""} text-lg`}
+              >
+                {item.price}₽
+              </p>
             </div>
             <CustomButton
               onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
@@ -76,6 +91,13 @@ export default function ProductCard({
           </div>
         </div>
       </div>
+
+      {index === maskotPosition && (
+        <MaskotAnimation
+          key={maskotKey} // При смене key компонент перемонтируется
+          onComplete={changeMaskotPosition}
+        />
+      )}
     </motion.div>
   );
 }

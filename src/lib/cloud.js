@@ -10,7 +10,7 @@ import {
 export const baseUrl = process.env.VK_CLOUD_ENDPOINT;
 export const bucketName = process.env.VK_CLOUD_BUCKET;
 
-export async function useCloudPath() {
+export function useCloudPath() {
   return `${baseUrl}/${bucketName}`;
 }
 

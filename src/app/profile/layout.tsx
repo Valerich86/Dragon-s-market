@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getUserInfo } from "@/lib/actions";
 import { font_light } from "@/lib/fonts";
 import ProfileOptions from "@/components/sections/profile-options";
-import UserProvider from "@/components/user-provider";
+import ProfileProvider from "@/components/profile-provider";
 
 export const metadata: Metadata = {
   title: {
@@ -34,7 +34,7 @@ export default async function ProfileLayout({
       </h1>
       <p className="text-xs">тел: {user.general.phone}</p>
       <ProfileOptions />
-      <UserProvider user={user}>{children}</UserProvider>
+      <ProfileProvider user={user}>{children}</ProfileProvider>
     </main>
   );
 }

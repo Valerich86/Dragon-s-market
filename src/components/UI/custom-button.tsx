@@ -22,7 +22,7 @@ export default function CustomButton({
       type={buttonType}
       onClick={onClick}
       disabled={isLoading}
-      className={`${options} ${!isLoading ? "hover:shadow-[0px_0px_20px_-5px_#E23324]" : ""} bg-accent z-10
+      className={`${options} ${!isLoading ? "hover:shadow-[0px_0px_20px_-5px_#E23324]" : ""} bg-accent 
           p-1 rounded-full text-secondary transition duration-400 
           cursor-pointer outline-none active:scale-98 text-center`}
     >

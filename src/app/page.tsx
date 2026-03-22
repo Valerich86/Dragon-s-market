@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const cloudPath = await useCloudPath();
+  const cloudPath = useCloudPath();
 
   return (
     <main aria-label='главная страница' className={
