@@ -42,6 +42,17 @@ export default function Addresses() {
             console.error("Ошибка регистрации");
           }
         };
+
+        const deleteAddress = async () => {
+          try {
+            const response = await fetch(`/api/addresses/${a.id}`, {
+              method: "DELETE",
+            });
+            if (response.ok) router.refresh();
+          } catch (error) {
+            console.error(error);
+          }
+        };
         return (
           <div
             key={a.id}
@@ -50,9 +61,12 @@ export default function Addresses() {
             <div className={`${font_mg} w-full`}>
               <div className="flex items-center gap-10 w-full lg:w-1/3">
                 <p className="uppercase">Адрес {i + 1}</p>
-                <div className="flex gap-2 items-center text-accent cursor-pointer" onClick={putAddress}>
-                  {a.id === defaultAddress && <IoMdRadioButtonOn/>}
-                  {a.id !== defaultAddress && <IoMdRadioButtonOff/>}
+                <div
+                  className="flex gap-2 items-center text-accent cursor-pointer"
+                  onClick={putAddress}
+                >
+                  {a.id === defaultAddress && <IoMdRadioButtonOn />}
+                  {a.id !== defaultAddress && <IoMdRadioButtonOff />}
                   <p className="text-secondary">
                     {a.id === defaultAddress ? "(основной)" : ""}
                   </p>
@@ -116,9 +130,9 @@ export default function Addresses() {
               >
                 <AiFillEdit size={20} />
               </Link>
-              <Link href={`/`} className="link text-accent">
+              <button className="link text-accent" onClick={deleteAddress}>
                 <AiTwotoneDelete size={22} />
-              </Link>
+              </button>
             </div>
           </div>
         );

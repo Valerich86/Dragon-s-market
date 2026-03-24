@@ -23,7 +23,7 @@ export default async function AddressPage({
     >
       <h1 className={`${font_light.className} text-2xl`}>{id ? "Редактирование адреса" : "Новый адрес"}</h1>
       <p className="text-accent text-xs mt-10 mb-5">* - обязательное поле</p>
-      <AddressForm method={id ? "put" : "post"} address={address? address : undefined} user={userId ? userId : undefined}/>
+      <AddressForm method={id ? "put" : "post"} address={address? address : undefined} user={Number(userId)}/>
     </main>
   );
 }

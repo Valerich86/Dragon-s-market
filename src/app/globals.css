@@ -233,3 +233,7 @@ video::--webkit-media-controls-start-playback-button {
 .input {
   @apply w-full text-primary rounded-md border-none p-2 text-sm outline-none bg-secondary placeholder:text-gray-400;
 }
+
+.eye {
+  @apply cursor-pointer text-secondary;
+}

@@ -7,7 +7,7 @@ export async function getUserInfo(userId: number) {
     [userId],
   );
   const addressesData = await pool.query(
-    `SELECT * FROM customer_addresses WHERE customer_id=$1`,
+    `SELECT * FROM addresses WHERE customer_id=$1`,
     [userId],
   );
   return {
@@ -20,7 +20,7 @@ export async function getUserInfo(userId: number) {
 
 export async function getAddress(addressId: number) {
   const addressesData = await pool.query(
-    `SELECT * FROM customer_addresses WHERE id=$1`,
+    `SELECT * FROM addresses WHERE id=$1`,
     [addressId],
   );
   return {

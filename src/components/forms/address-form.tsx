@@ -3,9 +3,8 @@
 import { SubmitEvent, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import FormError from "../UI/form-error";
-import Link from "next/link";
 import CustomButton from "../UI/custom-button";
-import { Address, RegisterFormErrors } from "@/lib/types";
+import { Address, AddressFormErrors } from "@/lib/types";
 
 export default function AddressForm({
   address,
@@ -14,10 +13,11 @@ export default function AddressForm({
 }: {
   address?: Address;
   method: "post" | "put";
-  user?: number;
+  user: number;
 }) {
   const [form, setForm] = useState({
     id: 0,
+    customer_id: Number(user),
     city: "",
     street: "",
     house: "",
@@ -26,9 +26,9 @@ export default function AddressForm({
     apartment: "",
     intercom_number: "",
     additional_info: "",
-    is_default: false
+    is_default: true
   });
-  const [errors, setErrors] = useState<RegisterFormErrors | undefined>(
+  const [errors, setErrors] = useState<AddressFormErrors | undefined>(
     undefined,
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +38,7 @@ export default function AddressForm({
     if (method === "put" && address) {
       setForm({
         id: address.id,
+        customer_id: Number(user),
         city: address.city,
         street: address.street,
         house: address.house,
@@ -55,7 +56,7 @@ export default function AddressForm({
     setIsLoading(true);
     e.preventDefault();
     setErrors(undefined);
-    const response = await fetch(`/api/addresses/${user}`, {
+    const response = await fetch(method === "post" ? `/api/addresses` : `/api/addresses/${form.id}`, {
       method: method === "post" ? "POST" : "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -66,7 +67,7 @@ export default function AddressForm({
     } else if (response.status === 400) {
       setErrors((await response.json()).errors);
     } else {
-      console.error("Ошибка регистрации");
+      console.error("Ошибка");
     }
     setIsLoading(false);
   }

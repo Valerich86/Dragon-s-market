@@ -1,6 +1,7 @@
 "use client";
 
 import { SubmitEvent, useState } from "react";
+import { PiEyesLight } from "react-icons/pi";
 import { redirect } from "next/navigation";
 import FormError from "../UI/form-error";
 import Link from "next/link";
@@ -9,9 +10,10 @@ import CustomButton from "../UI/custom-button";
 export default function LoginForm() {
   const [form, setForm] = useState({
     password: "",
-    phone: "+7"
+    phone: "+7",
   });
-  const [error, setError] = useState<string|undefined>(undefined);
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
@@ -26,8 +28,8 @@ export default function LoginForm() {
     if (response.ok) {
       redirect("/profile");
     } else if (response.status === 401) {
-      const {error} = await response.json();
-      console.log(error)
+      const { error } = await response.json();
+      console.log(error);
       setError(error);
     } else {
       console.error("Ошибка регистрации");
@@ -36,10 +38,15 @@ export default function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-full md:w-2/3 lg:w-1/2">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-2 w-full md:w-2/3 lg:w-1/2"
+    >
       {/* телефон */}
       <fieldset>
-        <label className="label">Логин (Номер телефона) <span className="text-accent">*</span></label>
+        <label className="label">
+          Логин (Номер телефона) <span className="text-accent">*</span>
+        </label>
         <input
           className="input"
           type="tel"
@@ -52,19 +59,29 @@ export default function LoginForm() {
       </fieldset>
 
       {/* пароль */}
-      <fieldset>
-        <label className="label">Пароль <span className="text-accent">*</span></label>
-        <input
-          className="input"
-          type="password"
-          value={form.password}
-          required
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-        />
-      </fieldset>
-        <div aria-live="polite" aria-atomic="true">
-          {error && <FormError errorField={error} />}
+      <fieldset className="relative">
+        <label className="label">
+          Пароль <span className="text-accent">*</span>
+        </label>
+        <div className="flex items-center gap-2">
+          <input
+            className="input"
+            type={showPassword ? "text" : "password"}
+            value={form.password}
+            placeholder="Пока просто не менее 4 символов"
+            required
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+          />
+          <PiEyesLight
+            size={30}
+            className={`cursor-pointer text-secondary ${showPassword ? "" : "-scale-x-100"} transition duration-300`}
+            onClick={() => setShowPassword((prev) => !prev)}
+          />
         </div>
+      </fieldset>
+      <div aria-live="polite" aria-atomic="true">
+        {error && <FormError errorField={error} />}
+      </div>
 
       <CustomButton
         text="Войти"
@@ -74,7 +91,7 @@ export default function LoginForm() {
       />
       <Link
         href={"/auth/register"}
-        className="link mt-2 lg:mt-5 italic h-10 flex items-center justify-center text-xs text-gray-200 text-right"
+        className="link mt-2 lg:mt-5 italic h-10 flex items-center justify-center text-gray-200 text-right"
       >
         Ешё не зарегистрированы? ⭢
       </Link>

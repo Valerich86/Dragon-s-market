@@ -1,12 +1,12 @@
-"use server";
-
 import { z } from "zod";
 import { pool } from "@/lib/db";
 import { NextResponse } from "next/server";
+import type { Address } from "@/lib/types";
 
-const RegistrationFormSchema = z
+export const AddressFormSchema = z
   .object({
-    id: z.number().optional(),
+    id: z.number(),
+    customer_id: z.number(),
     city: z
       .string()
       .min(2, "Название города должно содержать минимум 2 символа")
@@ -37,66 +37,12 @@ const RegistrationFormSchema = z
       ),
     intercom_number: z.string().trim().optional().default(""),
     additional_info: z.string().trim().optional().default(""),
-    is_default: z.boolean()
+    is_default: z.boolean().optional()
   });
 
-export async function POST(req: Request, { params }: { params: Promise<{ userId: string }> }) {
+export async function POST(req: Request) {
   const body = await req.json();
-  const { userId } = await params;
-  console.log(userId)
-  console.log(Number(userId))
-  const validatedFields = await RegistrationFormSchema.safeParseAsync(body);
-
-  if (!validatedFields.success) {
-    const errors = validatedFields.error.flatten().fieldErrors;
-    return NextResponse.json(
-      { errors: errors },
-      { status: 400 },
-    );
-  }
-
-  const {
-    id,
-    city,
-    street,
-    house,
-    entrance,
-    floor,
-    apartment,
-    intercom_number,
-    additional_info,
-    is_default
-  } = validatedFields.data;
-
-  try {
-    const result = await pool.query(
-      `INSERT INTO customer_addresses 
-      (customer_id, street, house, entrance, floor, apartment, intercom_number, additional_info, city, is_default)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
-      [
-        Number(userId),
-        street,
-        house,
-        entrance,
-        floor,
-        apartment,
-        intercom_number,
-        additional_info,
-        city,
-        is_default,
-      ],
-    );
-    return NextResponse.json({status: 201})
-  } catch (error) {
-    console.error('Ошибка добавления данных:', error);
-    return NextResponse.json({ status: 500 });
-  }
-}
-
-
-export async function PUT(req: Request, { params }: { params: Promise<{ userId: string }> }) {
-  const body = await req.json();
-  const validatedFields = await RegistrationFormSchema.safeParseAsync(body);
+  const validatedFields = await AddressFormSchema.safeParseAsync(body);
 
   if (!validatedFields.success) {
     const errors = validatedFields.error.flatten().fieldErrors;
@@ -108,7 +54,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ userId: 
   }
 
   const {
-    id,
+    customer_id,
     city,
     street,
     house,
@@ -117,15 +63,16 @@ export async function PUT(req: Request, { params }: { params: Promise<{ userId: 
     apartment,
     intercom_number,
     additional_info,
-    is_default
   } = validatedFields.data;
 
   try {
+    await pool.query("BEGIN");
     const result = await pool.query(
-      `UPDATE customer_addresses 
-      SET street=$1, house=$2, entrance=$3, floor=$4, apartment=$5, 
-      intercom_number=$6, additional_info=$7, city=$8, is_default=$9 WHERE id=$10`,
+      `INSERT INTO addresses 
+      (customer_id, street, house, entrance, floor, apartment, intercom_number, additional_info, city)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
       [
+        customer_id,
         street,
         house,
         entrance,
@@ -134,12 +81,21 @@ export async function PUT(req: Request, { params }: { params: Promise<{ userId: 
         intercom_number,
         additional_info,
         city,
-        is_default,
-        id
       ],
     );
-    return NextResponse.json({status: 204});
+    if (!result.rows || result.rows.length === 0) {
+      throw new Error("Не удалось добавить адрес");
+    }
+    const { id } = result.rows[0];
+    const data = await pool.query(`SELECT * FROM addresses WHERE customer_id=$1`, [customer_id]);
+    const allAddresses:Address[] = data.rows;
+    for (let a of allAddresses) {
+      await pool.query(`UPDATE addresses SET is_default=$1 WHERE id=$2`, [a.id === id ? true : false, a.id]);
+    }
+    await pool.query("COMMIT");
+    return NextResponse.json({status: 201})
   } catch (error) {
+    await pool.query("ROLLBACK");
     console.error('Ошибка добавления данных:', error);
     return NextResponse.json({ status: 500 });
   }

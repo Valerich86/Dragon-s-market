@@ -82,6 +82,9 @@ export type RegisterFormErrors = {
   password?: string[];
   confirmPassword?: string[];
   phone?: string[];
+};
+
+export type AddressFormErrors = {
   city?: string[];
   street?: string[];
   house?: string[];

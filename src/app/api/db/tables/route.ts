@@ -55,7 +55,7 @@ const createTablesQuery = `
     intercom_number VARCHAR(20),
     postal_code VARCHAR(20),
     additional_info TEXT,
-    is_default BOOLEAN DEFAULT FALSE,
+    is_default BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_addresses_customer

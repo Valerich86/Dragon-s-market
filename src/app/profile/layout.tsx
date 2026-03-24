@@ -21,7 +21,7 @@ export default async function ProfileLayout({
   children: React.ReactNode;
 }) {
   const session = await verifySession();
-  if (!session) redirect("/auth/login");
+  if (!session) redirect("/auth/register");
   const { user } = await getUserInfo(session.userId);
 
   return (

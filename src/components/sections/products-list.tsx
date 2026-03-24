@@ -47,6 +47,11 @@ export default function ProductsList({ category }: { category: Category }) {
     }
   }, [category, products]); 
 
+  if (isLoading) return (
+    <div className="w-full h-screen text-center pt-20 italic">
+      ...загружаю товары...
+    </div>
+  );
   if (!filteredProducts || filteredProducts.length === 0) {
     return (
       <NoInfo
@@ -54,6 +59,7 @@ export default function ProductsList({ category }: { category: Category }) {
       />
     );
   }
+
 
   return (
     <>
