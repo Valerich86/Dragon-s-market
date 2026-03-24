@@ -6,12 +6,14 @@ import { font_bold } from "@/lib/fonts";
 
 interface Props {
   src?: string;
-  onComplete: () => void; // Опциональный колбэк для уведомления родителя
+  onComplete: () => void;
+  position: "left" | "right";
 }
 
 export default function MaskotAnimation({
   src = "/video/maskot.webm",
   onComplete,
+  position,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasBeenClicked, setHasBeenClicked] = useState(false); // Флаг, что клик уже был
@@ -19,6 +21,7 @@ export default function MaskotAnimation({
 
   useEffect(() => {
     const video = videoRef.current;
+    console.log(position);
     if (video) {
       // Запускаем видео при монтировании
       video.play().catch((error) => {
@@ -71,8 +74,12 @@ export default function MaskotAnimation({
   return (
     <div
       onClick={(e) => handleClick(e)}
-      className={`${animationClass}
-      absolute bottom-0 -left-14 md:-left-19 w-1/2 z-10 -rotate-15`}
+      className={
+        `${animationClass} ${position === "left" 
+          ? "-left-16 md:-left-19.5 -rotate-12" 
+          : "left-37 md:left-45 rotate-12"}
+        absolute bottom-0 w-1/2`
+      }
     >
       <video
         onContextMenu={(e) => e.preventDefault()}
@@ -85,6 +92,7 @@ export default function MaskotAnimation({
           width: "100%",
           height: "auto",
           userSelect: "none",
+          transform: position === "right" ? "scaleX(-1)" : "scaleX(1)",
         }}
         loop={false}
         controls={false}
@@ -94,12 +102,10 @@ export default function MaskotAnimation({
       </video>
       {hasBeenClicked && (
         <motion.div
-          initial={{opacity: 1, y: 0}}
-          animate={{opacity: 0, y: "-400%"}}
-          transition={{duration: 3}}
-          className={
-            `${font_bold} text-accent text-shadow-lg text-shadow-amber-50 text-5xl absolute left-1/2 -translate-y-[50%] top-0 w-full`
-          }
+          initial={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 0, y: "-400%" }}
+          transition={{ duration: 3 }}
+          className={`${font_bold} text-accent text-shadow-lg text-shadow-amber-50 text-5xl absolute left-1/2 -translate-y-[50%] top-0 w-full`}
         >
           + 1
         </motion.div>

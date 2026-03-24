@@ -6,6 +6,7 @@ import ProductImage from "@/components/UI/product-image";
 import CustomButton from "@/components/UI/custom-button";
 import { font_accent } from "@/lib/fonts";
 import ProductSection from "@/components/sections/product";
+import { getProductData } from "@/lib/actions";
 
 export async function generateMetadata(
   {
@@ -35,14 +36,11 @@ export async function generateMetadata(
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: number }>;
 }) {
   const { id } = await params;
   const cloudPath = useCloudPath();
-  const data = await pool.query(`SELECT * FROM products WHERE id=$1`, [
-    id,
-  ]);
-  const product = data.rows[0];
+  const {product} = await getProductData(id);
 
   if (!product)
     return (

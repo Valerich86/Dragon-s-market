@@ -11,6 +11,7 @@ import {
 import DarknedImage from "../UI/darkned-image";
 import DayProduct from "../UI/day-product";
 import { pool } from "@/lib/db";
+import { getProductOfADay } from "@/lib/actions";
 
 export default async function HeroSection({
   cloudPath,
@@ -18,10 +19,7 @@ export default async function HeroSection({
   cloudPath: string;
 }) {
   const status = "productOfADay";
-  const dayProduct = await pool.query(
-    `SELECT * FROM products WHERE status=$1 AND is_active=TRUE AND remains>0`,
-    [status],
-  );
+  const {product} = await getProductOfADay();
 
   return (
     <section
@@ -47,8 +45,8 @@ export default async function HeroSection({
             Пермь, Бульвар Гагарина, 83
           </p>
         </div>
-        {dayProduct && (
-          <DayProduct cloudPath={cloudPath} product={dayProduct?.rows[0]} />
+        {product && (
+          <DayProduct cloudPath={cloudPath} product={product} />
         )}
       </div>
     </section>

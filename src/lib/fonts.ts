@@ -7,7 +7,9 @@ import {
   Comforter,
   Great_Vibes,
   Playfair_Display_SC,
-  Montserrat_Alternates
+  Montserrat_Alternates,
+  New_Amsterdam,
+  New_Rocker
 } from "next/font/google";
 
 export const font_asian1 = localFont({
@@ -24,7 +26,7 @@ export const font_asian3 = localFont({
 //   weight: "400",
 // });
 
-export const font_decor = Montserrat_Alternates({
+export const font_decor = New_Rocker({
   weight: "400",
 });
 

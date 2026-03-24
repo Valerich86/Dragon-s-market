@@ -35,7 +35,7 @@ export default async function CategoryPage({
   return (
     <main
       aria-label={categoryName}
-      className="w-full flex flex-wrap gap-4 items-center justify-between py-15"
+      className="w-full flex flex-wrap gap-5 items-center justify-start py-15"
     >
       <ProductsList category={{id: categoryId, name: categoryName}}/>
     </main>

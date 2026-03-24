@@ -10,7 +10,7 @@ export default function General() {
   return (
     <section aria-label="Общая информация" className="w-full">
       <div className="flex items-baseline gap-5 w-full">
-        <p>С нами с</p>
+        <p>Вы зарегистрированы</p>
         <div className="relative -translate-y-5 lg:-translate-y-6">
           <PaintCaption caption={new Date(general.created_at).toLocaleDateString()}/>
         </div>

@@ -47,8 +47,6 @@ export default function ProductsList({ category }: { category: Category }) {
     }
   }, [category, products]); 
 
-  if (isLoading) return <Loading />;
-
   if (!filteredProducts || filteredProducts.length === 0) {
     return (
       <NoInfo

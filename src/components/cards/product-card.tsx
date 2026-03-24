@@ -34,16 +34,19 @@ export default function ProductCard({
   const inView = useInView(ref, { once: true, amount: 0.3 });
   const router = useRouter();
   const [src, setSrc] = useState(`${cloudPath}/products/${item.id}.png`);
+  const [maskotSide, setMaskotSide] = useState<"right" | "left">(
+    index % 2 === 0 ? "right" : "left",
+  );
 
   return (
     <motion.div
       ref={ref}
-      initial={{ scale: 0.9 }}
-      animate={inView ? { scale: 1 } : {}}
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.9, opacity: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`w-[47%] lg:w-50 aspect-2/3 text-primary bg-secondary
          hover:bg-linear-to-r from-secondary to-gray-200 transition-colors 
-         duration-500 cursor-pointer rounded-xl relative ${index === maskotPosition ? "animate-swing": ""}`}
+         duration-500 cursor-pointer rounded-xl relative ${index === maskotPosition ? "animate-swing z-10" : ""}`}
       onClick={() => router.push(href)}
     >
       <div
@@ -96,6 +99,7 @@ export default function ProductCard({
         <MaskotAnimation
           key={maskotKey} // При смене key компонент перемонтируется
           onComplete={changeMaskotPosition}
+          position={maskotSide}
         />
       )}
     </motion.div>
