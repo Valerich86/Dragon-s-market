@@ -81,7 +81,7 @@ export default function UploadImages() {
         <div className="flex flex-col mb-5">
           <label className="label">Выберите изображения</label>
           <span className="text-xs italic opacity-50">
-            (до 20 файлов за раз)
+            (до 20 файлов за раз, только .png)
           </span>
         </div>
         <input
@@ -98,7 +98,7 @@ export default function UploadImages() {
         />
       </fieldset>
 
-      {files.length > 0 && files.length < maxFiles && (
+      {files.length > 0 && files.length <= maxFiles && (
         <div className="mt-4">
           <h3 className="font-medium mb-2">Выбранные файлы:</h3>
           <ul className="space-y-1">
