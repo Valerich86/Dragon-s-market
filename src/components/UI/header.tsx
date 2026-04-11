@@ -3,6 +3,7 @@
 import NavLink from "./nav-link";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { SlBasket } from "react-icons/sl";
 import { SlUser } from "react-icons/sl";
@@ -24,6 +25,7 @@ const rightLinks = [
 
 export default function Header() {
   const [screenWidth, setScreenWidth] = useState(0);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleResize = () => {
@@ -42,7 +44,7 @@ export default function Header() {
 
   return (
     <header
-      className={`w-full fixed left-0 top-0 flex justify-between items-center z-50 bg-primary h-13 pl-3 lg:pl-0 border border-gray-700`}
+      className={`${pathname.startsWith("/admin") ? "hidden" : ""} w-full fixed left-0 top-0 flex justify-between items-center z-50 bg-primary h-13 pl-3 lg:pl-0 border border-gray-700`}
     >
       {/* левые ссылки */}
       <div className="flex justify-start items-center h-13 lg:gap-5 w-full lg:w-1/3">

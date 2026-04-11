@@ -94,3 +94,25 @@ export type AddressFormErrors = {
   intercom_number?: string[];
   additional_info?: string[];
 };
+
+export interface UploadedFile {
+  originalName: string;
+  storedName: string;
+  size: number;
+  url?: string;
+}
+
+export interface UploadResponse {
+  success: boolean;
+  uploadedCount: number;
+  files: UploadedFile[];
+  error?: string;
+}
+
+export interface FileWithMeta {
+  file: File;
+  buffer: Buffer;
+  name: string;
+  type: string;
+  size: number;
+}

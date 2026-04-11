@@ -2,7 +2,6 @@ import HeroSection from "@/components/sections/hero";
 import type { Metadata } from "next";
 import NewsSection from "@/components/sections/news";
 import CarouselSection from "@/components/sections/carousel";
-import BGBlob from "@/components/UI/bg-blob";
 import AboutSection from "@/components/sections/about";
 import AssortmentSection from "@/components/sections/assortment";
 import { useCloudPath } from "@/lib/cloud";
@@ -22,7 +21,6 @@ export default async function Home() {
     <main aria-label='главная страница' className={
       `w-full overflow-x-hidden pb-50`
     }>
-      <BGBlob src={"/images/bg-blob.webp"} />
       <HeroSection cloudPath={cloudPath}/>
       <DiscountPlan />
       <VideoCarouselSection cloudPath={cloudPath}/>

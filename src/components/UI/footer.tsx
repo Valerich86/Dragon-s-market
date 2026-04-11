@@ -1,7 +1,10 @@
+'use client';
+
 import Link from "next/link";
 import React from "react";
 import { PiTelegramLogoLight } from "react-icons/pi";
 import { SlPhone } from "react-icons/sl";
+import { usePathname } from "next/navigation";
 
 type FooterLink = {
   name: string;
@@ -21,6 +24,8 @@ const rightLinks = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+
   const FooterBlock = ({ links }: { links: FooterLink[] }) => {
     return (
       <div className="w-full lg:w-1/4 flex flex-col justify-center gap-10">
@@ -36,7 +41,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="absolute bg-maskot2/80 text-secondary w-full x-spacing flex flex-col lg:text-xs z-10">
+    <footer className={`${pathname.startsWith("/admin") ? "hidden" : ""} absolute bg-maskot2/80 text-secondary w-full x-spacing flex flex-col lg:text-xs z-10`}>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-20 lg:gap-0 py-10 border-b border-gray-200">
         <FooterBlock links={leftLinks} />
         <FooterBlock links={rightLinks} />

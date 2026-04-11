@@ -1,5 +1,4 @@
 import { Metadata, ResolvingMetadata } from "next";
-import BGBlob from "@/components/UI/bg-blob";
 import { pool } from "@/lib/db";
 import { useCloudPath } from "@/lib/cloud";
 import ProductImage from "@/components/UI/product-image";
