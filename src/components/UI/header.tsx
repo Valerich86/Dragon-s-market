@@ -43,7 +43,11 @@ export default function Header({userId}:{userId:number}) {
 
   return (
     <header
-      className={`${pathname.startsWith("/admin") ? "hidden" : ""} w-full fixed left-0 top-0 flex justify-between items-center z-50 bg-primary h-13 pl-3 lg:pl-0 border border-gray-700`}
+      className={
+        `${pathname.startsWith("/admin") ? "hidden" : ""} 
+        w-full fixed left-0 top-0 flex justify-between items-center z-50 
+        bg-primary h-13 pl-3 lg:pl-0 border-b border-gray-700
+      `}
     >
       {/* левые ссылки */}
       <div className="flex justify-start items-center h-13 lg:gap-5 w-full lg:w-1/3">

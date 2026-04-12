@@ -1,9 +1,5 @@
 import { Metadata, ResolvingMetadata } from "next";
-import { pool } from "@/lib/db";
 import { useCloudPath } from "@/lib/cloud";
-import ProductImage from "@/components/UI/product-image";
-import CustomButton from "@/components/UI/custom-button";
-import { font_accent } from "@/lib/fonts";
 import ProductSection from "@/components/sections/product";
 import { getProductData } from "@/lib/actions";
 import { verifySession } from "@/lib/auth";
@@ -54,7 +50,7 @@ export default async function ProductPage({
 
   return (
     <main aria-label="товар" className={`w-full overflow-x-hidden x-spacing flex justify-center items-center`}>
-      <ProductSection product={product} cloudPath={cloudPath} />
+      <ProductSection product={product} cloudPath={cloudPath} userId={userId}/>
     </main>
   );
 }
