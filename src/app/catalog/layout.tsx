@@ -40,6 +40,7 @@ export default async function CatalogLayout({
       aria-label="каталог"
       className={`w-full overflow-x-hidden x-spacing py-30`}
     >
+      <UserIdProvider userId={userId}>
       <section aria-label="категории" className="w-full flex flex-wrap gap-5">
         <div className="w-full flex justify-between items-center h-10">
           <h1 className={`${font_light.className} uppercase`}>Каталог</h1>
@@ -47,7 +48,6 @@ export default async function CatalogLayout({
         </div>
         <CategoriesList categories={categories} />
       </section>
-      <UserIdProvider userId={userId}>
         <CatalogProvider catalog={{allProducts:catalog, cloudPath: cloudPath}}>{children}</CatalogProvider>
       </UserIdProvider>
     </main>
