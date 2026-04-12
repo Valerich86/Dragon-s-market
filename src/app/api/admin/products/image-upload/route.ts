@@ -1,7 +1,6 @@
 import type { UploadResponse, UploadedFile } from "@/lib/types";
 import { s3Client, bucketName } from "@/lib/cloud";
-import { ListBucketsCommand, PutObjectCommand } from "@aws-sdk/client-s3";
-import { randomUUID } from "crypto";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 // Вспомогательная функция для чтения файла из FormData
 async function getFileBuffer(file: File): Promise<Buffer> {
@@ -26,19 +25,10 @@ function validateFile(file: File): { valid: boolean; error?: string } {
 }
 
 export async function POST(request: Request) {
-  const listBucketsCommand = new ListBucketsCommand({});
-  try {
-    const buckets = await s3Client.send(listBucketsCommand);
-    console.log("Доступные buckets:", buckets.Buckets);
-  } catch (error) {
-    console.error("Ошибка при получении списка buckets:", error);
-  }
   try {
     // Получаем данные формы
     const formData = await request.formData();
     const files = formData.getAll("images") as unknown as File[];
-
-    console.log(`Получено файлов: ${files.length}`);
 
     if (!files || files.length === 0) {
       return Response.json(
@@ -69,19 +59,6 @@ export async function POST(request: Request) {
         // Читаем файл
         const fileBuffer = await getFileBuffer(file);
 
-        console.log(`Файл ${file.name} прочитан, размер буфера: ${fileBuffer.length} байт`);
-
-        // Генерируем уникальное имя файла
-        // const fileName = `uploads/${randomUUID()}-${file.name}`;
-
-        // Отладочный вывод перед загрузкой
-        console.log('Параметры загрузки:', {
-          Bucket: bucketName,
-          Key: file.name,
-          ContentType: file.type,
-          BodyLength: fileBuffer.length
-        });
-
         const fileName = `products/${file.name}`;
 
         // Загружаем в S3
@@ -93,8 +70,6 @@ export async function POST(request: Request) {
             ContentType: file.type,
           }),
         );
-
-        console.log(`Файл ${file.name} успешно загружен в S3`);
 
         uploadedFiles.push({
           originalName: file.name,

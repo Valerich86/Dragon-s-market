@@ -5,74 +5,46 @@ import NoInfo from "@/components/no-info";
 import ProductCard from "@/components/cards/product-card";
 import { useCatalog } from "@/context/catalog-context";
 import { Product, Category } from "@/lib/types";
-import Loading from "@/app/loading";
+import { useUserId } from "@/context/userId-context";
 
-export default function ProductsList({ category }: { category: Category }) {
-  const { products, cloudPath } = useCatalog();
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+interface Props {
+  products: Product[];
+  categoryName: string;
+}
+
+export default function ProductsList({ products, categoryName }:Props) {
+  const userId = useUserId();
+  const {cloudPath} = useCatalog();
   const [refreshPosition, setRefreshPosition] = useState(false);
   const [maskotPosition, setMaskotPosition] = useState(0);
   const [maskotKey, setMaskotKey] = useState(0); // Ключ для перезапуска анимации
 
   useEffect(() => {
-    // const randomIndex = Math.floor(Math.random() * 4);
-    const randomIndex = Math.floor(Math.random() * filteredProducts.length);
+    const randomIndex = Math.floor(Math.random() * products.length);
     setMaskotPosition(randomIndex);
     setMaskotKey(prev => prev + 1);
-  }, [filteredProducts.length, refreshPosition]);
+  }, [products.length, refreshPosition]);
 
-  useEffect(() => {
-    if (!products) {
-      setIsLoading(true);
-      return;
-    }
-
-    let list: Product[] = [];
-
-    try {
-      if (category.id === 0) {
-        list = [...products].sort(() => Math.random() - 0.5);
-      } else {
-        list = products.filter((product) =>
-          Number(product.category_id) === Number(category.id)
-        );
-      }
-      setFilteredProducts(list);
-    } catch (error) {
-      console.error("Ошибка фильтрации товаров:", error);
-      setFilteredProducts([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [category, products]); 
-
-  if (isLoading) return (
-    <div className="w-full h-screen text-center pt-20 italic">
-      ...загружаю товары...
-    </div>
-  );
-  if (!filteredProducts || filteredProducts.length === 0) {
+  if (!products || products.length === 0) {
     return (
       <NoInfo
-        text={`Продукты в категории "${category.name}" не найдены`}
+        text={`Продукты в категории "${categoryName}" не найдены`}
       />
     );
   }
 
-
   return (
     <>
-      {filteredProducts.map((item, index) => (
+      {products.map((item, index) => (
         <ProductCard
           key={item.id}
           item={item}
-          currentCategory={category}
           cloudPath={cloudPath}
           index={index}
           maskotPosition={maskotPosition}
           changeMaskotPosition={() => setRefreshPosition(!refreshPosition)}
           maskotKey={maskotKey}
+          userId={userId}
         />
       ))}
     </>

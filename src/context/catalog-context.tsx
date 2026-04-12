@@ -4,8 +4,7 @@ import { createContext, useContext } from 'react';
 import type { Category, Product } from '@/lib/types';
 
 export const CatalogContext = createContext<{
-    categories: Category[];
-    products: Product[];
+    allProducts: Product[];
     cloudPath: string;
 } | null>(null);
 

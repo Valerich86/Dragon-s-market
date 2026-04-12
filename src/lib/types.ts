@@ -1,5 +1,5 @@
 export type Product = {
-  id: string;
+  id: number;
   name: string;
   weight: number;
   unit: string;
@@ -12,11 +12,25 @@ export type Product = {
   is_active: boolean;
   to_carousel: boolean;
   status: string;
+  quantity: number | 0;
 };
 
 export type Category = {
   id: number;
   name: string;
+};
+
+export type CartItem = {
+  id: number;
+  customer_id: number;
+  product_id: number;
+  product_name: string;
+  product_weight: number;
+  product_unit: string;
+  quantity: number;
+  product_price: number;
+  total_price: number;
+  cart_total: number;
 };
 
 export type Info = {

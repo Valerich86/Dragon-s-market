@@ -21,7 +21,6 @@ export default function MaskotAnimation({
 
   useEffect(() => {
     const video = videoRef.current;
-    console.log(position);
     if (video) {
       // Запускаем видео при монтировании
       video.play().catch((error) => {

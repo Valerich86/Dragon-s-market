@@ -80,7 +80,7 @@ export default function DiscountPlan() {
     return (
       <div
         className={`${font_mg.className} text-primary border-5 rounded-2xl w-full
-      flex flex-col justify-center items-center gap-1 py-2 relative`}
+        flex flex-col justify-center items-center gap-1 py-2 relative`}
         style={{ backgroundColor: item.bgColor, borderColor: item.borderColor }}
       >
         <p className="uppercase">

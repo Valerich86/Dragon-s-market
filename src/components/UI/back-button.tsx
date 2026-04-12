@@ -1,34 +1,36 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
+import { CartContext } from "@/context/cart-context";
 
 export default function BackButton() {
   const router = useRouter();
   const pathname = usePathname();
-  const prevPathname = useRef(pathname);
+  const [previousPathname, setPreviousPathname] = useState<string>("");
 
+  // Отслеживаем изменение пути и сохраняем предыдущий
   useEffect(() => {
-    // Срабатывает при изменении пути
-    if (prevPathname.current !== pathname) {
-      // Ждём завершения перехода и прокручиваем вверх
+    if (previousPathname !== pathname) {
+      setPreviousPathname(pathname);
       setTimeout(() => {
         window.scrollTo({ top: 0, left: 0 });
-      }, 100); // Небольшая задержка для гарантии завершения перехода
-
-      // Обновляем предыдущий путь
-      prevPathname.current = pathname;
+      }, 100);
     }
-  }, [pathname]);
+  }, [pathname, previousPathname]);
+
+  const handleBack = () => {
+    router.refresh();
+    router.back()
+    // setTimeout(() => router.back(), 50);
+  };
 
   return (
     <>
       {pathname !== "/" && !pathname.startsWith("/admin") && (
         <button
           className="link fixed left-0 x-spacing top-18 text-3xl opacity-60 z-40 text-secondary"
-          onClick={() => {
-            router.back();
-          }}
+          onClick={handleBack}
         >
           ⇦
         </button>

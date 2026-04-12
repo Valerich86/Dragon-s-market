@@ -2,11 +2,10 @@
 
 import { useRef, useState, useEffect } from "react";
 import { useInView, motion } from "framer-motion";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import type { Category, Product } from "@/lib/types";
-import CustomButton from "../UI/custom-button";
+import ToCartButton from "../UI/to-cart-button";
 import { font_bold } from "@/lib/fonts";
 import MaskotAnimation from "../animation/maskot";
 
@@ -18,6 +17,7 @@ interface Props {
   maskotPosition: number;
   changeMaskotPosition: () => void;
   maskotKey: number;
+  userId: number;
 }
 
 export default function ProductCard({
@@ -28,6 +28,7 @@ export default function ProductCard({
   maskotPosition,
   changeMaskotPosition,
   maskotKey,
+  userId,
 }: Props) {
   const href = `/product/${item.id}?categoryName=${currentCategory?.name}&productName=${item.name}`;
   const ref = useRef(null);
@@ -44,13 +45,16 @@ export default function ProductCard({
       initial={{ scale: 0.9, opacity: 0 }}
       animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.9, opacity: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`w-[47%] lg:w-50 aspect-2/3 text-primary bg-secondary
+      className={`w-[46%] lg:w-50 aspect-2/3 text-primary bg-secondary
          hover:bg-linear-to-r from-secondary to-gray-200 transition-colors 
          duration-500 cursor-pointer rounded-xl relative ${index === maskotPosition ? "animate-swing z-10" : ""}`}
       onClick={() => router.push(href)}
     >
       <div
-        className={`w-full h-full flex flex-col items-center rounded-xl shadow-xl border border-gray-200 relative`}
+        className={
+          `w-full h-full flex flex-col items-center rounded-xl  
+          shadow-[0px_0px_30px_5px_rgba(59,130,246,0.12)] border border-gray-200 relative`
+        }
       >
         <div className="h-1/2 w-full">
           <Image
@@ -83,13 +87,12 @@ export default function ProductCard({
                 {item.price}₽
               </p>
             </div>
-            <CustomButton
-              onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                event.stopPropagation();
-                console.log("Добавлено");
-              }}
-              text="В корзину"
-              options={"w-full"}
+            <ToCartButton
+              product_id={item.id}
+              startQuantity={item.quantity}
+              customer_id={userId}
+              price={item.price}
+              isInCard
             />
           </div>
         </div>

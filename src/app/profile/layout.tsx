@@ -23,6 +23,7 @@ export default async function ProfileLayout({
   const session = await verifySession();
   if (!session) redirect("/auth/register");
   const { user } = await getUserInfo(session.userId);
+  if (!user) return;
 
   return (
     <main

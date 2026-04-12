@@ -9,7 +9,6 @@ import { SlBasket } from "react-icons/sl";
 import { SlUser } from "react-icons/sl";
 import BurgerMenu from "./burger-menu";
 import NavIcon from "./nav-icon";
-import SearchInput from "./search-input";
 
 const centeredLinks = [
   { name: "Kаталог", href: "/catalog" },
@@ -19,11 +18,11 @@ const centeredLinks = [
 ];
 
 const rightLinks = [
-  { icon: SlBasket, href: "/basket" },
+  { icon: SlBasket, href: "/cart" },
   { icon: SlUser, href: "/profile" },
 ];
 
-export default function Header() {
+export default function Header({userId}:{userId:number}) {
   const [screenWidth, setScreenWidth] = useState(0);
   const pathname = usePathname();
 
@@ -87,7 +86,7 @@ export default function Header() {
       <div className="flex justify-end items-center w-1/2 lg:w-1/3 h-full">
         {/* <SearchInput screenWidth={screenWidth} /> */}
         {rightLinks.map((item, index) => {
-          return <NavIcon key={index} href={item.href} icon={item.icon} />;
+          return <NavIcon key={index} href={item.href} icon={item.icon} userId={userId}/>;
         })}
       </div>
     </header>

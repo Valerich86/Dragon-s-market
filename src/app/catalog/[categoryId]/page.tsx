@@ -1,5 +1,7 @@
 import { Metadata, ResolvingMetadata } from "next";
 import ProductsList from "@/components/sections/products-list";
+import { getCatalog } from "@/lib/actions";
+import { verifySession } from "@/lib/auth";
 
 export async function generateMetadata(
   {
@@ -25,19 +27,24 @@ export async function generateMetadata(
 
 export default async function CategoryPage({
   params,
-  searchParams
+  searchParams,
 }: {
   params: Promise<{ categoryId: number }>;
   searchParams: Promise<{ categoryName: string }>;
 }) {
   const { categoryId } = await params;
   const { categoryName } = await searchParams;
+  const session = await verifySession();
+  let userId = 0;
+  if (session) userId = session.userId;
+  const { catalog } = await getCatalog(userId, categoryId);
+  
   return (
     <main
       aria-label={categoryName}
-      className="w-full flex flex-wrap gap-5 items-center justify-start py-15"
+      className="w-full flex flex-wrap gap-5 items-center justify-between py-15"
     >
-      <ProductsList category={{id: categoryId, name: categoryName}}/>
+      <ProductsList products={catalog} categoryName={categoryName}/>
     </main>
   );
 }

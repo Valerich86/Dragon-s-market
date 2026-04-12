@@ -19,7 +19,7 @@ export default function SparklesAnimation() {
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full h-full pointer-events-none select-none overflow-hidden`}
+      className={`absolute w-full top-40 left-0  h-full pointer-events-none select-none z-10`}
     >
       <video
         onContextMenu={(e) => e.preventDefault()}
@@ -33,15 +33,12 @@ export default function SparklesAnimation() {
           width: "100%",
           height: "auto",
           display: "block",
-          userSelect: "none",
-          // opacity: isVisible ? 1 : 0,
-          // transition: "opacity 0.5s ease"
+          userSelect: "none"
         }}
         loop={true} 
         controls={false}
       >
         <source src={`/video/sparkles.webm`} type="video/webm" />
-        Ваш браузер не поддерживает видео.
       </video>
     </div>
   );

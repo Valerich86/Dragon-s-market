@@ -1,9 +1,12 @@
 import CatalogProvider from "@/components/catalog-provider";
 import CategoriesList from "@/components/sections/categories-list";
 import SearchInput from "@/components/UI/search-input";
-import { getAllProductsAndCategoriesForCatalog } from "@/lib/actions";
+import { getCategories, getCatalog } from "@/lib/actions";
 import { font_light } from "@/lib/fonts";
 import type { Metadata } from "next";
+import { verifySession } from "@/lib/auth";
+import UserIdProvider from "@/components/userId-provider";
+import { useCloudPath } from "@/lib/cloud";
 
 export const metadata: Metadata = {
   title: {
@@ -25,7 +28,12 @@ export default async function CatalogLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { catalog } = await getAllProductsAndCategoriesForCatalog();
+  const session = await verifySession();
+  let userId = 0;
+  if (session) userId = session.userId;
+  const { categories } = await getCategories();
+  const { catalog } = await getCatalog(userId, 0);
+  const cloudPath = useCloudPath();
 
   return (
     <main
@@ -35,14 +43,13 @@ export default async function CatalogLayout({
       <section aria-label="категории" className="w-full flex flex-wrap gap-5">
         <div className="w-full flex justify-between items-center h-10">
           <h1 className={`${font_light.className} uppercase`}>Каталог</h1>
-          <SearchInput
-            allProducts={catalog.products}
-            cloudPath={catalog.cloudPath}
-          />
+          <SearchInput allProducts={catalog} cloudPath={cloudPath} />
         </div>
-        <CategoriesList categories={catalog.categories} />
+        <CategoriesList categories={categories} />
       </section>
-      <CatalogProvider catalog={catalog}>{children}</CatalogProvider>
+      {/* <UserIdProvider userId={userId}> */}
+        <CatalogProvider catalog={{allProducts:catalog, cloudPath: cloudPath}}>{children}</CatalogProvider>
+      {/* </UserIdProvider> */}
     </main>
   );
 }

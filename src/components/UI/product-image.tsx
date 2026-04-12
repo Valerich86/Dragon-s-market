@@ -1,33 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { Product } from "@/lib/types";
 
 interface Props {
-  product: Product;
+  productId: number;
   cloudPath: string;
   captionOptions?: string;
 }
 
 export default function ProductImage({
-  product,
+  productId,
   cloudPath,
   captionOptions = "",
 }: Props) {
-  const [src, setSrc] = useState(`${cloudPath}/products/${product.id}.png`);
+  const [src, setSrc] = useState(`${cloudPath}/products/${productId}.png`);
 
   return (
     <>
-      {/* <span
-        className={`${font_asian1.className} ${product.status === "default" ? "hidden" : ""} ${captionOptions} -rotate-30 absolute z-10 bg-maskot3 text-secondary py-2 px-3 text-center`}
-      >
-        {product.status === "new"
-          ? "Новинка"
-          : product.status === "sale"
-            ? "Акция!"
-            : ""}
-      </span> */}
       <Image
         src={src}
         alt="изображение товара"

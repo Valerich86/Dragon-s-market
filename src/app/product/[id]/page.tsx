@@ -6,6 +6,7 @@ import CustomButton from "@/components/UI/custom-button";
 import { font_accent } from "@/lib/fonts";
 import ProductSection from "@/components/sections/product";
 import { getProductData } from "@/lib/actions";
+import { verifySession } from "@/lib/auth";
 
 export async function generateMetadata(
   {
@@ -37,9 +38,12 @@ export default async function ProductPage({
 }: {
   params: Promise<{ id: number }>;
 }) {
+  let userId = 0;
+  const session = await verifySession();
+  if (session) userId = session.userId;
   const { id } = await params;
   const cloudPath = useCloudPath();
-  const {product} = await getProductData(id);
+  const {product} = await getProductData(id, userId);
 
   if (!product)
     return (
@@ -49,7 +53,7 @@ export default async function ProductPage({
     );
 
   return (
-    <main aria-label="товар" className={`w-full h-screen overflow-x-hidden x-spacing flex justify-center items-center`}>
+    <main aria-label="товар" className={`w-full overflow-x-hidden x-spacing flex justify-center items-center`}>
       <ProductSection product={product} cloudPath={cloudPath} />
     </main>
   );

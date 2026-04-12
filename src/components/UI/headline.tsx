@@ -1,5 +1,5 @@
 import { font_heading } from "@/lib/fonts";
-import Image from "next/image";
+import Smiler from "./smiler";
 
 interface Props {
   text: string;
@@ -15,13 +15,7 @@ export default function Headline({ text, emojiIndex }: Props) {
   if (isValidIndex) {
     parts = [
       text.slice(0, emojiIndex - 1),
-      <Image
-        src={"/images/emoji.webp"}
-        alt="Смайлик"
-        width={50}
-        height={50}
-        className="inline-block align-middle -mx-2 animate-emodji hover:cursor-pointer hover:scale-110 hover:rotate-10 active:rotate-10 active:scale-110 transition-transform duration-300"
-      />,
+      <Smiler />,
       text.slice(emojiIndex),
     ];
   } else {

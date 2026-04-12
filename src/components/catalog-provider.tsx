@@ -1,15 +1,11 @@
-'use client';
+"use client";
 
-import { CatalogContext } from '@/context/catalog-context';
-import type { ReactNode } from 'react';
-import type { Category, Product } from '@/lib/types';
+import { CatalogContext } from "@/context/catalog-context";
+import type { ReactNode } from "react";
+import type { Category, Product } from "@/lib/types";
 
 interface ProviderProps {
-  catalog: {
-    categories: Category[];
-    products: Product[];
-    cloudPath: string;
-  };
+  catalog: {allProducts:Product[], cloudPath: string},
   children: ReactNode;
 }
 

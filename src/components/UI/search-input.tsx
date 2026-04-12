@@ -97,13 +97,13 @@ export default function SearchInput({
                         <div className="flex gap-2 items-baseline-last">
                           <div className="w-10 h-10">
                             <ProductImage
-                              product={item}
+                              productId={item.id}
                               cloudPath={cloudPath}
                             />
                           </div>
                           <span className="text-xs line-clamp-2">{item.name}</span>
                         </div>
-                        <span className={`${font_bold}`}>{item.price}₽</span>
+                        <span className={`${font_bold.className}`}>{item.price}₽</span>
                       </div>
                     </Link>
                   </motion.div>
