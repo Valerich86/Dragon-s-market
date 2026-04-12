@@ -35,15 +35,13 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head></head>
       <body className={`${font_default.className} antialiased`}>
-        <UserIdProvider userId={userId}>
-          <CartProvider>
-            <Header userId={userId} />
-            {/* <SparklesAnimation /> */}
-            <BackButton />
-            <div className={`bg-primary text-secondary`}>{children}</div>
-            <Footer />
-          </CartProvider>
-        </UserIdProvider>
+        <CartProvider>
+          <Header userId={userId} />
+          {/* <SparklesAnimation /> */}
+          <BackButton />
+          <div className={`bg-primary text-secondary`}>{children}</div>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );
