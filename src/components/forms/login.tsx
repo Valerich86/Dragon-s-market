@@ -29,7 +29,6 @@ export default function LoginForm() {
       redirect("/profile");
     } else if (response.status === 401) {
       const { error } = await response.json();
-      console.log(error);
       setError(error);
     } else {
       console.error("Ошибка регистрации");

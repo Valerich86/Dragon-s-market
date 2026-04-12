@@ -20,9 +20,7 @@ export async function GET() {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       const productTypes: ProductType[] = data.types;
-      console.log(productTypes);
       try {
         await pool.query("BEGIN");
         for (let t of productTypes) {

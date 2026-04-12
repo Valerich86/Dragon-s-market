@@ -21,7 +21,6 @@ export default function NavIcon({ href, icon, userId }: NavLinkProps) {
   // Получаем длину корзины при монтировании и при изменении userId/refreshCart
   useEffect(() => {
     if (userId === 0) return;
-    console.log("refresh cart")
 
     const fetchCartLength = async () => {
       try {

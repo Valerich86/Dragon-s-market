@@ -13,7 +13,7 @@ export default function SparklesAnimation() {
     video
       .play()
       .catch((e) =>
-        console.log("Автовоспроизведение заблокировано при загрузке:", e),
+        console.error("Автовоспроизведение заблокировано при загрузке:", e),
       );
   }, []);
 

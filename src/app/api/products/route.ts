@@ -9,7 +9,6 @@ export async function GET(request: NextRequest) {
     );
     let query: string;
     let params: any[];
-    console.log(random);
 
     if (toCarousel) {
       query = `SELECT * FROM products WHERE to_carousel=TRUE AND is_active=TRUE AND remains>0 ORDER BY name ASC`;

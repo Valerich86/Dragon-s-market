@@ -10,8 +10,6 @@ export const pool = new Pool({
 export async function testDbConnection(): Promise<boolean> {
   try {
     const res = await pool.query('SELECT NOW()');
-    console.log('✅ Подключение к БД успешно установлено');
-    console.log('Текущее время в БД:', res.rows[0].now);
     return true;
   } catch (error) {
     console.error('❌ Ошибка подключения к БД:', error);

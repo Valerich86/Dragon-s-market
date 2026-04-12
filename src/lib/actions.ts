@@ -19,7 +19,7 @@ export async function getUserInfo(userId: number) {
       },
     };
   } catch (error) {
-    console.log("Ошибка получения данных пользователя: ", error);
+    console.error("Ошибка получения данных пользователя: ", error);
     return { user: null };
   }
 }
@@ -34,7 +34,7 @@ export async function getAddress(addressId: number) {
       address: addressesData.rows[0],
     };
   } catch (error) {
-    console.log("Ошибка получения адреса: ", error);
+    console.error("Ошибка получения адреса: ", error);
     return { address: null };
   }
 }
@@ -46,7 +46,7 @@ export async function getCategories() {
     categories.unshift({ id: 0, name: "Все" });
     return { categories: categories };
   } catch (error) {
-    console.log("Ошибка получения категорий: ", error);
+    console.error("Ошибка получения категорий: ", error);
     return { categories: [] };
   }
 }
@@ -124,7 +124,6 @@ export async function getProductData(id: number, userId: number) {
       `SELECT * FROM cart_items WHERE product_id=$1 AND customer_id=$2`,
       [id, userId],
     );
-    console.log("cartData: ", cartData.rows[0])
     if (cartData.rows.length > 0) {
       product.quantity = cartData.rows[0].quantity;
     } else {

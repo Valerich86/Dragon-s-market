@@ -46,7 +46,6 @@ export async function POST(req: Request) {
 
   if (!validatedFields.success) {
     const errors = validatedFields.error.flatten().fieldErrors;
-    console.log(errors)
     return NextResponse.json(
       { errors: errors },
       { status: 400 },

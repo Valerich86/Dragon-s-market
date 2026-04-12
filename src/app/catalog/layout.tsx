@@ -41,14 +41,18 @@ export default async function CatalogLayout({
       className={`w-full overflow-x-hidden x-spacing py-30`}
     >
       <UserIdProvider userId={userId}>
-      <section aria-label="категории" className="w-full flex flex-wrap gap-5">
-        <div className="w-full flex justify-between items-center h-10">
-          <h1 className={`${font_light.className} uppercase`}>Каталог</h1>
-          <SearchInput allProducts={catalog} cloudPath={cloudPath} />
-        </div>
-        <CategoriesList categories={categories} />
-      </section>
-        <CatalogProvider catalog={{allProducts:catalog, cloudPath: cloudPath}}>{children}</CatalogProvider>
+        <section aria-label="категории" className="w-full flex flex-wrap gap-5">
+          <div className="w-full flex justify-between items-center h-10">
+            <h1 className={`${font_light.className} uppercase`}>Каталог</h1>
+            <SearchInput allProducts={catalog} cloudPath={cloudPath} />
+          </div>
+          <CategoriesList categories={categories} />
+        </section>
+        <CatalogProvider
+          catalog={{ allProducts: catalog, cloudPath: cloudPath }}
+        >
+          {children}
+        </CatalogProvider>
       </UserIdProvider>
     </main>
   );
