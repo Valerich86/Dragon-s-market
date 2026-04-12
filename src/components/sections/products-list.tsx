@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function ProductsList({ products, categoryName }:Props) {
-  const userId = useUserId();
+  const userId = useUserId()!;
   const {cloudPath} = useCatalog();
   const [refreshPosition, setRefreshPosition] = useState(false);
   const [maskotPosition, setMaskotPosition] = useState(0);
