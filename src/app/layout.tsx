@@ -37,7 +37,6 @@ export default async function RootLayout({
       <body className={`${font_default.className} antialiased`}>
         <CartProvider>
           <Header userId={userId} />
-          {/* <SparklesAnimation /> */}
           <BackButton />
           <div className={`bg-primary text-secondary`}>{children}</div>
           <Footer />
