@@ -25,7 +25,6 @@ export default function ProductSection({ product, cloudPath }: Props) {
           <ProductImage
             productId={product.id}
             cloudPath={cloudPath}
-            captionOptions="left-0 top-5 text-2xl"
           />
         </div>
       </div>
