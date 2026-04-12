@@ -19,7 +19,7 @@ export default function SparklesAnimation() {
 
   return (
     <div
-      className={`absolute w-full top-40 left-0  h-full pointer-events-none select-none z-10`}
+      className={`absolute w-full top-0 left-0  h-full pointer-events-none select-none z-10`}
     >
       <video
         onContextMenu={(e) => e.preventDefault()}

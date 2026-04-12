@@ -8,6 +8,7 @@ import { CartItem } from "@/lib/types";
 import { font_bold } from "@/lib/fonts";
 import ToCartButton from "../UI/to-cart-button";
 import Loading from "@/app/loading";
+import ClearCart from "../UI/clear-cart";
 
 interface Props {
   cloudPath: string;
@@ -34,15 +35,16 @@ export default function CartList({ cloudPath, userId }: Props) {
     };
     fetchCart();
   }, [refresh]);
-
+  
   if (isLoading) return <Loading />;
-
+  
   if (cartItems.length === 0 && !isLoading) {
     return <div className="w-full text-center mt-10">Корзина пуста</div>;
   }
-
+  
   return (
-    <div className="w-full flex flex-col gap-5">
+    <div className="w-full flex flex-col gap-5 relative">
+      <ClearCart userId={userId} refresh={refresh} setRefresh={setRefresh}/>
       {cartItems.map(
         (item, index) =>
           item.quantity !== 0 && (
@@ -61,16 +63,15 @@ export default function CartList({ cloudPath, userId }: Props) {
                 className="w-full"
               >
                 <div className="w-full flex items-center justify-between">
-                  <Link href={`/product/${item.product_id}?productName=${item.product_name}`} className="w-full">
+                  <Link href={`/product/${item.product_id}?productName=${item.product_name}`} className="flex gap-2 items-center text-xs line-clamp-2 w-1/2 md:w-2/3">
                   {/* о товаре */}
-                    <div className="flex gap-2 items-center text-xs line-clamp-2 w-1/2 md:w-2/3">
                       <div className="w-20 h-20">
                         <ProductImage
                           productId={item.product_id}
                           cloudPath={cloudPath}
                         />
                       </div>
-                      <span className="hidden md:block w-[60%]">
+                      <span className="hidden md:block max-w-[70%]">
                         {item.product_name}
                       </span>
                       <div className="flex">
@@ -78,7 +79,6 @@ export default function CartList({ cloudPath, userId }: Props) {
                         <span className="">{item.product_unit}</span>
                       </div>
                       <span className="">{item.product_price}₽</span>
-                    </div>
                   </Link>
 
                   {/* итого */}
@@ -100,7 +100,7 @@ export default function CartList({ cloudPath, userId }: Props) {
             </motion.div>
           ),
       )}
-      <div className="w-full flex justify-end pt-5 border-t border-accent">
+      <div className="w-full flex justify-end items-center pt-5 border-t border-accent">
         <p className={`${font_bold.className}`}>{cartItems[0].cart_total}₽</p>
       </div>
     </div>

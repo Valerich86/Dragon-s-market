@@ -66,7 +66,7 @@ export async function PUT(req: Request) {
       await pool.query(`DELETE FROM cart_items WHERE id=${result.rows[0].id}`);
     }
     return NextResponse.json({
-      status: 204,
+      status: 200,
       quantity: newQuantity,
     });
   } catch (error) {
@@ -74,3 +74,4 @@ export async function PUT(req: Request) {
     return NextResponse.json({ status: 500 });
   }
 }
+

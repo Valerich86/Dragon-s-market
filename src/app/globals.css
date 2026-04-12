@@ -42,6 +42,7 @@ video::--webkit-media-controls-start-playback-button {
 @theme {
   --animate-shining: shining 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   --animate-hide: hide 1.5s ease-in-out;
+  --animate-message: message 5s ease-in-out;
   --animate-gotcha: gotcha 1s ease-in-out;
   --animate-tremor: tremor 0.3s ease-in-out infinite alternate;
   --animate-spin: spin 5s linear infinite;
@@ -50,30 +51,31 @@ video::--webkit-media-controls-start-playback-button {
   --animate-address: address 0.7s ease-in;
 
   @keyframes swing {
-  0%, 100% {
-    transform: rotate(0deg);
-    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    0%,
+    100% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    10% {
+      transform: rotate(-10deg);
+      animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    }
+    45% {
+      transform: rotate(7deg);
+      animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    }
+    60% {
+      transform: rotate(-5deg);
+      animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    }
+    75% {
+      transform: rotate(3deg);
+      animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    }
+    90% {
+      transform: rotate(-1deg);
+    }
   }
-  10% {
-    transform: rotate(-10deg);
-    animation-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
-  }
-  45% {
-    transform: rotate(7deg);
-    animation-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
-  }
-  60% {
-    transform: rotate(-5deg);
-    animation-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
-  }
-  75% {
-    transform: rotate(3deg);
-    animation-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
-  }
-  90% {
-    transform: rotate(-1deg);
-  }
-}
 
   @keyframes gotcha {
     0% {
@@ -100,31 +102,45 @@ video::--webkit-media-controls-start-playback-button {
     }
   }
 
+  @keyframes message {
+    0%, 100%{
+      opacity: 0;
+    }
+    10%, 90% {
+      opacity: 1;
+    }
+  }
+
   @keyframes tremor {
-    0%, 100% {
-    transform: translate(0, 0) rotate(0deg) scale(1);
-    text-shadow: 0 0 3px rgba(255, 255, 255, 0.25),
-                0 0 6px rgba(100, 200, 255, 0.15),
-                0 0 9px rgba(100, 200, 255, 0.08);
-  }
-  25% {
-    transform: translate(-0.5px, 0.5px) rotate(-0.2deg) scale(1.003);
-    text-shadow: 0 0 4px rgba(255, 255, 255, 0.3),
-                0 0 8px rgba(120, 220, 255, 0.2),
-                0 0 11px rgba(120, 220, 255, 0.12);
-  }
-  50% {
-    transform: translate(0.5px, -0.5px) rotate(0.15deg) scale(0.997);
-    text-shadow: 0 0 2.5px rgba(255, 255, 255, 0.28),
-                0 0 5px rgba(80, 180, 240, 0.12),
-                0 0 8px rgba(80, 180, 240, 0.07);
-  }
-  75% {
-    transform: translate(-0.3px, -0.3px) rotate(-0.1deg) scale(1.002);
-    text-shadow: 0 0 3.5px rgba(255, 255, 255, 0.27),
-                0 0 7px rgba(110, 210, 250, 0.18),
-                0 0 10px rgba(110, 210, 250, 0.1);
-  }
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(0deg) scale(1);
+      text-shadow:
+        0 0 3px rgba(255, 255, 255, 0.25),
+        0 0 6px rgba(100, 200, 255, 0.15),
+        0 0 9px rgba(100, 200, 255, 0.08);
+    }
+    25% {
+      transform: translate(-0.5px, 0.5px) rotate(-0.2deg) scale(1.003);
+      text-shadow:
+        0 0 4px rgba(255, 255, 255, 0.3),
+        0 0 8px rgba(120, 220, 255, 0.2),
+        0 0 11px rgba(120, 220, 255, 0.12);
+    }
+    50% {
+      transform: translate(0.5px, -0.5px) rotate(0.15deg) scale(0.997);
+      text-shadow:
+        0 0 2.5px rgba(255, 255, 255, 0.28),
+        0 0 5px rgba(80, 180, 240, 0.12),
+        0 0 8px rgba(80, 180, 240, 0.07);
+    }
+    75% {
+      transform: translate(-0.3px, -0.3px) rotate(-0.1deg) scale(1.002);
+      text-shadow:
+        0 0 3.5px rgba(255, 255, 255, 0.27),
+        0 0 7px rgba(110, 210, 250, 0.18),
+        0 0 10px rgba(110, 210, 250, 0.1);
+    }
   }
 
   @keyframes emodji {

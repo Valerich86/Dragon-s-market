@@ -44,7 +44,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         id
       ],
     );
-    return NextResponse.json({status: 204});
+    return NextResponse.json({status: 200});
   } catch (error) {
     console.error('Ошибка добавления данных:', error);
     return NextResponse.json({ status: 500 });

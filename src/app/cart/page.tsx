@@ -17,15 +17,17 @@ export default async function CartPage() {
   let userId = 0;
   if (session) userId = session.userId;
   const cloudPath = useCloudPath();
-  // const {cart} = await getCart(userId);
 
   return (
     <main
       aria-label="Корзина"
       className={`w-full overflow-x-hidden min-h-screen x-spacing py-30 flex flex-col`}
     >
-      <h1 className={`${font_light.className} uppercase mb-20`}>Корзина товаров</h1>
-      <CartList cloudPath={cloudPath} userId={userId}/>
+      <h1 className={`${font_light.className} uppercase mb-10`}>
+        Корзина товаров
+      </h1>
+
+      <CartList cloudPath={cloudPath} userId={userId} />
 
       {userId === 0 && (
         <div className="w-full flex">
