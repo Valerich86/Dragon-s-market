@@ -47,9 +47,9 @@ export default async function CatalogLayout({
         </div>
         <CategoriesList categories={categories} />
       </section>
-      {/* <UserIdProvider userId={userId}> */}
+      <UserIdProvider userId={userId}>
         <CatalogProvider catalog={{allProducts:catalog, cloudPath: cloudPath}}>{children}</CatalogProvider>
-      {/* </UserIdProvider> */}
+      </UserIdProvider>
     </main>
   );
 }
