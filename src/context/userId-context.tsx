@@ -9,12 +9,12 @@ export const useUserId = () => {
   const context = useContext(UserIdContext);
 
   if (typeof window === 'undefined') {
-    return null; // На сервере возвращаем null
+    return 0; // На сервере возвращаем null
   }
 
   if (context === null) {
     console.warn('useUserId used outside UserIdProvider');
-    return null;
+    return 0;
   }
 
   return context;
