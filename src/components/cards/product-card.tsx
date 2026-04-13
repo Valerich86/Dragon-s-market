@@ -48,7 +48,7 @@ export default function ProductCard({
       className={`w-[46%] lg:w-50 aspect-2/3 text-primary bg-secondary
          hover:bg-linear-to-r from-secondary to-gray-200 transition-colors 
          duration-500 cursor-pointer rounded-xl relative ${index === maskotPosition ? "animate-swing z-10" : ""}`}
-      onClick={() => router.push(href)}
+      // onClick={() => router.push(href)}
     >
       <div
         className={

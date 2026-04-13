@@ -5,9 +5,8 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import { font_bold } from "@/lib/fonts";
 import { PiSpinnerGapThin } from "react-icons/pi";
 import { CartContext } from "@/context/cart-context";
-import Link from "next/link";
-import Smiler from "./smiler";
 import Notification from "./notification";
+import { setCookie, getCookie, deleteCookie } from "@/lib/cookies";
 
 interface Props {
   product_id: number;
@@ -36,26 +35,38 @@ export default function ToCartButton({
   const [quantity, setQuantity] = useState(startQuantity);
   const [isLoading, setIsLoading] = useState(false);
   const [messageVisible, setMessageVisible] = useState(false);
-  const { refreshCart, setRefreshCart } = useContext(CartContext)!;
+  const [ageConfirmNeeded, setAgeConfirmNeeded] = useState(false);
+  const {refreshCart, setRefreshCart } = useContext(CartContext)!;
   const [notify, setNotify] = useState("");
 
   const handleAddToCart = async (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.stopPropagation();
-    console.log(category_id)
-    if (customer_id === 0 || !customer_id || category_id === 4) {
-      if (category_id === 4) {
-        setNotify("Подтвердите свой возраст. Вам есть 18 лет?");
-      } else {
-        setNotify("Вы пока не можете использовать корзину, сначала авторизуйтесь");
-        const timer = setTimeout(() => {
-          setMessageVisible(false);
-        }, 5000);
-      }
+    
+    if (customer_id === 0 || !customer_id) {
+      setAgeConfirmNeeded(false);
+      setNotify(
+        "Вы пока не можете использовать корзину, сначала авторизуйтесь",
+      );
+      const timer = setTimeout(() => {
+        setMessageVisible(false);
+      }, 5000);
       setMessageVisible(true);
       return;
     }
+
+    if (category_id === 4) {
+      const ageConfirmed = getCookie("dragon_bazar_ageConfirmed");
+      console.log(ageConfirmed);
+      if (!ageConfirmed || ageConfirmed === 'false'){
+        setAgeConfirmNeeded(true);
+        setNotify("Подтвердите свой возраст. Вам есть 18 лет?");
+        setMessageVisible(true);
+        return;
+      }
+    }
+
     setIsLoading(true);
     try {
       const response = await fetch(`/api/cart`, {
@@ -106,6 +117,16 @@ export default function ToCartButton({
     }
   };
 
+  const ageConfirm = () => {
+    setMessageVisible(false);
+    setCookie("dragon_bazar_ageConfirmed", "true", 1);
+  };
+
+  const ageAbort = () => {
+    setMessageVisible(false);
+    deleteCookie("dragon_bazar_ageConfirmed");
+  };
+
   return (
     <>
       {isLoading && (
@@ -149,7 +170,7 @@ export default function ToCartButton({
         </div>
       )}
       {messageVisible && (
-        <Notification text={notify} onAccept={() => setMessageVisible(false)}/>
+        <Notification text={notify} onAbort={ageAbort} onAccept={ageConfirm} ageConfirmNeeded={ageConfirmNeeded}/>
       )}
     </>
   );
