@@ -24,7 +24,7 @@ export default function ProductImage({
         width={200}
         height={200}
         loading="lazy"
-        className="h-full w-full object-cover rounded-2xl animate-shining select-none pointer-events-none"
+        className="h-full w-full object-contain rounded-2xl animate-shining select-none pointer-events-none"
         onError={() => setSrc('/images/stickers/please_buy.webp')}
       />
     </>

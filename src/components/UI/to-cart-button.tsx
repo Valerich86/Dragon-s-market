@@ -7,9 +7,11 @@ import { PiSpinnerGapThin } from "react-icons/pi";
 import { CartContext } from "@/context/cart-context";
 import Link from "next/link";
 import Smiler from "./smiler";
+import Notification from "./notification";
 
 interface Props {
   product_id: number;
+  category_id: number;
   price: number;
   customer_id: number;
   startQuantity: number;
@@ -23,6 +25,7 @@ const buttonStyle =
 
 export default function ToCartButton({
   product_id,
+  category_id,
   customer_id,
   price,
   startQuantity,
@@ -34,16 +37,23 @@ export default function ToCartButton({
   const [isLoading, setIsLoading] = useState(false);
   const [messageVisible, setMessageVisible] = useState(false);
   const { refreshCart, setRefreshCart } = useContext(CartContext)!;
+  const [notify, setNotify] = useState("");
 
   const handleAddToCart = async (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.stopPropagation();
-    if (customer_id === 0 || !customer_id) {
+    console.log(category_id)
+    if (customer_id === 0 || !customer_id || category_id === 4) {
+      if (category_id === 4) {
+        setNotify("Подтвердите свой возраст. Вам есть 18 лет?");
+      } else {
+        setNotify("Вы пока не можете использовать корзину, сначала авторизуйтесь");
+        const timer = setTimeout(() => {
+          setMessageVisible(false);
+        }, 5000);
+      }
       setMessageVisible(true);
-      const timer = setTimeout(() => {
-        setMessageVisible(false);
-      }, 5000);
       return;
     }
     setIsLoading(true);
@@ -139,15 +149,7 @@ export default function ToCartButton({
         </div>
       )}
       {messageVisible && (
-        <div className="w-screen h-screen flex animate-message justify-center items-center fixed inset-0 text-2xl text-primary z-10">
-          <div className="w-4/5 flex items-center justify-center">
-            <div className="bg-secondary rounded-md p-2">
-              <p>Вы пока не можете использовать корзину, </p>
-              <p>сначала авторизуйтесь</p>
-            </div>
-            <Smiler />
-          </div>
-        </div>
+        <Notification text={notify} onAccept={() => setMessageVisible(false)}/>
       )}
     </>
   );

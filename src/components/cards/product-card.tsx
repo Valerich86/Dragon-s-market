@@ -48,7 +48,7 @@ export default function ProductCard({
       className={`w-[46%] lg:w-50 aspect-2/3 text-primary bg-secondary
          hover:bg-linear-to-r from-secondary to-gray-200 transition-colors 
          duration-500 cursor-pointer rounded-xl relative ${index === maskotPosition ? "animate-swing z-10" : ""}`}
-      // onClick={() => router.push(href)}
+      onClick={() => router.push(href)}
     >
       <div
         className={
@@ -56,14 +56,14 @@ export default function ProductCard({
           shadow-[0px_0px_30px_5px_rgba(59,130,246,0.12)] border border-gray-200 relative`
         }
       >
-        <div className="h-1/2 w-full">
+        <div className="h-1/2 w-full p-2">
           <Image
             src={src}
             alt=""
             width={200}
             height={200}
             loading="lazy"
-            className="h-full w-full object-cover rounded-2xl animate-shining"
+            className="h-full w-full object-contain rounded-2xl animate-shining"
             onError={() => setSrc("/images/stickers/please_buy.webp")}
           />
         </div>
@@ -89,6 +89,7 @@ export default function ProductCard({
             </div>
             <ToCartButton
               product_id={item.id}
+              category_id={item.category_id}
               startQuantity={item.quantity}
               customer_id={userId}
               price={item.price}

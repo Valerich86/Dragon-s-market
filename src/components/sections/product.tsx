@@ -46,6 +46,7 @@ export default function ProductSection({ product, cloudPath, userId }: Props) {
         <div className="w-full lg:w-1/2">
           <ToCartButton
             product_id={product.id}
+            category_id={product.category_id}
             customer_id={userId}
             price={product.price}
             startQuantity={product.quantity}
