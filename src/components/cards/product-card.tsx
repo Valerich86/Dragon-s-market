@@ -30,7 +30,7 @@ export default function ProductCard({
   maskotKey,
   userId,
 }: Props) {
-  const href = `/product/${item.id}?categoryName=${currentCategory?.name}&productName=${item.name}`;
+  const href = `/product/${item.id}?productName=${item.name}`;
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
   const router = useRouter();
@@ -48,7 +48,7 @@ export default function ProductCard({
       className={`w-[46%] lg:w-50 aspect-2/3 text-primary bg-secondary
          hover:bg-linear-to-r from-secondary to-gray-200 transition-colors 
          duration-500 cursor-pointer rounded-xl relative ${index === maskotPosition ? "animate-swing z-10" : ""}`}
-      onClick={() => router.push(href)}
+      // onClick={() => router.push(href)}
     >
       <div
         className={
@@ -68,9 +68,9 @@ export default function ProductCard({
           />
         </div>
         <div className="h-1/2 w-full flex flex-col lg:gap-2 justify-between p-1 lg:p-2 border-t-2 border-gray-300 rounded-b-xl text-xs">
-          <p className="text-primary line-clamp-3 lg:text-sm lg:min-h-15">
+          <h3 className="text-primary line-clamp-3 lg:text-sm lg:min-h-15">
             {item.name}
-          </p>
+          </h3>
           <p className="text-gray-600 hidden lg:block">
             {item.weight}
             {item.unit}
