@@ -86,6 +86,7 @@ export default function CartList({ cloudPath, userId }: Props) {
                     <div className="w-1/2">
                       <ToCartButton
                         product_id={item.product_id}
+                        category_id={0}
                         customer_id={item.customer_id}
                         price={item.product_price}
                         startQuantity={item.quantity}
