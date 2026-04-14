@@ -19,7 +19,7 @@ export async function verifySession() {
     const cookieStore = await import("next/headers").then((mod) =>
       mod.cookies(),
     );
-    const token = cookieStore.get("session")?.value;
+    const token = cookieStore.get("dragon_bazar_session")?.value;
     if (!token) return null;
     const { payload } = await jwtVerify(token, secretKey);
     return {

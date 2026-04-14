@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import { verifySession } from "@/lib/auth";
 import UserIdProvider from "@/components/userId-provider";
 import { useCloudPath } from "@/lib/cloud";
+import MascotCookie from "@/components/mascot-cookie";
 
 export const metadata: Metadata = {
   title: {
@@ -34,6 +35,9 @@ export default async function CatalogLayout({
   const { categories } = await getCategories();
   const { catalog } = await getCatalog(userId, 0);
   const cloudPath = useCloudPath();
+  const randomIndex = Math.floor(Math.random() * catalog.length);
+  // const newMascotPositionId = catalog[randomIndex].id;
+  const newMascotPositionId = 717;
 
   return (
     <main
@@ -41,6 +45,7 @@ export default async function CatalogLayout({
       className={`w-full overflow-x-hidden x-spacing py-30`}
     >
       <UserIdProvider userId={userId}>
+        <MascotCookie newMascotPositionId={newMascotPositionId} />
         <section aria-label="категории" className="w-full flex flex-wrap gap-5">
           <div className="w-full flex justify-between items-center h-10">
             <h1 className={`${font_light.className} uppercase`}>Каталог</h1>

@@ -75,8 +75,8 @@ function BurgerMenu() {
               handleSwipe(swipeDistance);
             }}
             aria-label="основная навигация (смартфон)"
-            className={` py-5 px-5 rounded-r-xl absolute left-0 top-15 z-50 bg-primary text-secondary
-              shadow-[0px_0px_30px_25px_rgba(59,130,246,0.12)] flex flex-col gap-5`}
+            className={` py-5 px-5 h-[80vh] rounded-r-xl absolute left-0 top-15 z-50 bg-primary text-secondary
+              shadow-[0px_0px_30px_25px_rgba(59,130,246,0.15)] flex flex-col gap-5`}
           >
             <div className="pb-5 border-b border-gray-400 flex flex-col items-center gap-y-5">
               <strong>г.Пермь, Бульвар Гагарина, 83</strong>

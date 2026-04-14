@@ -24,7 +24,7 @@ export default function CarouselItem ({
         <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center relative p-5">
           <ProductImage productId={product.id} cloudPath={cloudPath} captionOptions="top-6 left-2 text-2xl"/>
         </div>
-        <div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col items-start justify-around p-10 bg-maskot2 ">
+        <div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col items-start justify-around p-10 bg-mascot2 ">
           <h3 className={`text-xl font-extrabold uppercase`}>
             {product.name}
           </h3>

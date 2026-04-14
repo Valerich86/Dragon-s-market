@@ -88,7 +88,6 @@ export default function Header({userId}:{userId:number}) {
 
       {/* правые ссылки */}
       <div className="flex justify-end items-center w-1/2 lg:w-1/3 h-full">
-        {/* <SearchInput screenWidth={screenWidth} /> */}
         {rightLinks.map((item, index) => {
           return <NavIcon key={index} href={item.href} icon={item.icon} userId={userId}/>;
         })}

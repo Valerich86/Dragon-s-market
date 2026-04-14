@@ -7,27 +7,21 @@ import Image from "next/image";
 import type { Category, Product } from "@/lib/types";
 import ToCartButton from "../UI/to-cart-button";
 import { font_bold } from "@/lib/fonts";
-import MaskotAnimation from "../animation/maskot";
+import MascotBonusAnimation from "../animation/mascot-bonus";
+import { getCookie, deleteCookie } from "@/lib/cookies";
+import { getRandomWeightedBonus } from "@/lib/random-bonus";
 
 interface Props {
   item: Product;
-  currentCategory?: Category;
   cloudPath: string;
   index: number;
-  maskotPosition: number;
-  changeMaskotPosition: () => void;
-  maskotKey: number;
   userId: number;
 }
 
 export default function ProductCard({
   item,
-  currentCategory,
   cloudPath,
   index,
-  maskotPosition,
-  changeMaskotPosition,
-  maskotKey,
   userId,
 }: Props) {
   const href = `/product/${item.id}?productName=${item.name}`;
@@ -35,9 +29,24 @@ export default function ProductCard({
   const inView = useInView(ref, { once: true, amount: 0.3 });
   const router = useRouter();
   const [src, setSrc] = useState(`${cloudPath}/products/${item.id}.png`);
-  const [maskotSide, setMaskotSide] = useState<"right" | "left">(
-    index % 2 === 0 ? "right" : "left",
-  );
+  const [mascotHere, setMascotHere] = useState(false);
+  const [showBonus, setShowBonus] = useState(false);
+  const [swing, setSwing] = useState(true);
+  const randomBonus = getRandomWeightedBonus();
+
+  useEffect(() => {
+    const currentPosition = getCookie("dragon_bazar_newMascotPositionId");
+    if (currentPosition && currentPosition === item.id.toString()){
+      console.log(item.id.toString())
+      setMascotHere(true);
+    } 
+  }, []);
+
+  const onMascotCaught = () => {
+    setMascotHere(false);
+    setShowBonus(true);
+    deleteCookie("dragon_bazar_newMascotPositionId");
+  }
 
   return (
     <motion.div
@@ -47,7 +56,7 @@ export default function ProductCard({
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`w-[46%] lg:w-50 aspect-2/3 text-primary bg-secondary
          hover:bg-linear-to-r from-secondary to-gray-200 transition-colors 
-         duration-500 cursor-pointer rounded-xl relative ${index === maskotPosition ? "animate-swing z-10" : ""}`}
+         duration-500 cursor-pointer rounded-xl relative ${mascotHere && swing ? "animate-swing z-10" : ""}`}
       // onClick={() => router.push(href)}
     >
       <div
@@ -99,12 +108,27 @@ export default function ProductCard({
         </div>
       </div>
 
-      {index === maskotPosition && (
-        <MaskotAnimation
-          key={maskotKey} // При смене key компонент перемонтируется
-          onComplete={changeMaskotPosition}
-          position={maskotSide}
+      {mascotHere && (
+        <MascotBonusAnimation
+          onComplete={onMascotCaught}
+          index={index}
+          stopSwing={() => setSwing(false)}
+          // randomBonus={randomBonus}
         />
+      )}
+
+      {showBonus && (
+        <motion.div
+          initial={{ opacity: 1, y: 0, x: 0, scale: 1 }}
+          animate={{ opacity: 0, y: "-200%", x: "30%", scale: 4 }}
+          transition={{ duration: 5 }}
+          className={`
+            ${font_bold} text-accent text-shadow-lg text-shadow-amber-50 
+            text-6xl absolute left-1/2 -translate-y-[50%] top-0 w-full
+          `}
+        >
+          +{randomBonus}
+        </motion.div>
       )}
     </motion.div>
   );

@@ -15,15 +15,6 @@ interface Props {
 export default function ProductsList({ products, categoryName }:Props) {
   const userId = useUserId()!;
   const {cloudPath} = useCatalog();
-  const [refreshPosition, setRefreshPosition] = useState(false);
-  const [maskotPosition, setMaskotPosition] = useState(0);
-  const [maskotKey, setMaskotKey] = useState(0); // Ключ для перезапуска анимации
-
-  useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * products.length);
-    setMaskotPosition(randomIndex);
-    setMaskotKey(prev => prev + 1);
-  }, [products.length, refreshPosition]);
 
   if (!products || products.length === 0) {
     return (
@@ -41,9 +32,6 @@ export default function ProductsList({ products, categoryName }:Props) {
           item={item}
           cloudPath={cloudPath}
           index={index}
-          maskotPosition={maskotPosition}
-          changeMaskotPosition={() => setRefreshPosition(!refreshPosition)}
-          maskotKey={maskotKey}
           userId={userId}
         />
       ))}

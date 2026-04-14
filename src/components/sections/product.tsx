@@ -17,7 +17,7 @@ export default function ProductSection({ product, cloudPath, userId }: Props) {
       <div
         className={`w-full lg:w-1/2 h-[50vh] lg:h-[80vh] flex items-center justify-center p-3`}
       >
-        <div className="h-full bg-primary rounded-md relative shadow-[0px_0px_40px_5px_rgba(59,130,246,0.12)]">
+        <div className="h-full bg-primary rounded-xl relative shadow-[0px_0px_40px_5px_rgba(59,130,246,0.15)]">
           <ProductImage
             productId={product.id}
             cloudPath={cloudPath}

@@ -41,7 +41,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className={`${pathname.startsWith("/admin") ? "hidden" : ""} absolute bg-maskot2/80 text-secondary w-full x-spacing flex flex-col lg:text-xs z-10`}>
+    <footer className={`${pathname.startsWith("/admin") ? "hidden" : ""} absolute bg-mascot2/80 text-secondary w-full x-spacing flex flex-col lg:text-xs z-10`}>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-20 lg:gap-0 py-10 border-b border-gray-200">
         <FooterBlock links={leftLinks} />
         <FooterBlock links={rightLinks} />

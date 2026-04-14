@@ -87,7 +87,7 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: {
-        "Set-Cookie": `session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=15552000`,
+        "Set-Cookie": `dragon_bazar_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=15552000`,
         "Content-Type": "application/json",
       },
     });

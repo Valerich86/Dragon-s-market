@@ -101,8 +101,8 @@ export default function CartList({ cloudPath, userId }: Props) {
             </motion.div>
           ),
       )}
-      <div className="w-full flex justify-end items-center pt-5 border-t border-accent">
-        <p className={`${font_bold.className}`}>{cartItems[0].cart_total}₽</p>
+      <div className="w-full flex justify-end items-center pt-5 border-t border-accent text-xl">
+        <p className={font_bold.className}>{cartItems[0].cart_total}₽</p>
       </div>
     </div>
   );

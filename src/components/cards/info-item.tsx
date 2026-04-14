@@ -2,7 +2,7 @@
 
 import type { Info } from "@/lib/types";
 import Headline from "../UI/headline";
-import MaskotAnimation from "../animation/maskot";
+import MascotAnimation from "../animation/mascot-bonus";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import CustomButton from "../UI/custom-button";

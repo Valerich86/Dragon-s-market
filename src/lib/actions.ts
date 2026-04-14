@@ -84,7 +84,7 @@ export async function getCatalog(userId: number, categoryId: number) {
   let params: number[] = [];
 
   if (categoryId === 0) {
-    query = `SELECT * FROM products WHERE remains>0 AND is_active=TRUE ORDER BY name ASC`;
+    query = `SELECT * FROM products WHERE remains>0 AND is_active=TRUE ORDER BY name ASC LIMIT 100`;
     params = [];
   } else {
     query = `SELECT * FROM products WHERE remains>0 AND is_active=TRUE AND category_id=$1 ORDER BY name ASC`;
@@ -97,6 +97,7 @@ export async function getCatalog(userId: number, categoryId: number) {
       const cartItem = cart.find((c) => c.product_id === p.id);
       p.quantity = cartItem ? cartItem.quantity : 0;
     }
+    if (categoryId === 0) products = [...productsData.rows].sort(() => Math.random() - 0.5);
     return { catalog: products };
   } catch (error) {
     console.error("Ошибка получения товаров: ", error);
@@ -111,6 +112,7 @@ export async function getProductOfADay() {
     ORDER BY updated_at`,
     ["productOfADay"],
   );
+  console.log(data.rows[data.rows.length - 1])
   return { product: data.rows[data.rows.length - 1] };
 }
 

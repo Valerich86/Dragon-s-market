@@ -1,13 +1,4 @@
-import {
-  font_accent,
-  font_light,
-  font_bold,
-  font_mg,
-  font_heading,
-  font_asian1,
-  font_asian2,
-  font_asian3,
-} from "@/lib/fonts";
+import { font_light, font_heading } from "@/lib/fonts";
 import DarknedImage from "../UI/darkned-image";
 import DayProduct from "../UI/day-product";
 import { pool } from "@/lib/db";
@@ -18,8 +9,7 @@ export default async function HeroSection({
 }: {
   cloudPath: string;
 }) {
-  const status = "productOfADay";
-  const {product} = await getProductOfADay();
+  const { product } = await getProductOfADay();
 
   return (
     <section
@@ -31,7 +21,7 @@ export default async function HeroSection({
         options="w-screen h-screen bg-right"
       />
       <div
-        className={`${font_heading.className} uppercase text-left text-2xl lg:text-5xl w-full px-3 lg:px-10 z-10`}
+        className={`${font_heading.className} absolute top-[40%] lg:top-1/2 -translate-y-[50%] uppercase text-left text-2xl lg:text-5xl w-full px-3 lg:px-10 z-10`}
       >
         <p>Азия на вкус:</p>
         <p>от привычного к невероятному!</p>
@@ -45,9 +35,7 @@ export default async function HeroSection({
             Пермь, Бульвар Гагарина, 83
           </p>
         </div>
-        {product && (
-          <DayProduct cloudPath={cloudPath} product={product} />
-        )}
+        {product && <DayProduct cloudPath={cloudPath} product={product} />}
       </div>
     </section>
   );
