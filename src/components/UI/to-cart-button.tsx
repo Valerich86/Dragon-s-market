@@ -2,11 +2,11 @@
 
 import { useEffect, useState, useContext } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import Cookies from "js-cookie";
 import { font_bold } from "@/lib/fonts";
 import { PiSpinnerGapThin } from "react-icons/pi";
 import { CartContext } from "@/context/cart-context";
 import Notification from "./notification";
-import { setCookie, getCookie, deleteCookie } from "@/lib/cookies";
 
 interface Props {
   product_id: number;
@@ -57,7 +57,7 @@ export default function ToCartButton({
     }
 
     if (category_id === 4) {
-      const ageConfirmed = getCookie("dragon_bazar_ageConfirmed");
+      const ageConfirmed = Cookies.get("dragon_bazar_ageConfirmed");
       console.log(ageConfirmed);
       if (!ageConfirmed || ageConfirmed === 'false'){
         setAgeConfirmNeeded(true);
@@ -119,12 +119,12 @@ export default function ToCartButton({
 
   const ageConfirm = () => {
     setMessageVisible(false);
-    setCookie("dragon_bazar_ageConfirmed", "true", 1);
+    Cookies.set("dragon_bazar_ageConfirmed", "true", {maxAge: 60*60 });
   };
 
   const ageAbort = () => {
     setMessageVisible(false);
-    deleteCookie("dragon_bazar_ageConfirmed");
+    Cookies.remove("dragon_bazar_ageConfirmed");
   };
 
   return (

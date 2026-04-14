@@ -4,12 +4,12 @@ import { useRef, useState, useEffect } from "react";
 import { useInView, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Cookies from "js-cookie";
 import type { Category, Product } from "@/lib/types";
 import ToCartButton from "../UI/to-cart-button";
 import { font_bold } from "@/lib/fonts";
 import MascotBonusAnimation from "../animation/mascot-bonus";
-import { getCookie, deleteCookie } from "@/lib/cookies";
-// import { getRandomWeightedBonus } from "@/lib/random-bonus";
+import { getRandomWeightedBonus } from "@/lib/random-bonus";
 
 interface Props {
   item: Product;
@@ -32,11 +32,10 @@ export default function ProductCard({
   const [mascotHere, setMascotHere] = useState(false);
   const [showBonus, setShowBonus] = useState(false);
   const [swing, setSwing] = useState(true);
-  // const randomBonus = getRandomWeightedBonus();
-  const randomBonus = 1;
+  const randomBonus = getRandomWeightedBonus();
 
   useEffect(() => {
-    const currentPosition = getCookie("dragon_bazar_newMascotPositionId");
+    const currentPosition = Cookies.get("dragon_bazar_newMascotPositionId");
     if (currentPosition && currentPosition === item.id.toString()){
       console.log(item.id.toString())
       setMascotHere(true);
@@ -46,7 +45,7 @@ export default function ProductCard({
   const onMascotCaught = () => {
     setMascotHere(false);
     setShowBonus(true);
-    deleteCookie("dragon_bazar_newMascotPositionId");
+    Cookies.remove("dragon_bazar_newMascotPositionId");
   }
 
   return (
