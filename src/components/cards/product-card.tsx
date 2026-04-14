@@ -9,7 +9,7 @@ import ToCartButton from "../UI/to-cart-button";
 import { font_bold } from "@/lib/fonts";
 import MascotBonusAnimation from "../animation/mascot-bonus";
 import { getCookie, deleteCookie } from "@/lib/cookies";
-import { getRandomWeightedBonus } from "@/lib/random-bonus";
+// import { getRandomWeightedBonus } from "@/lib/random-bonus";
 
 interface Props {
   item: Product;
@@ -32,7 +32,8 @@ export default function ProductCard({
   const [mascotHere, setMascotHere] = useState(false);
   const [showBonus, setShowBonus] = useState(false);
   const [swing, setSwing] = useState(true);
-  const randomBonus = getRandomWeightedBonus();
+  // const randomBonus = getRandomWeightedBonus();
+  const randomBonus = 1;
 
   useEffect(() => {
     const currentPosition = getCookie("dragon_bazar_newMascotPositionId");
