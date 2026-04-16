@@ -9,7 +9,7 @@ export default function AllProducts() {
   return (
     <section
       aria-label="все товары"
-      className="w-full flex flex-wrap gap-5 items-center justify-start py-15"
+      className="w-full flex flex-wrap gap-5 items-center justify-between py-15"
     >
       <ProductsList products={allProducts} categoryName="Все товары"/>
     </section>
