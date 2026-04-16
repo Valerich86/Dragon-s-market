@@ -1,7 +1,7 @@
 import CatalogProvider from "@/components/catalog-provider";
 import CategoriesList from "@/components/sections/categories-list";
 import SearchInput from "@/components/UI/search-input";
-import { getCategories, getCatalog } from "@/lib/actions";
+import { getCategories, getCatalog, getBonusParams } from "@/lib/actions";
 import { font_light } from "@/lib/fonts";
 import type { Metadata } from "next";
 import { verifySession } from "@/lib/auth";
@@ -35,9 +35,7 @@ export default async function CatalogLayout({
   const { categories } = await getCategories();
   const { catalog } = await getCatalog(userId, 0);
   const cloudPath = useCloudPath();
-  const randomIndex = Math.floor(Math.random() * catalog.length);
-  // const newMascotPositionId = catalog[randomIndex].id;
-  const newMascotPositionId = 717;
+  const {mascotPositionId, showMascot} = await getBonusParams(userId, catalog );
 
   return (
     <main
@@ -45,7 +43,6 @@ export default async function CatalogLayout({
       className={`w-full overflow-x-hidden x-spacing py-30`}
     >
       <UserIdProvider userId={userId}>
-        <MascotCookie newMascotPositionId={newMascotPositionId} />
         <section aria-label="категории" className="w-full flex flex-wrap gap-5">
           <div className="w-full flex justify-between items-center h-10">
             <h1 className={`${font_light.className} uppercase`}>Каталог</h1>
@@ -54,7 +51,12 @@ export default async function CatalogLayout({
           <CategoriesList categories={categories} />
         </section>
         <CatalogProvider
-          catalog={{ allProducts: catalog, cloudPath: cloudPath }}
+          catalog={{
+            allProducts: catalog,
+            cloudPath: cloudPath,
+            showMascot: showMascot,
+            mascotPositionId: mascotPositionId
+          }}
         >
           {children}
         </CatalogProvider>

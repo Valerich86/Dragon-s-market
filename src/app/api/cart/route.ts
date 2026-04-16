@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   const customer_id = searchParams.get('customer_id');
   if (!customer_id) {
     return NextResponse.json(
-      { error: 'Missing required parameters: customer_id and product_id' },
+      { error: 'Missing required parameters: customer_id' },
       { status: 400 }
     );
   }

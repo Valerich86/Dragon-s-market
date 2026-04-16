@@ -1,13 +1,13 @@
 import { useCloudPath } from "./cloud";
 import { pool } from "./db";
 import type { CartItem } from "./types";
+import type { Product } from "./types";
 
 export async function getUserInfo(userId: number) {
   try {
-    const userData = await pool.query(
-      `SELECT id, first_name, phone, created_at FROM customers WHERE id=$1`,
-      [userId],
-    );
+    const userData = await pool.query(`SELECT * FROM customers WHERE id=$1`, [
+      userId,
+    ]);
     const addressesData = await pool.query(
       `SELECT * FROM addresses WHERE customer_id=$1`,
       [userId],
@@ -21,6 +21,62 @@ export async function getUserInfo(userId: number) {
   } catch (error) {
     console.error("Ошибка получения данных пользователя: ", error);
     return { user: null };
+  }
+}
+
+export type BonusResult = {
+  mascotPositionId: number;
+  showMascot: boolean;
+}
+
+export async function getBonusParams(
+  userId: number,
+  catalog:Product[],
+): Promise<BonusResult> {
+  if (userId === 0) return {mascotPositionId: 0, showMascot: false};
+  const randomIndex = Math.floor(Math.random() * catalog.length);
+  let currentPosition: 0;
+  // const newPosition = 717;
+  const newPosition = catalog[randomIndex].id;
+  try {
+    const data = await pool.query(
+      `SELECT bonus_amount, bonus_created_at, bonus_position_id, bonus_received FROM customers WHERE id=$1`,
+      [userId],
+    );
+    const customer = data.rows[0];
+    currentPosition = customer.bonus_position_id;
+    if (customer.bonus_created_at) {
+      // Преобразуем даты в число миллисекунд с 1970-01-01
+      const bonusCreatedAtMs = new Date(customer.bonus_created_at).getTime();
+      const nowMs = new Date().getTime();
+
+      // 12 часов в миллисекундах
+      const twelveHoursMs = 12 * 60 * 60 * 1000;
+
+      // Разница во времени в миллисекундах
+      const timeDiffMs = nowMs - bonusCreatedAtMs;
+
+      if (timeDiffMs >= twelveHoursMs) {
+        await pool.query(
+          `UPDATE customers SET bonus_created_at = NOW(), bonus_received=false, bonus_position_id=$2 WHERE id=$1`,
+          [userId, newPosition],
+        );
+        return {mascotPositionId: newPosition, showMascot: true};
+      } else if (timeDiffMs < twelveHoursMs && !customer.bonus_received) {
+        return {mascotPositionId: currentPosition, showMascot: true};
+      } else {
+        return {mascotPositionId: 0, showMascot: false};
+      }
+    } else {
+      await pool.query(
+        `UPDATE customers SET bonus_created_at = NOW(), bonus_received=false, bonus_position_id=$2 WHERE id=$1`,
+        [userId, newPosition],
+      );
+      return {mascotPositionId: newPosition, showMascot: true};
+    }
+  } catch (error) {
+    console.error("Ошибка получения данных пользователя: ", error);
+    return {mascotPositionId: 0, showMascot: false};
   }
 }
 
@@ -97,7 +153,8 @@ export async function getCatalog(userId: number, categoryId: number) {
       const cartItem = cart.find((c) => c.product_id === p.id);
       p.quantity = cartItem ? cartItem.quantity : 0;
     }
-    if (categoryId === 0) products = [...productsData.rows].sort(() => Math.random() - 0.5);
+    if (categoryId === 0)
+      products = [...productsData.rows].sort(() => Math.random() - 0.5);
     return { catalog: products };
   } catch (error) {
     console.error("Ошибка получения товаров: ", error);
@@ -112,7 +169,6 @@ export async function getProductOfADay() {
     ORDER BY updated_at`,
     ["productOfADay"],
   );
-  console.log(data.rows[data.rows.length - 1])
   return { product: data.rows[data.rows.length - 1] };
 }
 
@@ -134,6 +190,6 @@ export async function getProductData(id: number, userId: number) {
     return { product: product };
   } catch (error) {
     console.error("Ошибка получения товара: ", error);
-    return { product: null }
+    return { product: null };
   }
 }

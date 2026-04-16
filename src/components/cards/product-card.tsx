@@ -10,6 +10,7 @@ import ToCartButton from "../UI/to-cart-button";
 import { font_bold } from "@/lib/fonts";
 import MascotBonusAnimation from "../animation/mascot-bonus";
 import { getRandomWeightedBonus } from "@/lib/random-bonus";
+import { useCatalog } from "@/context/catalog-context";
 
 interface Props {
   item: Product;
@@ -18,12 +19,7 @@ interface Props {
   userId: number;
 }
 
-export default function ProductCard({
-  item,
-  cloudPath,
-  index,
-  userId,
-}: Props) {
+export default function ProductCard({ item, cloudPath, index, userId }: Props) {
   const href = `/product/${item.id}?productName=${item.name}`;
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
@@ -33,20 +29,25 @@ export default function ProductCard({
   const [showBonus, setShowBonus] = useState(false);
   const [swing, setSwing] = useState(true);
   const randomBonus = getRandomWeightedBonus();
+  const { showMascot, mascotPositionId } = useCatalog();
 
   useEffect(() => {
-    const currentPosition = Cookies.get("dragon_bazar_newMascotPositionId");
-    if (currentPosition && currentPosition === item.id.toString()){
-      console.log(item.id.toString())
+    if (showMascot && mascotPositionId === item.id) {
       setMascotHere(true);
-    } 
-  }, []);
+    }
+  }, [showMascot, mascotPositionId]);
 
-  const onMascotCaught = () => {
+  const onMascotCaught = async () => {
     setMascotHere(false);
     setShowBonus(true);
-    Cookies.remove("dragon_bazar_newMascotPositionId");
-  }
+    try {
+      await fetch(`/api/change-bonus/${userId}?bonus=${randomBonus}`, {
+        method: "PUT",
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <motion.div
@@ -60,10 +61,8 @@ export default function ProductCard({
       // onClick={() => router.push(href)}
     >
       <div
-        className={
-          `w-full h-full flex flex-col items-center rounded-xl  
-          shadow-[0px_0px_30px_5px_rgba(59,130,246,0.12)] border border-gray-200 relative`
-        }
+        className={`w-full h-full flex flex-col items-center rounded-xl  
+          shadow-[0px_0px_30px_5px_rgba(59,130,246,0.12)] border border-gray-200 relative`}
       >
         <div className="h-1/2 w-full p-2">
           <Image
@@ -96,14 +95,16 @@ export default function ProductCard({
                 {item.price}₽
               </p>
             </div>
-            <ToCartButton
-              product_id={item.id}
-              category_id={item.category_id}
-              startQuantity={item.quantity}
-              customer_id={userId}
-              price={item.price}
-              isInCard
-            />
+            {item.category_id !== 4 && (
+              <ToCartButton
+                product_id={item.id}
+                category_id={item.category_id}
+                startQuantity={item.quantity}
+                customer_id={userId}
+                price={item.price}
+                isInCard
+              />
+            )}
           </div>
         </div>
       </div>

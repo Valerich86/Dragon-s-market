@@ -69,6 +69,10 @@ export type User = {
   first_name: string;
   phone: string;
   created_at: string;
+  bonus_created_at: string;
+  bonus_position_id: number;
+  bonus_amount: number;
+  bonus_received: boolean;
 };
 
 export type Address = {
@@ -129,4 +133,17 @@ export interface FileWithMeta {
   name: string;
   type: string;
   size: number;
+}
+
+export interface QRData {
+  userId: string;
+  ageVerified: boolean;
+  qrData: string;
+  timestamp: Date;
+}
+
+export interface VerificationResult {
+  success: boolean;
+  message: string;
+  data?: any;
 }

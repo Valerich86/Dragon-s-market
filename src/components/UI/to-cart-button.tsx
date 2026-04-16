@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useContext } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { font_bold } from "@/lib/fonts";
 import { PiSpinnerGapThin } from "react-icons/pi";
@@ -38,6 +39,7 @@ export default function ToCartButton({
   const [ageConfirmNeeded, setAgeConfirmNeeded] = useState(false);
   const {refreshCart, setRefreshCart } = useContext(CartContext)!;
   const [notify, setNotify] = useState("");
+  const router = useRouter();
 
   const handleAddToCart = async (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -47,7 +49,7 @@ export default function ToCartButton({
     if (customer_id === 0 || !customer_id) {
       setAgeConfirmNeeded(false);
       setNotify(
-        "Вы пока не можете использовать корзину, сначала авторизуйтесь",
+        "Вы пока не можете использовать корзину, сначала войдите в приложение",
       );
       const timer = setTimeout(() => {
         setMessageVisible(false);
@@ -58,7 +60,6 @@ export default function ToCartButton({
 
     if (category_id === 4) {
       const ageConfirmed = Cookies.get("dragon_bazar_ageConfirmed");
-      console.log(ageConfirmed);
       if (!ageConfirmed || ageConfirmed === 'false'){
         setAgeConfirmNeeded(true);
         setNotify("Подтвердите свой возраст. Вам есть 18 лет?");
@@ -119,7 +120,8 @@ export default function ToCartButton({
 
   const ageConfirm = () => {
     setMessageVisible(false);
-    Cookies.set("dragon_bazar_ageConfirmed", "true", {maxAge: 60*60 });
+    // Cookies.set("dragon_bazar_ageConfirmed", "true", {maxAge: 60*60 });
+    router.push("/age-verification")
   };
 
   const ageAbort = () => {

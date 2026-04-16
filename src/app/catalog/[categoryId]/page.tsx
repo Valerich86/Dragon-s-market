@@ -38,13 +38,21 @@ export default async function CategoryPage({
   let userId = 0;
   if (session) userId = session.userId;
   const { catalog } = await getCatalog(userId, categoryId);
-  
+
   return (
-    <main
-      aria-label={categoryName}
-      className="w-full flex flex-wrap gap-5 items-center justify-between py-15"
-    >
-      <ProductsList products={catalog} categoryName={categoryName}/>
-    </main>
+    <>
+      {catalog[0].category_id === 4 && (
+        <div className="mt-12 p-4 bg-yellow-50 border text-center border-yellow-200 rounded-lg text-xs text-yellow-800">
+            <strong>Важно:</strong> товары категории "Энергетики" не подлежат
+            доставке и представлены на сайте в целях ознакомления
+        </div>
+      )}
+      <section
+        aria-label={categoryName}
+        className="w-full flex flex-wrap gap-5 items-center justify-between py-15"
+      >
+        <ProductsList products={catalog} categoryName={categoryName} />
+      </section>
+    </>
   );
 }

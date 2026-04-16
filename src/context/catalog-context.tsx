@@ -6,6 +6,8 @@ import type { Category, Product } from '@/lib/types';
 export const CatalogContext = createContext<{
     allProducts: Product[];
     cloudPath: string;
+    showMascot: Boolean;
+    mascotPositionId: number;
 } | null>(null);
 
 export const useCatalog = () => {
