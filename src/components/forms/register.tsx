@@ -167,10 +167,10 @@ export default function RegisterForm() {
 
       <div className="w-full text-sm mt-5 text-zinc-500">
         <label className="flex items-start cursor-pointer">
-          <button onClick={() => setPrivacyAgreed(prev => !prev)} className="mt-0.5 text-indigo-700">
+          <div onClick={() => setPrivacyAgreed(prev => !prev)} className="mt-0.5 text-indigo-700">
             {!privacyAgreed && <GrCheckbox size={15}/>}
             {privacyAgreed && <GrCheckboxSelected size={15}/>}
-          </button>
+          </div>
           <span className="ml-2 text-zinc-500">
             Я даю согласие на обработку моих персональных данных в соответствии
             с{" "}
