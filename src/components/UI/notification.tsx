@@ -8,7 +8,7 @@ interface Props {
   showNotification: boolean;
   onAccept?: () => void;
   onAbort?: () => void;
-  notificationPurpose: "login" | "age_verify" | "logout";
+  notificationPurpose: "login" | "age_verify" | "logout" | "delete-user";
 }
 
 const buttonStyle =

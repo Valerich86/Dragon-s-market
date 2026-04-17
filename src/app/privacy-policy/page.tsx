@@ -13,13 +13,13 @@ export default async function PrivacyPolicyPage() {
   return (
     <main
       aria-label="privacy-policy"
-      className="w-full min-h-screen x-spacing py-30"
+      className="w-full min-h-screen x-spacing py-20"
     >
       <h1 className={`${font_light.className} uppercase mb-10`}>
         Политика обработки персональных данных
       </h1>
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 text-sm">
         <section>
           <h2 className="text-xl font-semibold mb-4">1. Определения</h2>
           <p>В настоящей Политике используются следующие термины:</p>

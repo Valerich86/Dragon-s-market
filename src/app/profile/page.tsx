@@ -1,14 +1,38 @@
 "use client";
 
+import Image from "next/image";
+import { IoClose } from "react-icons/io5";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import CustomButton from "@/components/UI/custom-button";
 import PaintCaption from "@/components/UI/paint-caption";
 import { useProfile } from "@/context/profile-context";
-import { font_bold, font_light, font_mg } from "@/lib/fonts";
-import Image from "next/image";
-import { IoClose } from "react-icons/io5";
+import Notification from "@/components/UI/notification";
 
 export default function General() {
   const { general } = useProfile();
+  const [showWarning, setShowWarning] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log(general.id)
+  }, []);
+
+  const handleDeleteProfile = async () => {
+    setIsLoading(true);
+    setShowWarning(false);
+    try {
+      const response = await fetch(`/api/auth/delete/${general.id}`, {
+        method: "DELETE",
+      });
+      router.replace("/");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <section
@@ -36,9 +60,21 @@ export default function General() {
         <IoClose />
         {general.bonus_amount}
       </div>
-      {/* <div className="w-full md:w-1/2 lg:w-1/3">
-        <CustomButton text={"Удалить профиль"} options="w-full"/>
-      </div> */}
+      <div className="w-full md:w-1/2 lg:w-1/3">
+        <CustomButton
+          text={"Удалить учётную запись"}
+          options="w-full"
+          onClick={() => setShowWarning(true)}
+          isLoading={isLoading}
+        />
+      </div>
+      <Notification
+        text="Удаляя свою учётную запись, Вы не сможете использовать некоторые функции сайта. Согласны?"
+        showNotification={showWarning}
+        onAccept={handleDeleteProfile}
+        onAbort={() => setShowWarning(false)}
+        notificationPurpose={"delete-user"}
+      />
     </section>
   );
 }
