@@ -4,8 +4,8 @@ import { getCart } from "@/lib/actions";
 import { verifySession } from "@/lib/auth";
 import { useCloudPath } from "@/lib/cloud";
 import { font_light } from "@/lib/fonts";
-import { Metadata } from "next";
 import Link from "next/link";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Корзина",

@@ -1,5 +1,6 @@
 "use client";
 
+import CustomButton from "@/components/UI/custom-button";
 import PaintCaption from "@/components/UI/paint-caption";
 import { useProfile } from "@/context/profile-context";
 import { font_bold, font_light, font_mg } from "@/lib/fonts";
@@ -35,6 +36,9 @@ export default function General() {
         <IoClose />
         {general.bonus_amount}
       </div>
+      {/* <div className="w-full md:w-1/2 lg:w-1/3">
+        <CustomButton text={"Удалить профиль"} options="w-full"/>
+      </div> */}
     </section>
   );
 }

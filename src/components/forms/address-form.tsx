@@ -2,6 +2,8 @@
 
 import { SubmitEvent, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
 import FormError from "../UI/form-error";
 import CustomButton from "../UI/custom-button";
 import { Address, AddressFormErrors } from "@/lib/types";
@@ -9,7 +11,7 @@ import { Address, AddressFormErrors } from "@/lib/types";
 export default function AddressForm({
   address,
   method,
-  user
+  user,
 }: {
   address?: Address;
   method: "post" | "put";
@@ -26,12 +28,13 @@ export default function AddressForm({
     apartment: "",
     intercom_number: "",
     additional_info: "",
-    is_default: true
+    is_default: true,
   });
   const [errors, setErrors] = useState<AddressFormErrors | undefined>(
     undefined,
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [privacyAgreed, setPrivacyAgreed] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -45,22 +48,25 @@ export default function AddressForm({
         entrance: address.entrance,
         floor: address.floor,
         apartment: address.apartment,
-        intercom_number: address.intercom_number||"",
-        additional_info: address.additional_info||"",
-        is_default: address.is_default
+        intercom_number: address.intercom_number || "",
+        additional_info: address.additional_info || "",
+        is_default: address.is_default,
       });
     }
   }, [method, address]);
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
-    setIsLoading(true);
     e.preventDefault();
     setErrors(undefined);
-    const response = await fetch(method === "post" ? `/api/addresses` : `/api/addresses/${form.id}`, {
-      method: method === "post" ? "POST" : "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    setIsLoading(true);
+    const response = await fetch(
+      method === "post" ? `/api/addresses` : `/api/addresses/${form.id}`,
+      {
+        method: method === "post" ? "POST" : "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      },
+    );
     if (response.ok) {
       router.refresh();
       router.back();
@@ -73,10 +79,7 @@ export default function AddressForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-2 w-full"
-    >
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-full">
       <div className="flex flex-col gap-2 lg:w-[45%]">
         {/* город */}
         <fieldset>
@@ -230,12 +233,40 @@ export default function AddressForm({
               ))}
           </div>
         </fieldset>
-      <CustomButton
-        text={method === "post" ? "Сохранить" : "Изменить"}
-        buttonType="submit"
-        options="h-10 mt-6 px-6 min-w-70"
-        isLoading={isLoading}
-      />
+
+        <div className="w-full text-sm mt-5 text-zinc-500">
+          <label className="flex items-start cursor-pointer">
+            <button
+              onClick={() => setPrivacyAgreed((prev) => !prev)}
+              className="mt-0.5 text-indigo-700"
+            >
+              {!privacyAgreed && <GrCheckbox size={15} />}
+              {privacyAgreed && <GrCheckboxSelected size={15} />}
+            </button>
+            <span className="ml-2 text-zinc-500">
+              Я даю согласие на обработку моих персональных данных в
+              соответствии с{" "}
+              <Link
+                href="/privacy-policy"
+                className="text-indigo-700 link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Политикой конфиденциальности
+              </Link>
+              <span className="text-accent"> *</span>
+            </span>
+          </label>
+          {errors?.policy && <FormError errorField={errors.policy} />}
+        </div>
+
+        <CustomButton
+          text={method === "post" ? "Сохранить" : "Изменить"}
+          buttonType="submit"
+          options="h-10 mt-6 px-6 min-w-70"
+          isLoading={isLoading}
+          disabled={!privacyAgreed}
+        />
       </div>
     </form>
   );

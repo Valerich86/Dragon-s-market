@@ -61,12 +61,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const {
-    first_name,
-    last_name,
-    phone,
-    password
-  } = validatedFields.data;
+  const { first_name, last_name, phone, password } = validatedFields.data;
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -83,6 +78,19 @@ export async function POST(req: Request) {
     const { id } = result.rows[0];
     // Создание токена сессии
     const token = await createSessionToken(id);
+    const forwarded = req.headers.get("x-forwarded-for");
+    const ip = forwarded ? forwarded.split(",")[0].trim() : "127.0.0.1";
+
+    await pool.query(
+      `INSERT INTO consent_ppd (customer_id, values, purpose, ip_address)
+       VALUES ($1, $2, $3, $4)`,
+      [
+        id,
+        "Имя, фамилия, номер телефона, пароль, IP-адрес",
+        "Для дальнейшей аутентификации пользователя и полноценного использования сайта",
+        ip
+      ],
+    );
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,

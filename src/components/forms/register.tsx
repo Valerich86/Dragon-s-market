@@ -4,6 +4,7 @@ import { SubmitEvent, useState } from "react";
 import { redirect } from "next/navigation";
 import FormError from "../UI/form-error";
 import Link from "next/link";
+import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
 import CustomButton from "../UI/custom-button";
 import { RegisterFormErrors } from "@/lib/types";
 import { PiEyesLight } from "react-icons/pi";
@@ -22,11 +23,12 @@ export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [privacyAgreed, setPrivacyAgreed] = useState(false);
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
-    setIsLoading(true);
     e.preventDefault();
     setErrors(undefined);
+    setIsLoading(true);
     const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -163,11 +165,35 @@ export default function RegisterForm() {
         </div>
       </fieldset>
 
+      <div className="w-full text-sm mt-5 text-zinc-500">
+        <label className="flex items-start cursor-pointer">
+          <button onClick={() => setPrivacyAgreed(prev => !prev)} className="mt-0.5 text-indigo-700">
+            {!privacyAgreed && <GrCheckbox size={15}/>}
+            {privacyAgreed && <GrCheckboxSelected size={15}/>}
+          </button>
+          <span className="ml-2 text-zinc-500">
+            Я даю согласие на обработку моих персональных данных в соответствии
+            с{" "}
+            <Link
+              href="/privacy-policy"
+              className="text-indigo-700 link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Политикой конфиденциальности
+            </Link>
+            <span className="text-accent"> *</span>
+          </span>
+        </label>
+        {errors?.policy && <FormError errorField={errors.policy} />}
+      </div>
+
       <CustomButton
         text="Зарегистрироваться"
         buttonType="submit"
         options="h-10 mt-6 px-6 min-w-70"
         isLoading={isLoading}
+        disabled={!privacyAgreed}
       />
       <Link
         href={"/auth/login"}

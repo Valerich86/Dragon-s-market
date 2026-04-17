@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IconType } from "react-icons";
+import { useRouter } from "next/navigation";
 import { useState, useEffect, useContext } from "react";
 import { CartContext } from "@/context/cart-context";
 import { font_bold } from "@/lib/fonts";
+import Notification from "./notification";
 
 interface NavLinkProps {
   href: string;
@@ -14,11 +16,13 @@ interface NavLinkProps {
 }
 
 export default function NavIcon({ href, icon, userId }: NavLinkProps) {
-  const pathName = usePathname();
   const Icon = icon;
+  const pathName = usePathname();
+  const router = useRouter();
   const { refreshCart } = useContext(CartContext)!;
   const [localCartLength, setLocalCartLength] = useState(0);
   const [total, setTotal] = useState(0);
+  const [showNotification, setShowNotification] = useState(false);
 
   // Получаем длину корзины при монтировании и при изменении userId/refreshCart
   useEffect(() => {
@@ -38,27 +42,57 @@ export default function NavIcon({ href, icon, userId }: NavLinkProps) {
     fetchCartLength();
   }, [userId, refreshCart]);
 
+  const handleLogout = async () => {
+    setShowNotification(false);
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.replace("/auth/login");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div
       className={`${pathName.startsWith(href) ? "bg-accent" : "bg-none"} text-secondary px-3 h-full flex items-center relative`}
     >
-      <Link href={href} className="link">
-        <Icon size={20} />
-      </Link>
-      {href === "/cart" && localCartLength > 0 && pathName.startsWith("/catalog") && (
-        <>
-          <div className="absolute rounded-full px-1 top-1 -right-1 bg-accent shadow-[0px_0px_5px_-1px_#fefefe] z-10">
-            {localCartLength}
-          </div>
-          <Link href={"/cart"} className={
-            `${font_bold.className} fixed rounded-full min-w-25 py-1 px-3 bottom-10 text-xl
-            right-5 md:right-10 bg-accent shadow-[0px_0px_40px_25px_rgba(226,51,36,0.3)] border 
-            hover:shadow-[0px_0px_40px_25px_rgba(226,51,36,0.5)] transition duration-300 z-10 text-center`
-          }>
-            {total}₽
-          </Link>
-        </>
+      {href !== "/logout" && (
+        <Link href={href} className="link">
+          <Icon size={20} />
+        </Link>
       )}
+      {href === "/logout" && (
+        <button
+          className="link"
+          onClick={() => setShowNotification(true)}
+        >
+          <Icon size={20} />
+        </button>
+      )}
+      {href === "/cart" &&
+        localCartLength > 0 &&
+        pathName.startsWith("/catalog") && (
+          <>
+            <div className="absolute rounded-full px-1 top-1 -right-1 bg-accent shadow-[0px_0px_5px_-1px_#fefefe] z-10">
+              {localCartLength}
+            </div>
+            <Link
+              href={"/cart"}
+              className={`${font_bold.className} fixed rounded-full min-w-25 py-1 px-3 bottom-10 text-xl
+            right-5 md:right-10 bg-accent shadow-[0px_0px_40px_25px_rgba(226,51,36,0.3)] border 
+            hover:shadow-[0px_0px_40px_25px_rgba(226,51,36,0.5)] transition duration-300 z-10 text-center`}
+            >
+              {total}₽
+            </Link>
+          </>
+        )}
+        <Notification
+          text="Вы действительно хотите выйти из учётной записи?"
+          notificationPurpose="logout"
+          showNotification={showNotification}
+          onAbort={() => setShowNotification(false)}
+          onAccept={handleLogout}
+        />
     </div>
   );
 }

@@ -100,6 +100,7 @@ export type RegisterFormErrors = {
   password?: string[];
   confirmPassword?: string[];
   phone?: string[];
+  policy?: string;
 };
 
 export type AddressFormErrors = {
@@ -111,6 +112,7 @@ export type AddressFormErrors = {
   apartment?: string[];
   intercom_number?: string[];
   additional_info?: string[];
+  policy?: string;
 };
 
 export interface UploadedFile {

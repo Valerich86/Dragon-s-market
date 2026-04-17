@@ -20,6 +20,8 @@ interface Props {
   isInCard?: boolean;
 }
 
+type NotificationPorpose = "login" | "age_verify" | "logout";
+
 const buttonStyle =
   "bg-accent p-1 rounded-lg text-secondary hover:shadow-[0px_0px_20px_-5px_#E23324] transition duration-400 w-full cursor-pointer outline-none active:scale-98 text-center";
 
@@ -36,8 +38,9 @@ export default function ToCartButton({
   const [quantity, setQuantity] = useState(startQuantity);
   const [isLoading, setIsLoading] = useState(false);
   const [messageVisible, setMessageVisible] = useState(false);
-  const [ageConfirmNeeded, setAgeConfirmNeeded] = useState(false);
-  const {refreshCart, setRefreshCart } = useContext(CartContext)!;
+  const [notificationPurpose, setNotificationPurpose] =
+    useState<NotificationPorpose>("login");
+  const { refreshCart, setRefreshCart } = useContext(CartContext)!;
   const [notify, setNotify] = useState("");
   const router = useRouter();
 
@@ -45,9 +48,9 @@ export default function ToCartButton({
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.stopPropagation();
-    
+
     if (customer_id === 0 || !customer_id) {
-      setAgeConfirmNeeded(false);
+      setNotificationPurpose("login");
       setNotify(
         "Вы пока не можете использовать корзину, сначала войдите в приложение",
       );
@@ -60,8 +63,8 @@ export default function ToCartButton({
 
     if (category_id === 4) {
       const ageConfirmed = Cookies.get("dragon_bazar_ageConfirmed");
-      if (!ageConfirmed || ageConfirmed === 'false'){
-        setAgeConfirmNeeded(true);
+      if (!ageConfirmed || ageConfirmed === "false") {
+        setNotificationPurpose("age_verify");
         setNotify("Подтвердите свой возраст. Вам есть 18 лет?");
         setMessageVisible(true);
         return;
@@ -121,7 +124,7 @@ export default function ToCartButton({
   const ageConfirm = () => {
     setMessageVisible(false);
     // Cookies.set("dragon_bazar_ageConfirmed", "true", {maxAge: 60*60 });
-    router.push("/age-verification")
+    router.push("/age-verification");
   };
 
   const ageAbort = () => {
@@ -171,9 +174,13 @@ export default function ToCartButton({
           </div>
         </div>
       )}
-      {messageVisible && (
-        <Notification text={notify} onAbort={ageAbort} onAccept={ageConfirm} ageConfirmNeeded={ageConfirmNeeded}/>
-      )}
+      <Notification
+        text={notify}
+        onAbort={ageAbort}
+        onAccept={ageConfirm}
+        showNotification={messageVisible}
+        notificationPurpose={notificationPurpose}
+      />
     </>
   );
 }

@@ -2,14 +2,12 @@ import { font_default } from "@/lib/fonts";
 import { Metadata } from "next";
 import Header from "@/components/UI/header";
 import Footer from "@/components/UI/footer";
-import Decor from "@/components/decor";
 import BackButton from "@/components/UI/back-button";
 import "./globals.css";
-import SparklesAnimation from "@/components/animation/sparkles";
 import { getUserInfo } from "@/lib/actions";
 import { verifySession } from "@/lib/auth";
 import { CartProvider } from "@/context/cart-context";
-import UserIdProvider from "@/components/userId-provider";
+import CookieNotification from "@/components/UI/cookie-notification";
 
 export const metadata: Metadata = {
   title: {
@@ -40,6 +38,7 @@ export default async function RootLayout({
           <BackButton />
           <div className={`bg-primary text-secondary`}>{children}</div>
           <Footer />
+          <CookieNotification />
         </CartProvider>
       </body>
     </html>

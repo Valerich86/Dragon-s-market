@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { SlBasket } from "react-icons/sl";
 import { SlUser } from "react-icons/sl";
+import { SlLogout } from "react-icons/sl";
 import BurgerMenu from "./burger-menu";
 import NavIcon from "./nav-icon";
 
@@ -20,6 +21,7 @@ const centeredLinks = [
 const rightLinks = [
   { icon: SlBasket, href: "/cart" },
   { icon: SlUser, href: "/profile" },
+  { icon: SlLogout , href: "/logout" },
 ];
 
 export default function Header({userId}:{userId:number}) {

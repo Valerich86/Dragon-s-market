@@ -27,7 +27,7 @@ export default function BackButton() {
 
   return (
     <>
-      {pathname !== "/" && !pathname.startsWith("/admin") && (
+      {pathname !== "/" && pathname !== "/privacy-policy" && !pathname.startsWith("/admin") && (
         <button
           className="link fixed left-0 x-spacing top-18 text-3xl opacity-60 z-40 text-secondary"
           onClick={handleBack}
