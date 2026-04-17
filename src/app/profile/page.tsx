@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { IoClose } from "react-icons/io5";
 import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import CustomButton from "@/components/UI/custom-button";
 import PaintCaption from "@/components/UI/paint-caption";
@@ -15,10 +16,6 @@ export default function General() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    console.log(general.id)
-  }, []);
-
   const handleDeleteProfile = async () => {
     setIsLoading(true);
     setShowWarning(false);
@@ -26,6 +23,7 @@ export default function General() {
       const response = await fetch(`/api/auth/delete/${general.id}`, {
         method: "DELETE",
       });
+      Cookies.remove("dragon_bazar_cookiesDate");
       router.replace("/");
     } catch (error) {
       console.error(error);

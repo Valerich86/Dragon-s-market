@@ -13,7 +13,7 @@ export default function CookieNotification() {
   
   const handleSetCookies = () => {
     setIsOpened(false);
-    Cookies.set("dragon_bazar_cookiesDate", new Date().toISOString());
+    Cookies.set("dragon_bazar_cookiesDate", new Date().toISOString(), {expires: 24*120});
   };
 
   useEffect(() => {
