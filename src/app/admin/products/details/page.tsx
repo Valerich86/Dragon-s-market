@@ -91,7 +91,8 @@ export default function AdminDetailsPage() {
           isLoading={updating}
           onClick={handleUpdateCatalog}
         />
-        {updating && <p className="text-accent text-xs">{sec} сек...</p>}
+        {updating && <p className="text-accent text-xs">Идёт обновление каталога ({sec} сек)...</p>}
+        {updating && <p className="text-accent text-xs">Не переключайтесь. И не дышите.</p>}
         {updatingInfo.newItems && (
           <p>Загружено новых товаров: {updatingInfo.newItems}</p>
         )}
