@@ -34,7 +34,7 @@ export default function CustomButton({
         text
       ) : (
         <div className="w-full h-full flex justify-center items-center">
-          <PiSpinnerGapThin className="text-center animate-spin" size={35} />
+          <PiSpinnerGapThin className="text-center animate-spin" size={30} />
         </div>
       )}
     </button>

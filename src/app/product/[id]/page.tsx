@@ -8,19 +8,20 @@ export async function generateMetadata(
   {
     searchParams,
   }: {
-    searchParams: Promise<{ productName: string, categoryName: string }>;
+    searchParams: Promise<{ productName: string; categoryName: string }>;
   },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { productName, categoryName } = await searchParams;
-  let product = "Неизвестный товар", category;
+  let product = "Неизвестный товар",
+    category;
   if (productName) {
     product = decodeURIComponent(productName);
   }
   if (category) {
     category = decodeURIComponent(categoryName);
   }
-  const title = category ? `${category} | ${product}`: product;
+  const title = category ? `${category} | ${product}` : product;
   const description = `Купить "${product}" в магазине азиатских снеков "Драконий базар", Пермь`;
   return {
     title,
@@ -39,7 +40,7 @@ export default async function ProductPage({
   if (session) userId = session.userId;
   const { id } = await params;
   const cloudPath = useCloudPath();
-  const {product} = await getProductData(id, userId);
+  const { product } = await getProductData(id, userId);
 
   if (!product)
     return (
@@ -49,8 +50,11 @@ export default async function ProductPage({
     );
 
   return (
-    <main aria-label="товар" className={`w-full overflow-x-hidden x-spacing flex justify-center items-center`}>
-      <ProductSection product={product} cloudPath={cloudPath} userId={userId}/>
+    <main
+      aria-label="товар"
+      className={`w-full overflow-x-hidden x-spacing flex justify-center items-center`}
+    >
+      <ProductSection product={product} cloudPath={cloudPath} userId={userId} />
     </main>
   );
 }

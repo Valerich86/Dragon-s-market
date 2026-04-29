@@ -5,9 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import CustomButton from "./custom-button";
 
 const navLinks = [
   { name: "Фото товара", href: "/admin/products/image-upload" },
+  { name: "Карточки товара", href: "/admin/products/details" },
 ];
 
 export default function Sidebar() {

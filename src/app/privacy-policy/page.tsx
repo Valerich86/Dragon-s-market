@@ -227,7 +227,7 @@ export default async function PrivacyPolicyPage() {
           <p>
             Для реализации своих прав пользователь может направить запрос на
             электронную почту{" "}
-            <a href="mailto:ryazanov_suspense@mail.ru" className="text-indigo-600">ryazanov_suspense@mail.ru</a>. Срок
+            <a href="mailto:daleksek@mail.ru" className="text-indigo-600">daleksek@mail.ru</a>. Срок
             рассмотрения запроса — до 30 календарных дней с момента его
             получения.
           </p>
@@ -246,13 +246,13 @@ export default async function PrivacyPolicyPage() {
 
         <section>
           <h2 className="text-xl font-semibold mb-4">11. Контакты оператора</h2>
-          <p>ИП [ФИО ИП]</p>
-          <p>ИНН: [номер ИНН]</p>
-          <p>Адрес: [юридический адрес]</p>
+          <p>ИП Михайлов Александр Сергеевич</p>
+          <p>ИНН: 222210834999</p>
+          <p>Юридический адрес: 614051, Пермский край, Г. Пермь, Уинская 3, 134</p>
           <p>
-            Email: <a href="mailto:[email]">[email]</a>
+            Email: <a href="mailto:daleksek@mail.ru" className="text-indigo-600">daleksek@mail.ru</a>
           </p>
-          <p>Телефон: [номер телефона]</p>
+          <p>Телефон: +79223281133</p>
         </section>
 
         <section>

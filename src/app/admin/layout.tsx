@@ -18,7 +18,7 @@ export default async function AdminLayout({
   return (
     <main aria-label="админ" className={`w-full overflow-x-hidden`}>
       <Sidebar />
-      <div className="w-screen min-h-screen bg-primary lg:px-70 py-40 lg:pt-0">
+      <div className="w-screen min-h-screen bg-primary lg:pl-70 py-40 lg:pt-0">
         {children}
       </div>
     </main>

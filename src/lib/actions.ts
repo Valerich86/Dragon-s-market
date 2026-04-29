@@ -31,7 +31,7 @@ export type BonusResult = {
 
 export async function getBonusParams(
   userId: number,
-  catalog:Product[],
+  catalog: Product[],
 ): Promise<BonusResult> {
   if (userId === 0) return {mascotPositionId: 0, showMascot: false};
   const randomIndex = Math.floor(Math.random() * catalog.length);
@@ -140,7 +140,7 @@ export async function getCatalog(userId: number, categoryId: number) {
   let params: number[] = [];
 
   if (categoryId === 0) {
-    query = `SELECT * FROM products WHERE remains>0 AND is_active=TRUE ORDER BY name ASC LIMIT 100`;
+    query = `SELECT * FROM products WHERE remains>0 AND is_active=TRUE ORDER BY name ASC`;
     params = [];
   } else {
     query = `SELECT * FROM products WHERE remains>0 AND is_active=TRUE AND category_id=$1 ORDER BY name ASC`;

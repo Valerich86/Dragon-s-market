@@ -53,6 +53,7 @@ export default function Addresses() {
             console.error(error);
           }
         };
+        
         return (
           <div
             key={a.id}

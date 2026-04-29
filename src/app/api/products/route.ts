@@ -4,7 +4,7 @@ import { pool } from "@/lib/db";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
-    const { categoryId, toCarousel, random } = Object.fromEntries(
+    const { categoryId, toCarousel, random, toAdmin } = Object.fromEntries(
       searchParams.entries(),
     );
     let query: string;
@@ -19,7 +19,10 @@ export async function GET(request: NextRequest) {
     } else if (random) {
       query = `SELECT * FROM products WHERE remains>0 AND is_active=TRUE ORDER BY name ASC LIMIT 100`;
       params = [];
-    } else {
+    } else if (toAdmin) {
+      query = `SELECT * FROM products ORDER BY id ASC`;
+      params = [];
+    }else {
       query = `SELECT * FROM products WHERE remains>0 AND is_active=TRUE ORDER BY name ASC`;
       params = [];
     }

@@ -20,7 +20,7 @@ type Product = {
   remains: Remain[];
   [key: string]: any;
 }
-// получение категорий 
+
 export async function GET() {
   try {
     const host_name = process.env.HOST_NAME;

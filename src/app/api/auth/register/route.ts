@@ -3,7 +3,6 @@ import { pool } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { createSessionToken } from "@/lib/auth";
 import { NextResponse } from "next/server";
-import { RegisterFormErrors } from "@/lib/types";
 
 // проверка логина
 async function checkPhoneAvailability(phone: string): Promise<boolean> {

@@ -7,7 +7,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ user
   const bonus = searchParams.get('bonus');
   try {
     await pool.query(
-      `UPDATE customers SET bonus_amount=bonus_amount+$1, bonus_received=true WHERE id=$2`, [Number(bonus), userId]
+      `UPDATE customers SET bonus_amount=bonus_amount+$1, 
+      bonus_received=true WHERE id=$2`, 
+      [Number(bonus), userId]
     );
 
     return NextResponse.json({ status: 204 });

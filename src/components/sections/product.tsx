@@ -24,11 +24,12 @@ export default function ProductSection({ product, cloudPath, userId }: Props) {
           />
         </div>
       </div>
-      <div className="w-full lg:w-1/2 h-1/2 lg:h-[80vh] lg:p-3 flex flex-col gap-5">
+      <div className="w-full lg:w-1/2 lg:p-3 flex flex-col gap-5">
         <p className={`${font_accent.className} font-extrabold uppercase`}>
           {product.name}
         </p>
-        {/* <p className={``}>{product.description}</p> */}
+        <pre className={`text-xs`}><strong>Состав:</strong> {product.composition}</pre>
+        <pre className={`text-xs`}>{product.description}</pre>
         <p>
           {product.weight}
           {product.unit}
@@ -39,9 +40,6 @@ export default function ProductSection({ product, cloudPath, userId }: Props) {
           >
             Цена: {product.price} ₽
           </span>
-          {product.status === "sale" && (
-            <span className="font-extrabold ml-3">{product.old_price} ₽</span>
-          )}
         </p>
         <div className="w-full lg:w-1/2">
           <ToCartButton

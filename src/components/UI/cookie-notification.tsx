@@ -45,7 +45,7 @@ export default function CookieNotification() {
           animate={{ y: 0 }}
           exit={{ y: "-200%" }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className={`absolute left-0 top-20 z-50 w-full text-gray-500
+          className={`absolute left-0 top-10 z-50 w-full text-gray-500
               shadow-[0px_0px_30px_25px_rgba(59,130,246,0.15) x-spacing`}
         >
           <div className="w-full flex justify-end link">
