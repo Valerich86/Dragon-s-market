@@ -52,7 +52,7 @@ export default function OrderNotifications() {
   return (
     <>
       {notifications.length > 0 && (
-        <div className="flex flex-col justify-end h-[90vh] gap-5 absolute right-5 top-5 overflow-x-hidden overflow-y-auto z-50">
+        <div className="flex flex-col justify-end h-[90vh] gap-5 fixed right-5 top-5 overflow-x-hidden overflow-y-auto z-50">
           {notifications.map((item, index) => (
             <motion.div
               key={index}

@@ -49,7 +49,7 @@ export default function AdminDetailsPage() {
   if (isLoading) return <Loading />;
 
   return (
-    <div className={`w-full overflow-x-hidden px-5 lg:pr-25 lg:py-5`}>
+    <div className={`w-full overflow-x-hidden px-5 lg:pr-25 py-10`}>
       <CatalogUpdater />
       <h1 className={`${font_light.className} uppercase mb-10`}>
         Выберите нужный товар
