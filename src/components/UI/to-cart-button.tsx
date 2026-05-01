@@ -11,7 +11,6 @@ import Notification from "./notification";
 
 interface Props {
   product_id: number;
-  category_id: number;
   price: number;
   customer_id: number;
   startQuantity: number;
@@ -27,7 +26,6 @@ const buttonStyle =
 
 export default function ToCartButton({
   product_id,
-  category_id,
   customer_id,
   price,
   startQuantity,
@@ -59,16 +57,6 @@ export default function ToCartButton({
       }, 5000);
       setMessageVisible(true);
       return;
-    }
-
-    if (category_id === 4) {
-      const ageConfirmed = Cookies.get("dragon_bazar_ageConfirmed");
-      if (!ageConfirmed || ageConfirmed === "false") {
-        setNotificationPurpose("age_verify");
-        setNotify("Подтвердите свой возраст. Вам есть 18 лет?");
-        setMessageVisible(true);
-        return;
-      }
     }
 
     setIsLoading(true);

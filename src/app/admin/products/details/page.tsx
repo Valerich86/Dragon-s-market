@@ -7,10 +7,11 @@ import type { Product } from "@/lib/types";
 import Link from "next/link";
 import Loading from "@/app/loading";
 import CustomButton from "@/components/UI/custom-button";
+import CatalogUpdater from "@/components/catalog-updater";
 
 interface UpdatingInfo {
   newItems: number | null;
-  updatedRemains: number | null;
+  updated: number | null;
   error: string | undefined;
 }
 
@@ -19,13 +20,6 @@ export default function AdminDetailsPage() {
   const [catalog, setCatalog] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [updating, setUpdating] = useState(false);
-  const [sec, setSec] = useState(0);
-  const [updatingInfo, setUpdatingInfo] = useState<UpdatingInfo>({
-    newItems: null,
-    updatedRemains: null,
-    error: undefined,
-  });
 
   useEffect(() => {
     const fetchCatalog = async () => {
@@ -52,57 +46,11 @@ export default function AdminDetailsPage() {
     setFilteredProducts(foundItems);
   }, [value]);
 
-  const handleUpdateCatalog = async () => {
-    setUpdating(true);
-    const interval = setInterval(() => {
-      setSec(prev => prev + 1);
-    }, 1000);
-    setUpdatingInfo({
-      newItems: null,
-      updatedRemains: null,
-      error: undefined,
-    });
-    const response = await fetch(`/api/admin/products/refresh`);
-    if (response.ok) {
-      const { updatedRemains, newItems } = await response.json();
-      setUpdatingInfo({
-        ...updatingInfo,
-        updatedRemains: updatedRemains,
-        newItems: newItems,
-      });
-    } else {
-      setUpdatingInfo({
-        ...updatingInfo,
-        error: (await response.json()).error,
-      });
-    }
-    clearInterval(interval);
-    setUpdating(false);
-  };
-
   if (isLoading) return <Loading />;
 
   return (
-    <div className={`w-full overflow-x-hidden px-5 lg:pr-25 py-5`}>
-      <div className="w-full flex flex-col lg:items-end gap-3 mb-10 lg:mb-0">
-        <CustomButton
-          text="Обновить каталог"
-          options="w-45 h-10"
-          isLoading={updating}
-          onClick={handleUpdateCatalog}
-        />
-        {updating && <p className="text-accent text-xs">Идёт обновление каталога ({sec} сек)...</p>}
-        {updating && <p className="text-accent text-xs">Не переключайтесь. И не дышите.</p>}
-        {updatingInfo.newItems && (
-          <p>Загружено новых товаров: {updatingInfo.newItems}</p>
-        )}
-        {updatingInfo.updatedRemains && (
-          <p>Изменено остатков: {updatingInfo.updatedRemains}</p>
-        )}
-        {updatingInfo.error && (
-          <p className="text-accent text-xs">{updatingInfo.error}</p>
-        )}
-      </div>
+    <div className={`w-full overflow-x-hidden px-5 lg:pr-25 lg:py-5`}>
+      <CatalogUpdater />
       <h1 className={`${font_light.className} uppercase mb-10`}>
         Выберите нужный товар
       </h1>

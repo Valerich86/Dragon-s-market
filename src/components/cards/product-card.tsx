@@ -95,16 +95,13 @@ export default function ProductCard({ item, cloudPath, index, userId }: Props) {
                 {item.price}₽
               </p>
             </div>
-            {item.category_id !== 4 && (
-              <ToCartButton
-                product_id={item.id}
-                category_id={item.category_id}
-                startQuantity={item.quantity}
-                customer_id={userId}
-                price={item.price}
-                isInCard
-              />
-            )}
+            <ToCartButton
+              product_id={item.id}
+              startQuantity={item.quantity}
+              customer_id={userId}
+              price={item.price}
+              isInCard
+            />
           </div>
         </div>
       </div>

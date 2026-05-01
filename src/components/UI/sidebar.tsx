@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import CustomButton from "./custom-button";
+import SoundEnableButton from "./sound-enabled-button";
 
 const navLinks = [
   { name: "Фото товара", href: "/admin/products/image-upload" },
@@ -18,7 +19,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`z-20 lg:h-screen lg:w-1/6 w-full items-center fixed left-0 top-0 flex flex-col bg-primary border-r border-gray-700 pb-5`}
+      className={`z-20 lg:h-screen lg:w-1/6 w-full items-center fixed left-0 top-0 flex flex-col bg-primary border-b lg:border-r border-gray-700 pb-5`}
     >
       <Link
         href={"/"}
@@ -57,6 +58,7 @@ export default function Sidebar() {
             {item.name}
           </Link>
         ))}
+      <SoundEnableButton />
       </div>
     </aside>
   );

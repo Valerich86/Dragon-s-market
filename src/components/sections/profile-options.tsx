@@ -20,7 +20,11 @@ export default function ProfileOptions() {
         <Link
           key={item.href}
           href={item.href}
-          className={`link ${pathName === item.href ? "bg-accent" : ""} rounded-t p-1`}
+          className={
+            `link ${pathName === item.href 
+              || (pathName.startsWith(item.href) 
+              && item.href.startsWith("/profile/orders")) 
+              ? "bg-accent" : ""} rounded-t p-1`}
           onClick={() => {
             setCurrentOption(item);
           }}

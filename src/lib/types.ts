@@ -27,6 +27,7 @@ export type CartItem = {
   product_name: string;
   product_weight: number;
   product_unit: string;
+  product_category: number;
   quantity: number;
   product_price: number;
   total_price: number;
@@ -45,24 +46,68 @@ export type Info = {
 };
 
 export type Order = {
-  id: string;
-  customer_id: string;
-  total_amount: number;
+  // Поля из таблицы orders
+  id: number;
+  customer_id: number;
+  address_id: number | null;
+  type: string;
+  cart_items: number[];
+  total_items: number;
+  total_sum: number;
   status:
-    | "pending"
-    | "paid"
-    | "processing"
-    | "shipped"
-    | "delivered"
-    | "cancelled"
-    | "refunded";
-  shipping_address: string;
-  shipping_city: string;
-  shipping_postal_code: string;
-  notes: string;
-  created_at: string;
+    | "создан"
+    | "в обработке"
+    | "подтверждён"
+    | "оплачен"
+    | "собирается"
+    | "готов к отправке"
+    | "передан в доставку"
+    | "в пути"
+    | "доставлен"
+    | "завершён"
+    | "отменён";
+  notes: string | null;
+  created_at: string; 
   updated_at: string;
+
+  // Поля из customers
+  first_name: string;
+  last_name: string;
+  phone: string;
+
+  // Поля из addresses (могут быть null, если address_id = NULL)
+  city: string | null;
+  address: string | null;
+  street: string | null;
+  house: string | null;
+  entrance: string | null; // опечатка сохранена как в исходной схеме
+  floor: string | null;
+  apartment: string | null;
+  intercom_number: string | null;
+  postal_code: string | null;
+  additional_info: string | null;
 };
+
+export type OrderItem = {
+  id: number;
+  order_id: number;
+  product_id: number;
+  product_name: string;
+  product_weight: number;
+  product_unit: string;
+  product_category: number;
+  quantity: number;
+  product_price: number;
+  total_price: number;
+};
+
+export type OrderNotification = {
+  id: number;
+    type: string;
+    total_items: number;
+    total_sum: number;
+    created_at: string;
+}
 
 export type User = {
   id: number;
@@ -80,7 +125,6 @@ export type Address = {
   customer_id: number;
   country: string;
   city: string;
-  address?: string;
   street: string;
   house: string;
   entrance: string;

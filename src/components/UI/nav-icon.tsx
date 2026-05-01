@@ -62,37 +62,32 @@ export default function NavIcon({ href, icon, userId }: NavLinkProps) {
         </Link>
       )}
       {href === "/logout" && (
-        <button
-          className="link"
-          onClick={() => setShowNotification(true)}
-        >
+        <button className="link" onClick={() => setShowNotification(true)}>
           <Icon size={20} />
         </button>
       )}
-      {href === "/cart" &&
-        localCartLength > 0 &&
-        pathName.startsWith("/catalog") && (
-          <>
-            <div className="absolute rounded-full px-1 top-1 -right-1 bg-accent shadow-[0px_0px_5px_-1px_#fefefe] z-10">
-              {localCartLength}
-            </div>
-            <Link
-              href={"/cart"}
-              className={`${font_bold.className} fixed rounded-full min-w-25 py-1 px-3 bottom-10 text-xl
+      {href === "/cart" && localCartLength > 0 && pathName !== "/cart" && (
+        <>
+          <div className="absolute rounded-full px-1 top-1 -right-1 bg-accent shadow-[0px_0px_5px_-1px_#fefefe] z-10">
+            {localCartLength}
+          </div>
+          <Link
+            href={"/cart"}
+            className={`${font_bold.className} fixed rounded-full min-w-25 py-1 px-3 bottom-10 text-xl
             right-5 md:right-10 bg-accent shadow-[0px_0px_40px_25px_rgba(226,51,36,0.3)] border 
             hover:shadow-[0px_0px_40px_25px_rgba(226,51,36,0.5)] transition duration-300 z-10 text-center`}
-            >
-              {total}₽
-            </Link>
-          </>
-        )}
-        <Notification
-          text="Вы действительно хотите выйти из учётной записи?"
-          notificationPurpose="logout"
-          showNotification={showNotification}
-          onAbort={() => setShowNotification(false)}
-          onAccept={handleLogout}
-        />
+          >
+            {total}₽
+          </Link>
+        </>
+      )}
+      <Notification
+        text="Вы действительно хотите выйти из учётной записи?"
+        notificationPurpose="logout"
+        showNotification={showNotification}
+        onAbort={() => setShowNotification(false)}
+        onAccept={handleLogout}
+      />
     </div>
   );
 }

@@ -72,7 +72,7 @@ export default function UploadImages() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col px-5 gap-2 w-full md:w-2/3 lg:w-1/2 mt-5"
+      className="flex flex-col px-5 gap-2 w-full md:w-2/3 lg:w-1/2 pt-5"
     >
       <h1 className={`${font_light.className} uppercase mb-10`}>
         Загрузка изображений для товаров

@@ -14,7 +14,7 @@ export async function GET(request: Request) {
 
   try {
     const data = await pool.query(
-        `SELECT ci.*, p.name AS product_name, p.weight AS product_weight, 
+        `SELECT ci.*, p.name AS product_name, p.weight AS product_weight, p.category_id as product_category,
         p.unit AS product_unit, p.price AS product_price, SUM(ci.total_price) OVER () AS cart_total
         FROM cart_items AS ci JOIN products AS p ON ci.product_id=p.id 
         WHERE ci.customer_id=$1 ORDER BY ci.created_at`,

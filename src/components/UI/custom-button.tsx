@@ -26,8 +26,8 @@ export default function CustomButton({
       disabled={isLoading || disabled}
       className={
         `${options} ${!isLoading && !disabled 
-          ? "active:scale-98 hover:shadow-[0px_0px_20px_-5px_#E23324] bg-accent" : "bg-gray-600"} 
-          p-1 rounded-full text-secondary transition duration-400 cursor-pointer outline-none text-center`
+          ? "active:scale-98 hover:shadow-[0px_0px_20px_-5px_#E23324] bg-accent cursor-pointer" : "bg-gray-600"} 
+          p-1 rounded-full text-secondary transition duration-400 outline-none text-center`
         }
     >
       {!isLoading ? (

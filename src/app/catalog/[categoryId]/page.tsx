@@ -41,10 +41,9 @@ export default async function CategoryPage({
 
   return (
     <>
-      {catalog[0].category_id === 4 && (
+      {categoryId === 4 && (
         <div className="mt-12 p-4 bg-yellow-50 border text-center border-yellow-200 rounded-lg text-xs text-yellow-800">
-            <strong>Важно:</strong> товары категории "Энергетики" не подлежат
-            доставке и представлены на сайте в целях ознакомления
+            <strong>Важно:</strong> энергетики можно добавить в корзину только при условии самовывоза — доставка этой категории товаров не предусмотрена.
         </div>
       )}
       <section
