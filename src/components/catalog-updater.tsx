@@ -35,8 +35,10 @@ export default function CatalogUpdater() {
       );
       if (response.ok) {
         const { updated, newItems } = await response.json();
-        setUpdated((prev) => prev + updated);
-        setNewItems((prev) => prev + newItems);
+        console.log(updated, newItems)
+        console.log(typeof updated, typeof newItems)
+        setUpdated((prev) => prev + Number(updated));
+        setNewItems((prev) => prev + Number(newItems));
       } else {
         const { error } = await response.json();
         setError(error);

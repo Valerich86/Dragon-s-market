@@ -57,7 +57,6 @@ export async function auth() {
   }
 }
 
-
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const categoryId = searchParams.get("categoryId");
@@ -89,6 +88,7 @@ export async function GET(request: NextRequest) {
           products = data.items;
           allProducts.push(...products);
         }
+        console.log(`${categoryId}: ${allProducts.length}`);
         try {
           await pool.query("BEGIN");
           for (let p of allProducts) {
@@ -96,35 +96,53 @@ export async function GET(request: NextRequest) {
               `SELECT remains, name, price FROM products WHERE id=$1`,
               [p.id],
             );
+
+            // если товар есть в БД и значения полей отличаются, обновляем
             if (
               result.rows.length > 0 &&
               (result.rows[0].remains !== p.remains[0].remain ||
-              result.rows[0].name !== p.name ||
-              result.rows[0].price !== p.prices[0].price)
+                result.rows[0].name !== p.name ||
+                Number(result.rows[0].price) !== Number(p.prices[0].price))
             ) {
-              await pool.query(`UPDATE products SET remains=$1, name=$2. price=$3 WHERE id=$4`, [
-                p.remains[0].remain,
-                p.name,
-                p.prices[0].price,
-                p.id,
-              ]);
-              updated += 1;
+              try {
+                console.log(p.remains[0].remain, p.name, p.prices[0].price, p.id)
+                console.log(result.rows[0].remains, result.rows[0].name, Number(result.rows[0].price), p.id)
+                await pool.query(
+                  `UPDATE products SET remains=$1, name=$2, price=$3 WHERE id=$4`,
+                  [p.remains[0].remain, p.name, p.prices[0].price, p.id],
+                );
+                updated += 1;
+              } catch (error) {
+                return NextResponse.json({
+                  status: 500,
+                  error: `Ошибка обновления товара: ${error}`,
+                });
+              }
+
+            // если товара нет в БД, добавляем
             } else if (result.rows.length === 0) {
               const categoryId = p.type ?? 0;
-              await pool.query(
-                `INSERT INTO products (id, name, weight, unit, category_id, price, remains) 
+              try {
+                await pool.query(
+                  `INSERT INTO products (id, name, weight, unit, category_id, price, remains) 
                   VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-                [
-                  p.id,
-                  p.name,
-                  p.weight,
-                  p.unit,
-                  categoryId,
-                  p.prices[0].price,
-                  p.remains[0].remain,
-                ],
-              );
-              newItems += 1;
+                  [
+                    p.id,
+                    p.name,
+                    p.weight,
+                    p.unit,
+                    categoryId,
+                    p.prices[0].price,
+                    p.remains[0].remain,
+                  ],
+                );
+                newItems += 1;
+              } catch (error) {
+                return NextResponse.json({
+                  status: 500,
+                  error: `Ошибка добавления товара: ${error}`,
+                });
+              }
             }
           }
           await pool.query("COMMIT");
