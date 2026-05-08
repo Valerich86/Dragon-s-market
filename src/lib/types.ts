@@ -1,3 +1,22 @@
+export const orderStatuses = [
+  "создан",
+  "взят в работу",
+  "собирается",
+  "готов к отправке",
+  "передан в доставку",
+  "в пути",
+  "доставлен",
+  "завершён",
+  "оплачен",
+  "отменён",
+];
+
+export const contentTypes = [
+    { value: "news", label: "новости" },
+    { value: "about", label: "о нас" },
+    { value: "delivery", label: "о доставке" },
+  ];
+
 export type Product = {
   id: number;
   name: string;
@@ -34,15 +53,16 @@ export type CartItem = {
   cart_total: number;
 };
 
-export type Info = {
+export type Content = {
   id: number;
+  type: string;
   title?: string;
-  info_type: "news" | "about" | "assortment";
-  media_type: "image" | "video" | "none";
-  content: string;
+  info: string;
   media_url?: string;
-  optional_link_url?: string;
+  link_href?: string;
+  link_name?: string;
   created_at: string;
+  updated_at: string;
 };
 
 export type Order = {
@@ -54,20 +74,9 @@ export type Order = {
   cart_items: number[];
   total_items: number;
   total_sum: number;
-  status:
-    | "создан"
-    | "в обработке"
-    | "подтверждён"
-    | "оплачен"
-    | "собирается"
-    | "готов к отправке"
-    | "передан в доставку"
-    | "в пути"
-    | "доставлен"
-    | "завершён"
-    | "отменён";
+  status: string;
   notes: string | null;
-  created_at: string; 
+  created_at: string;
   updated_at: string;
 
   // Поля из customers
@@ -103,11 +112,11 @@ export type OrderItem = {
 
 export type OrderNotification = {
   id: number;
-    type: string;
-    total_items: number;
-    total_sum: number;
-    created_at: string;
-}
+  type: string;
+  total_items: number;
+  total_sum: number;
+  created_at: string;
+};
 
 export type User = {
   id: number;

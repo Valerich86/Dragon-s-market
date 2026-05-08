@@ -11,9 +11,8 @@ import ThemeSwitcher from "../theme-switcher";
 const links = [
   { name: "Kаталог", href: "/catalog" },
   { name: "Новости", href: "/news" },
-  { name: "Как купить?", href: "/delivery" },
+  { name: "О доставке", href: "/delivery" },
   { name: "О нас", href: "/about" },
-  { name: "О товарах", href: "/assortment" },
 ];
 
 // const links_2 = [

@@ -5,7 +5,6 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
-    console.log(userId)
     const data = await pool.query(
       `SELECT * FROM addresses WHERE customer_id=$1 AND is_default=$2`,
       [userId, true],

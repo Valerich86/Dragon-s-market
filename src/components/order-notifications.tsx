@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import useSound from "use-sound";
+import Link from "next/link";
 
 interface OrderId {
   id: number;
@@ -17,13 +17,12 @@ export default function OrderNotifications() {
       try {
         const response = await fetch("/api/orders?autoFetch=true");
         const orderIds: OrderId[] = (await response.json()).orders;
-        console.log("сравнение: ", arraysEqual(prevNotifications.current, orderIds));
         // Сравниваем с предыдущим состоянием
         if (!arraysEqual(prevNotifications.current, orderIds)) {
           setNotifications(orderIds);
           prevNotifications.current = [...orderIds]; // Обновляем предыдущее состояние
-          const audio = new Audio('/sound/notification.mp3');
-          audio.play().catch((e) => console.error('Звук не воспроизведён:', e));
+          const audio = new Audio("/sound/notification.mp3");
+          audio.play();
         }
       } catch (error) {
         console.error("Ошибка загрузки заказов:", error);
@@ -34,35 +33,34 @@ export default function OrderNotifications() {
     return () => clearInterval(interval);
   }, []);
 
-
   // Функция сравнения массивов
   const arraysEqual = (a: OrderId[], b: OrderId[]): boolean => {
-  if (a.length !== b.length) return false;
+    if (a.length !== b.length) return false;
 
-  // Сортируем по id перед преобразованием в строку
-  const sortedA = [...a].sort((x, y) => x.id - y.id);
-  const sortedB = [...b].sort((x, y) => x.id - y.id);
+    // Сортируем по id перед преобразованием в строку
+    const sortedA = [...a].sort((x, y) => x.id - y.id);
+    const sortedB = [...b].sort((x, y) => x.id - y.id);
 
-  return JSON.stringify(sortedA) === JSON.stringify(sortedB);
-};
-
+    return JSON.stringify(sortedA) === JSON.stringify(sortedB);
+  };
 
   if (notifications.length === 0) return null;
 
   return (
     <>
       {notifications.length > 0 && (
-        <div className="flex flex-col justify-end h-[90vh] gap-5 fixed right-5 top-5 overflow-x-hidden overflow-y-auto z-50">
+        <div className="flex flex-col gap-5 fixed h-[30vh] right-5 top-[60vh] overflow-x-hidden overflow-y-auto z-50 bg-gray-700 p-3 rounded">
           {notifications.map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              transition={{ duration: 0.2 }}
-              className="bg-accent p-2 rounded"
-            >
-              Новый заказ № {item.id}
-            </motion.div>
+            <Link href={`/admin/orders/details/${item.id}`} key={index}>
+              <motion.div
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                transition={{ duration: 0.2 }}
+                className="bg-accent p-2 rounded"
+              >
+                Новый заказ № {item.id}
+              </motion.div>
+            </Link>
           ))}
         </div>
       )}

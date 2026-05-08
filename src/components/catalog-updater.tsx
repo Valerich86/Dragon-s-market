@@ -35,10 +35,8 @@ export default function CatalogUpdater() {
       );
       if (response.ok) {
         const { updated, newItems } = await response.json();
-        console.log(updated, newItems)
-        console.log(typeof updated, typeof newItems)
-        setUpdated((prev) => prev + Number(updated));
-        setNewItems((prev) => prev + Number(newItems));
+        setUpdated((prev) => prev + updated);
+        setNewItems((prev) => prev + newItems);
       } else {
         const { error } = await response.json();
         setError(error);
@@ -49,7 +47,7 @@ export default function CatalogUpdater() {
   };
 
   return (
-    <div className="w-full flex flex-col lg:items-end gap-3 mb-10 lg:mb-0">
+    <div className="w-full flex flex-col lg:items-start gap-3 mb-10">
       <CustomButton
         text="Обновить каталог"
         options="w-45 h-10"

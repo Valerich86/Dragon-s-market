@@ -103,7 +103,7 @@ export default function DiscountPlan() {
   return (
     <section aria-label="план скидок" className="section x-spacing">
       <Headline text="Драконий план скидок" emojiIndex={19}/>
-      <div className="w-full flex flex-wrap gap-1 lg:gap-2 justify-center text-xs lg:text-lg">
+      <div className="w-full flex flex-wrap gap-1 lg:gap-2 justify-center text-xs lg:text-lg lg:mt-10">
         <div className="flex flex-col gap-1 lg:gap-2 w-full lg:w-[45%]">
           {daysInfo1.map((item, index) => (
             <DayItem key={index} item={item} />

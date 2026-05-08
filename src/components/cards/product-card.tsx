@@ -64,16 +64,17 @@ export default function ProductCard({ item, cloudPath, index, userId }: Props) {
         className={`w-full h-full flex flex-col items-center rounded-xl  
           shadow-[0px_0px_30px_5px_rgba(59,130,246,0.12)] border border-gray-200 relative`}
       >
-        <div className="h-1/2 w-full p-2">
+        <div className="h-1/2 w-full p-2 relative">
           <Image
             src={src}
             alt=""
             width={200}
             height={200}
             loading="lazy"
-            className="h-full w-full object-contain rounded-2xl animate-shining"
+            className={`h-full w-full object-contain rounded-2xl animate-shining ${item.category_id === 4 ? "blur-xs" : ""}`}
             onError={() => setSrc("/images/stickers/please_buy.webp")}
           />
+          <p className="text-[7px] absolute bottom-0 text-center w-full left-1/2 -translate-x-[50%]">Внешний вид товара может отличаться.</p>
         </div>
         <div className="h-1/2 w-full flex flex-col lg:gap-2 justify-between p-1 lg:p-2 border-t-2 border-gray-300 rounded-b-xl text-xs">
           <h3 className="text-primary line-clamp-3 lg:text-sm lg:min-h-15">

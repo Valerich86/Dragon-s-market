@@ -2,12 +2,8 @@
 
 import { SubmitEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
-import FormError from "../UI/form-error";
 import CustomButton from "../UI/custom-button";
 import { Product } from "@/lib/types";
-import { font_light } from "@/lib/fonts";
 
 export default function ProductForm({
   product,
@@ -17,8 +13,8 @@ export default function ProductForm({
   cloudPath: string;
 }) {
   const [form, setForm] = useState({
-    description: product.description,
-    composition: product.composition,
+    description: product.description || "",
+    composition: product.composition || "",
     is_active: product.is_active,
     status: product.status,
   });
@@ -26,10 +22,6 @@ export default function ProductForm({
   const statusOptions = [
     { value: "default", label: "по умолчанию" },
     { value: "productOfADay", label: "товар дня" },
-  ];
-  const activeOptions = [
-    { value: true, label: "да" },
-    { value: false, label: "нет" },
   ];
   const router = useRouter();
 

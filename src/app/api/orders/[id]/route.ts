@@ -39,7 +39,6 @@ export async function GET(
         WHERE oi.order_id=$1 ORDER BY oi.created_at`,
       [order.id],
     );
-    console.log(items.rows)
     await pool.query(`COMMIT`);
     return NextResponse.json({ order: order, items: items.rows }, { status: 200 });
   } catch (error) {

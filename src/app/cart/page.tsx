@@ -1,6 +1,5 @@
 import CartList from "@/components/sections/cart-list";
 import Smiler from "@/components/UI/smiler";
-import { getCart } from "@/lib/actions";
 import { verifySession } from "@/lib/auth";
 import { useCloudPath } from "@/lib/cloud";
 import { font_light } from "@/lib/fonts";

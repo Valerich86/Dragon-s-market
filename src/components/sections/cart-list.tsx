@@ -32,12 +32,10 @@ export default function CartList({ cloudPath, userId }: Props) {
         const cart:CartItem[] = (await response.json()).cart;
         setCartItems(cart);
         let addToItemsIds = [];
-        console.log("refreshing")
         for (let c of cart) {
           addToItemsIds.push(c.id);
           if (c.product_category === 4) setHasCategory4(true);
         }
-        console.log(addToItemsIds)
         setItemsIds(addToItemsIds);
       } catch (error) {
         console.error("Ошибка получения корзины: ", error);

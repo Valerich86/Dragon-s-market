@@ -66,7 +66,7 @@ function getLabelFromPath(path: string): string {
     '/catalog': 'Каталог',
     '/news': 'Новости',
     '/about': 'О нас',
-    '/delivery': 'Как купить?',
+    '/delivery': 'О доставке',
     '/basket': 'Корзина',
     '/profile': 'Профиль',
     "/catalog/6": "Японские вафли и печенье",

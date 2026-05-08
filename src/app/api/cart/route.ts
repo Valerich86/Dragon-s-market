@@ -4,12 +4,6 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const customer_id = searchParams.get('customer_id');
-  if (!customer_id) {
-    return NextResponse.json(
-      { error: 'Missing required parameters: customer_id' },
-      { status: 400 }
-    );
-  }
   const numCustomerId = Number(customer_id);
 
   try {
@@ -48,8 +42,8 @@ export async function POST(req: Request) {
   }
 }
 
-export async function PUT(req: Request) {
-  const {customer_id, product_id, price, k} = await req.json();
+export async function PUT(request: Request) {
+  const {customer_id, product_id, price, k} = await request.json();
   const numCustomerId = Number(customer_id);
   const numProductId = Number(product_id);
   const numPrice = Number(price);

@@ -7,10 +7,13 @@ import { validateAndSanitize } from "@/lib/validation";
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const autoFetch = searchParams.get("autoFetch");
+  const userId = searchParams.get("userId");
   const fetch = autoFetch
     ? `SELECT id FROM orders WHERE status=$1`
-    : `SELECT * FROM orders`;
-  const params = autoFetch ? ["создан"] : [];
+    : userId
+      ? `SELECT * FROM orders WHERE customer_id=$1 ORDER BY created_at DESC`
+      : `SELECT * FROM orders`;
+  const params = autoFetch ? ["создан"] : userId ? [userId] : [];
   try {
     const data = await pool.query(fetch, params);
     return NextResponse.json({ orders: data.rows }, { status: 200 });
@@ -42,15 +45,15 @@ export async function POST(request: NextRequest) {
   try {
     await pool.query("BEGIN");
     let orderItemsData = [];
-    console.log("cart_items: ", cart_items)
     for (let cartItemId of cart_items) {
-      const result = await pool.query(
-        `SELECT * FROM cart_items WHERE id=$1`,
-        [cartItemId],
-      );
+      const result = await pool.query(`SELECT * FROM cart_items WHERE id=$1`, [
+        cartItemId,
+      ]);
       orderItemsData.push(result.rows[0]);
     }
-    await pool.query(`DELETE FROM cart_items WHERE customer_id=$1`, [customer_id]);
+    await pool.query(`DELETE FROM cart_items WHERE customer_id=$1`, [
+      customer_id,
+    ]);
     const result = await pool.query(
       `INSERT INTO orders 
       (customer_id, address_id, type, cart_items, total_items, total_sum, notes)
@@ -70,7 +73,7 @@ export async function POST(request: NextRequest) {
       await pool.query(
         `INSERT INTO order_items (order_id, product_id, quantity, total_price)
         VALUES ($1, $2, $3, $4)`,
-        [id, item.product_id, item.quantity, item.total_price]
+        [id, item.product_id, item.quantity, item.total_price],
       );
     }
     await pool.query("COMMIT");

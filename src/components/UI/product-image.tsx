@@ -13,6 +13,7 @@ export default function ProductImage({
   productId,
   cloudPath,
   captionOptions = "",
+
 }: Props) {
   const [src, setSrc] = useState(`${cloudPath}/products/${productId}.png`);
 

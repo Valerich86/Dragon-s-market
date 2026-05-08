@@ -50,10 +50,11 @@ export default function AdminDetailsPage() {
 
   return (
     <div className={`w-full overflow-x-hidden px-5 lg:pr-25 py-10`}>
-      <CatalogUpdater />
       <h1 className={`${font_light.className} uppercase mb-10`}>
-        Выберите нужный товар
+        Управление товарами
       </h1>
+      <CatalogUpdater />
+      <label className="label">Выберите нужный товар</label>
       <div className={`w-full lg:w-1/2 flex flex-col gap-3 items-center z-50`}>
         <input
           className="input"

@@ -1,10 +1,31 @@
-export default function NewsPage() {
+import NoInfo from "@/components/no-info";
+import ContentSection from "@/components/sections/content";
+import { getContent } from "@/lib/actions";
+import { useCloudPath } from "@/lib/cloud";
+import { font_light } from "@/lib/fonts";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Новости",
+  description: 'Новости магазина "Драконий базар", г. Пермь',
+};
+
+export default async function NewsPage() {
+  const cloudPath = useCloudPath();
+  const { content } = await getContent("news");
+
+  if (!content || content.length === 0) return <NoInfo />
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <h1 className="text-2xl">
-        Страница "новости"
+    <main
+      aria-label="Новости"
+      className={`w-full overflow-x-hidden min-h-screen x-spacing py-30 flex flex-col`}
+    >
+      <h1 className={`${font_light.className} uppercase mb-10`}>
+        Наши новости
       </h1>
-    </div>
-  )
+
+      {content && content.length !== 0 && <ContentSection content={content}/>}
+    </main>
+  );
 }

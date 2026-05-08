@@ -93,7 +93,7 @@ export default function OrderForm({
             Выберите тип заказа <span className="text-accent">*</span>
           </label>
           <div
-            className={`rounded-full w-25 h-15 bg-gray-600 shadow-[0px_0px_40px_25px_rgba(226,51,36,0.3)] border flex items-center cursor-pointer relative`}
+            className={`rounded-full w-25 h-15 bg-gray-600 shadow-[0px_0px_40px_25px_rgba(226,51,36,0.3)] border-3 flex items-center cursor-pointer relative`}
             onClick={() =>
               form.type === "самовывоз"
                 ? setForm({ ...form, type: "доставка" })
@@ -102,12 +102,14 @@ export default function OrderForm({
           >
             <div
               className={`
-              rounded-full w-15 h-15 bg-accent shadow-[0px_0px_40px_25px_rgba(226,51,36,0.3)]
-              border transition-all duration-200 ease-in-out
-              ${form.type === "самовывоз" ? "translate-x-2/3" : ""}
-              hover:shadow-[0px_0px_40px_25px_rgba(226,51,36,0.5)]
-            `}
-            ></div>
+                rounded-full w-14 h-14 bg-accent shadow-[0px_0px_40px_25px_rgba(226,51,36,0.2)]
+                border transition-all duration-200 ease-in-out relative
+                ${form.type === "самовывоз" ? "translate-x-[70%] rotate-45" : ""}
+                hover:shadow-[0px_0px_40px_25px_rgba(226,51,36,0.1)]
+              `}
+            >
+              <div className="absolute w-1 h-1 top-3 left-3 bg-amber-50 rounded-full"></div>
+            </div>
           </div>
         </div>
         <p className={`${font_bold.className} text-xl uppercase`}>

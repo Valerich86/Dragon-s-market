@@ -1,6 +1,6 @@
 import { useCloudPath } from "./cloud";
 import { pool } from "./db";
-import type { CartItem } from "./types";
+import type { CartItem, Content } from "./types";
 import type { Product } from "./types";
 
 export async function getUserInfo(userId: number) {
@@ -172,6 +172,22 @@ export async function getProductOfADay() {
   return { product: data.rows[data.rows.length - 1] };
 }
 
+export async function getContent(type:string, limit?:number) {
+  let query = `SELECT * FROM content WHERE type=$1 ORDER BY created_at DESC`;
+  let params:(string|number)[] = [type];
+  if (limit) {
+    query += ` LIMIT $2`;
+    params.push(limit);
+  }
+  const data = await pool.query(query, params);
+  return { content: data.rows };
+}
+
+export async function getOneFromContent(id:number) {
+  const data = await pool.query(`SELECT * FROM content WHERE id=$1;`, [id]);
+  return { content: data.rows[0] };
+}
+
 export async function getProductData(id: number, userId: number) {
   try {
     const productData = await pool.query(`SELECT * FROM products WHERE id=$1`, [
@@ -193,3 +209,4 @@ export async function getProductData(id: number, userId: number) {
     return { product: null };
   }
 }
+

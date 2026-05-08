@@ -88,7 +88,6 @@ export async function GET(request: NextRequest) {
           products = data.items;
           allProducts.push(...products);
         }
-        console.log(`${categoryId}: ${allProducts.length}`);
         try {
           await pool.query("BEGIN");
           for (let p of allProducts) {
@@ -105,8 +104,6 @@ export async function GET(request: NextRequest) {
                 Number(result.rows[0].price) !== Number(p.prices[0].price))
             ) {
               try {
-                console.log(p.remains[0].remain, p.name, p.prices[0].price, p.id)
-                console.log(result.rows[0].remains, result.rows[0].name, Number(result.rows[0].price), p.id)
                 await pool.query(
                   `UPDATE products SET remains=$1, name=$2, price=$3 WHERE id=$4`,
                   [p.remains[0].remain, p.name, p.prices[0].price, p.id],

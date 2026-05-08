@@ -24,7 +24,7 @@ export default function Headline({ text, emojiIndex }: Props) {
 
   return (
     <h1
-      className={`${font_heading.className} text-3xl text-center lg:text-5xl lg:mb-10`}
+      className={`${font_heading.className} text-3xl text-center lg:text-5xl`}
     >
       {parts.map((part, index) => (
         <span key={index}>{part}</span>

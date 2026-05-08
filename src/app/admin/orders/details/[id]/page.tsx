@@ -1,99 +1,116 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, SubmitEvent } from "react";
 import { font_bold } from "@/lib/fonts";
 import { IoClose } from "react-icons/io5";
 import Link from "next/link";
-import { MdOutlineRefresh } from "react-icons/md";
-import { useRouter, useParams } from "next/navigation";
-import type { Order, OrderItem } from "@/lib/types";
+import { useParams } from "next/navigation";
+import { Order, OrderItem, orderStatuses } from "@/lib/types";
 import Loading from "@/app/loading";
 import NoInfo from "@/components/no-info";
-import PaintCaption from "@/components/UI/paint-caption";
 import ProductImage from "@/components/UI/product-image";
+import CustomButton from "@/components/UI/custom-button";
 
 export default function Orders() {
-  const router = useRouter();
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [cloudPath, setCloudPath] = useState("");
-  const [order, setOrder] = useState<Order|undefined>(undefined);
+  const [order, setOrder] = useState<Order | undefined>(undefined);
   const [items, setItems] = useState<OrderItem[]>([]);
+  const [currentStatus, setCurrentStatus] = useState("");
 
   useEffect(() => {
     const fetchOrder = async () => {
-      setIsLoading(true);
+      setIsFetching(true);
       try {
         const response = await fetch(`/api/orders/${id}`);
         const { order, items } = await response.json();
         setOrder(order);
         setItems(items);
+        setCurrentStatus(order.status)
         const cpResponse = await fetch(`/api/cloud`);
         const { cloudPath } = await cpResponse.json();
         setCloudPath(cloudPath);
       } catch (error) {
         console.error(error);
       } finally {
-        setIsLoading(false);
+        setIsFetching(false);
       }
     };
     fetchOrder();
   }, []);
 
-  const refreshStatus = async () => {
-    setRefreshing(true);
+  const handleUpdateStatus = async () => {
     try {
-      const response = await fetch(`/api/orders/refresh/${id}`);
-      const {orderStatus} = await response.json();
-      console.log(orderStatus)
-      if (order) setOrder({...order, status: orderStatus});
+      await fetch(`/api/admin/orders/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({status: currentStatus}),
+      });
+      console.log(currentStatus)
     } catch (error) {
       console.error(error);
-    } finally {
-      setRefreshing(false);
-    }
+    } 
   };
 
-  if (isLoading) return <Loading />;
+  useEffect(() => {
+    handleUpdateStatus();
+  }, [currentStatus]);
+
+  if (isFetching) return <Loading />;
   if (!order || items.length === 0) {
     return <NoInfo text={`Данные по заказу №${id} не найдены`} />;
   }
 
   return (
-    <section
-      aria-label="заказ"
-      className="w-full flex flex-col justify-center gap-10"
+    <main
+      aria-label="Детали заказа (админ)"
+      className="w-full md:w-[90%] flex flex-col justify-center gap-5 text-sm p-5"
     >
       <div
-        className={`${font_bold.className} w-full flex items-center gap-5 text-xl`}
+        className={`${font_bold.className} w-full flex items-center justify-between text-xl`}
       >
         <strong>Заказ № {id}</strong>
-        <MdOutlineRefresh className={`${refreshing ? "animate-spin" : "animate-pulse"} cursor-pointer`} onClick={refreshStatus}/>
       </div>
-      <div className="flex items-baseline gap-5 w-full lg:w-1/3">
+      <form className="w-full flex flex-col lg:flex-row lg:justify-between gap-5 z-60" onSubmit={handleUpdateStatus}>
         <p className="">Текущий статус:</p>
-        <div className="relative -translate-y-5 lg:-translate-y-6">
-          <PaintCaption caption={order.status} />
-        </div>
-      </div>
-      <div className="flex items-baseline gap-5 w-full lg:w-1/3">
-        <p>Тип заказа:</p>
-        <div className="relative -translate-y-5 lg:-translate-y-6">
-          <PaintCaption caption={order.type} />
-        </div>
-      </div>
-      <div className="flex items-baseline gap-5 w-full lg:w-1/3">
-        <p>Создан:</p>
-        <div className="relative -translate-y-5 lg:-translate-y-6">
-          <PaintCaption
-            caption={new Date(order.created_at)
-              .toLocaleString()
-              .substring(0, 17)}
-          />
-        </div>
-      </div>
-
+        <select
+          value={currentStatus}
+          onChange={(e) => setCurrentStatus(e.target.value)}
+          className="input focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        >
+          {orderStatuses.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </form>
+      <p className="">
+        Тип заказа: <strong>{order.type}</strong>
+      </p>
+      <p className="">
+        Создан:{" "}
+        <strong>
+          {new Date(order.created_at).toLocaleString().substring(0, 17)}
+        </strong>
+      </p>
+      <p className="">
+        Последнее изменение:{" "}
+        <strong>
+          {new Date(order.updated_at).toLocaleString().substring(0, 17)}
+        </strong>
+      </p>
+      <p className="">
+        Покупатель:{" "}
+        <strong>
+          {order.first_name} {order.last_name}
+        </strong>
+      </p>
+      <p className="">
+        Телефон: <strong>{order.phone}</strong>
+      </p>
       {items.map((item) => (
         <div
           key={item.id}
@@ -103,7 +120,7 @@ export default function Orders() {
             <div className="w-full flex items-center justify-between">
               <Link
                 href={`/product/${item.product_id}?productName=${item.product_name}`}
-                className="flex gap-2 items-center text-xs line-clamp-2 w-1/2 md:w-2/3"
+                className="flex gap-2 items-center text-xs line-clamp-2"
               >
                 {/* о товаре */}
                 <div className="w-20 h-20">
@@ -112,7 +129,7 @@ export default function Orders() {
                     cloudPath={cloudPath}
                   />
                 </div>
-                <span className="hidden md:block max-w-[70%]">
+                <span className="hidden md:block max-w-[80%]">
                   {item.product_name}
                 </span>
                 <div className="flex">
@@ -123,7 +140,7 @@ export default function Orders() {
               </Link>
 
               {/* итого */}
-              <div className="flex justify-between w-1/2 md:w-1/3">
+              <div className="flex justify-end gap-5 lg:gap-10">
                 <div className="flex items-center">
                   <IoClose />
                   <span>{item.quantity}</span>
@@ -141,7 +158,7 @@ export default function Orders() {
 
       {order.type === "доставка" && (
         <div>
-          <label className="mb-3 label">Заказ будет доставлен по адресу:</label>
+          <label className="mb-3 label">Адрес доставки:</label>
           <div className="bg-gray-600 p-5 rounded-lg mt-3">
             <p>Город {order.city}</p>
             <p>
@@ -166,6 +183,6 @@ export default function Orders() {
           {order.additional_info}
         </p>
       )}
-    </section>
+    </main>
   );
 }

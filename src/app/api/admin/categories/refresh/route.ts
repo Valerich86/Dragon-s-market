@@ -23,15 +23,15 @@ export async function GET(request: NextRequest) {
       if (response.ok) {
         const data = await response.json();
         const categories: ProductType[] = data.types;
-        // await pool.query("BEGIN");
-        // for (let c of categories) {
-        //   const name = c.name === "Брелки" ? "Брелоки" : c.name;
-        //   await pool.query(
-        //     `INSERT INTO categories (id, name) VALUES ($1, $2)`,
-        //     [c.id, name],
-        //   );
-        // }
-        // await pool.query("COMMIT");
+        await pool.query("BEGIN");
+        for (let c of categories) {
+          const name = c.name === "Брелки" ? "Брелоки" : c.name;
+          await pool.query(
+            `INSERT INTO categories (id, name) VALUES ($1, $2)`,
+            [c.id, name],
+          );
+        }
+        await pool.query("COMMIT");
         return NextResponse.json({
           status: 200,
           data: categories

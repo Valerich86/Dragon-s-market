@@ -9,8 +9,10 @@ import CustomButton from "./custom-button";
 import SoundEnableButton from "./sound-enabled-button";
 
 const navLinks = [
-  { name: "Фото товара", href: "/admin/products/image-upload" },
   { name: "Карточки товара", href: "/admin/products/details" },
+  { name: "Фото товара", href: "/admin/products/image-upload" },
+  { name: "Заказы", href: "/admin/orders" },
+  { name: "Контент", href: "/admin/content" },
 ];
 
 export default function Sidebar() {
@@ -19,7 +21,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`z-20 lg:h-screen lg:w-1/6 w-full items-center fixed left-0 top-0 flex flex-col bg-primary border-b lg:border-r border-gray-700 pb-5`}
+      className={`z-60 lg:h-screen lg:w-1/6 w-full items-center fixed left-0 top-0 flex flex-col bg-primary border-b lg:border-r border-gray-700 pb-5`}
     >
       <Link
         href={"/"}

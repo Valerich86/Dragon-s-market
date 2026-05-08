@@ -22,6 +22,7 @@ export default function ProductSection({ product, cloudPath, userId }: Props) {
             productId={product.id}
             cloudPath={cloudPath}
           />
+          <p className="text-[7px] absolute bottom-2 left-1/2 -translate-x-[50%] text-center w-[150%]">Внешний вид товара может отличаться от представленного на фото.</p>
         </div>
       </div>
       <div className="w-full lg:w-1/2 lg:p-3 flex flex-col gap-5">

@@ -3,13 +3,13 @@ import { s3Client, bucketName } from "@/lib/cloud";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 // Вспомогательная функция для чтения файла из FormData
-async function getFileBuffer(file: File): Promise<Buffer> {
+export async function getFileBuffer(file: File): Promise<Buffer> {
   const arrayBuffer = await file.arrayBuffer();
   return Buffer.from(arrayBuffer);
 }
 
 // Валидация файла
-function validateFile(file: File): { valid: boolean; error?: string } {
+export function validateFile(file: File): { valid: boolean; error?: string } {
   const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
   const maxSize = 5 * 1024 * 1024; // 5 МБ
 
@@ -78,7 +78,6 @@ export async function POST(request: Request) {
           size: file.size,
           url: `${process.env.VK_CLOUD_ENDPOINT}/${bucketName}/${fileName}`,
         });
-
         uploadedCount++;
       } catch (fileError) {
         console.error(`Ошибка загрузки файла ${file.name}:`, fileError);
