@@ -41,9 +41,10 @@ export default async function CategoryPage({
 
   return (
     <>
-      {categoryId === 4 && (
+      {Number(categoryId) === 4 && (
         <div className="mt-12 p-4 bg-yellow-50 border text-center border-yellow-200 rounded-lg text-xs text-yellow-800">
-            <strong>Важно:</strong> энергетики можно добавить в корзину только при условии самовывоза — доставка этой категории товаров не предусмотрена.
+          <strong>Важно:</strong> энергетики можно добавить в корзину только при
+          условии самовывоза — доставка этой категории товаров не предусмотрена.
         </div>
       )}
       <section

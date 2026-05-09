@@ -17,7 +17,6 @@ const navLinks = [
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const [hintIsVisible, setHintIsVisible] = useState(false);
 
   return (
     <aside
@@ -26,8 +25,6 @@ export default function Sidebar() {
       <Link
         href={"/"}
         className={`h-20`}
-        onMouseEnter={() => setHintIsVisible(true)}
-        onMouseLeave={() => setHintIsVisible(false)}
       >
         <div className="relative flex justify-center w-full">
           <Image
@@ -38,12 +35,6 @@ export default function Sidebar() {
             loading="eager"
             className="h-full w-auto select-none pointer-events-none "
           />
-          <p
-            className={`absolute top-1/2 left-1/2 text-xs text-yellow-300
-            ${hintIsVisible ? "block" : "hidden"}`}
-          >
-            Перейти на сайт
-          </p>
         </div>
       </Link>
       <div className={

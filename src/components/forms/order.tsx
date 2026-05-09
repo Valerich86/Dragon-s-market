@@ -33,9 +33,15 @@ export default function OrderForm({
     total_sum: totalSum,
     notes: "",
   });
-  const [notesErrors, setNotesErrors] = useState<string[] | undefined>(undefined);
-  const [addressError, setAddressError] = useState<string | undefined>(undefined);
-  const [addressData, setAddressData] = useState<Address | undefined>(undefined);
+  const [notesErrors, setNotesErrors] = useState<string[] | undefined>(
+    undefined,
+  );
+  const [addressError, setAddressError] = useState<string | undefined>(
+    undefined,
+  );
+  const [addressData, setAddressData] = useState<Address | undefined>(
+    undefined,
+  );
   const [isLoading, setIsLoading] = useState(false);
   const { refreshCart, setRefreshCart } = useContext(CartContext)!;
   const router = useRouter();
@@ -73,7 +79,7 @@ export default function OrderForm({
     if (response.ok) {
       const { orderId } = await response.json();
       setRefreshCart(!refreshCart);
-      router.replace(`/profile/orders/${orderId}`)
+      router.replace(`/profile/orders/${orderId}`);
     } else if (response.status === 400) {
       setNotesErrors((await response.json()).errors);
     } else {
@@ -132,24 +138,39 @@ export default function OrderForm({
           <label className="mb-3 label">Заказ будет доставлен по адресу:</label>
           <div className="bg-gray-600 p-5 rounded-lg mt-3">
             <p>Город {addressData?.city}</p>
-            <p>ул.{addressData?.street}, дом {addressData?.house}, подъезд {addressData?.entrance}</p> 
-            <p>этаж {addressData?.floor}, кв.{addressData?.apartment}, домофон {addressData?.intercom_number}</p>
-            <p>{addressData?.additional_info
-              ? `Доп.информация: ${addressData.additional_info}`
-              : ""}</p>
-            <p className="text-xs bg-accent mt-3 text-center py-1">Исправить данные можно в <Link href={"/profile/addresses"} className="text-indigo-700 link">
-              Профиле пользователя
-            </Link></p>
+            <p>
+              ул.{addressData?.street}, дом {addressData?.house}, подъезд{" "}
+              {addressData?.entrance}
+            </p>
+            <p>
+              этаж {addressData?.floor}, кв.{addressData?.apartment}, домофон{" "}
+              {addressData?.intercom_number}
+            </p>
+            <p>
+              {addressData?.additional_info
+                ? `Доп.информация: ${addressData.additional_info}`
+                : ""}
+            </p>
+            <p className="text-xs bg-accent mt-3 text-center py-1">
+              Исправить данные можно в{" "}
+              <Link
+                href={"/profile/addresses"}
+                className="text-indigo-700 link"
+              >
+                Профиле пользователя
+              </Link>
+            </p>
           </div>
         </div>
       )}
 
       <div aria-live="polite" aria-atomic="true">
-        {notesErrors && notesErrors.map((er, i) => (
-          <FormError key={i} errorField={er}/>
-        ))}
+        {notesErrors &&
+          notesErrors.map((er, i) => <FormError key={i} errorField={er} />)}
         {hasCategory4 && form.type === "доставка" && (
-          <FormError errorField={`Невозможно оформить доставку, в списке есть энергетик`} />
+          <FormError
+            errorField={`Невозможно оформить доставку, в списке есть энергетик`}
+          />
         )}
         {addressError && (
           <div className="text-accent text-xs">
@@ -165,7 +186,11 @@ export default function OrderForm({
         buttonType="submit"
         options="h-10 px-6 min-w-70"
         isLoading={isLoading}
-        disabled={notesErrors !== undefined || addressError != undefined || hasCategory4}
+        disabled={
+          notesErrors !== undefined ||
+          addressError != undefined ||
+          (hasCategory4 && form.type === "доставка")
+        }
       />
     </form>
   );

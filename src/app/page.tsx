@@ -24,7 +24,7 @@ export default async function Home() {
     >
       <HeroSection cloudPath={cloudPath} />
       <DiscountPlan />
-      <div className="x-spacing mt-30">
+      <div className="x-spacing mt-10">
         {news && news.length !== 0 && (
           <ContentSection content={news} />
         )}
@@ -38,7 +38,7 @@ export default async function Home() {
         </div>
       </div>
       <VideoCarouselSection cloudPath={cloudPath} />
-      <div className="x-spacing mt-30">
+      <div className="x-spacing mt-10">
         {about && about.length !== 0 && (
           <ContentSection content={about} />
         )}

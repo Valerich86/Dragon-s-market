@@ -104,7 +104,7 @@ export default function ContentSection({ content }: Props) {
 
   return (
     <section aria-label="контент" className="section">
-      <div className={`w-full flex flex-col justify-between gap-y-50`}>
+      <div className={`w-full flex flex-col justify-between gap-y-30`}>
         {content.map((item) => (
           <ContentItem key={item.id} item={item} />
         ))}
