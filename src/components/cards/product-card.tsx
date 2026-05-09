@@ -56,7 +56,7 @@ export default function ProductCard({ item, cloudPath, index, userId }: Props) {
       animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.9, opacity: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`w-[46%] lg:w-50 aspect-2/3 text-primary bg-secondary origin-top
-         hover:bg-linear-to-r from-secondary to-gray-200 transition-colors 
+         hover:bg-linear-to-r from-secondary to-gray-200 transition-colors no-scaling
          duration-500 cursor-pointer rounded-xl relative ${mascotHere && swing ? "animate-swing z-10" : ""}`}
       // onClick={() => router.push(href)}
     >
@@ -101,7 +101,7 @@ export default function ProductCard({ item, cloudPath, index, userId }: Props) {
               startQuantity={item.quantity}
               customer_id={userId}
               price={item.price}
-              isInCard
+              isInCart
             />
           </div>
         </div>

@@ -26,7 +26,7 @@ export default async function CartPage() {
         Корзина товаров
       </h1>
 
-      <CartList cloudPath={cloudPath} userId={userId} />
+      {userId !== 0 && <CartList cloudPath={cloudPath} userId={userId} />}
 
       {userId === 0 && (
         <div className="w-full flex">

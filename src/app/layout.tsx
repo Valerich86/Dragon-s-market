@@ -1,13 +1,15 @@
+import "./globals.css";
 import { font_default } from "@/lib/fonts";
 import { Metadata } from "next";
 import Header from "@/components/UI/header";
 import Footer from "@/components/UI/footer";
 import BackButton from "@/components/UI/back-button";
-import "./globals.css";
 import { getUserInfo } from "@/lib/actions";
 import { verifySession } from "@/lib/auth";
 import { CartProvider } from "@/context/cart-context";
 import CookieNotification from "@/components/UI/cookie-notification";
+import { AccessibilityProvider } from "@/components/accessibility-provider";
+import { AccessibilityStyles } from "@/components/UI/accessibility-styles ";
 
 export const metadata: Metadata = {
   title: {
@@ -32,15 +34,20 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head></head>
-      <body className={`${font_default.className} antialiased`}>
-        <CartProvider>
-          <Header userId={userId} />
-          <BackButton />
-          <div className={`bg-primary text-secondary`}>{children}</div>
-          <Footer />
-          <CookieNotification />
-        </CartProvider>
-      </body>
+      <AccessibilityProvider>
+        <body className={`${font_default.className} antialiased`}>
+          <AccessibilityStyles />
+          <CartProvider>
+            <Header userId={userId} />
+            <BackButton />
+            <div className={`bg-primary text-secondary text-base`}>
+              {children}
+            </div>
+            <Footer />
+            <CookieNotification />
+          </CartProvider>
+        </body>
+      </AccessibilityProvider>
     </html>
   );
 }

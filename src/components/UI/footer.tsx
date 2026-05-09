@@ -5,6 +5,7 @@ import React from "react";
 import { PiTelegramLogoLight } from "react-icons/pi";
 import { SlPhone } from "react-icons/sl";
 import { usePathname } from "next/navigation";
+import { AccessibilityPanel } from "./accessibility-panel";
 
 type FooterLink = {
   name: string;
@@ -19,7 +20,6 @@ const leftLinks = [
 
 const rightLinks = [
   { name: "Каталог", href: "/catalog" },
-  { name: "Условия оплаты", href: "/delivery" },
   { name: "Условия доставки", href: "/delivery" },
 ];
 
@@ -36,12 +36,15 @@ export default function Footer() {
             </Link>
           </div>
         ))}
+        {links[0].name === "Каталог" && (
+          <div className="w-full flex justify-center lg:justify-start"><AccessibilityPanel /></div>
+        )}
       </div>
     );
   };
 
   return (
-    <footer className={`${pathname.startsWith("/admin") ? "hidden" : ""} absolute bg-mascot2/80 text-secondary w-full x-spacing flex flex-col lg:text-xs z-10`}>
+    <footer className={`${pathname.startsWith("/admin") ? "hidden" : ""} text-base absolute bg-mascot2/80 text-secondary w-full x-spacing flex flex-col lg:text-xs z-10`}>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-20 lg:gap-0 py-10 border-b border-gray-200">
         <FooterBlock links={leftLinks} />
         <FooterBlock links={rightLinks} />

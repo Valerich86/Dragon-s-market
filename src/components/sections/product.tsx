@@ -48,7 +48,7 @@ export default function ProductSection({ product, cloudPath, userId }: Props) {
             customer_id={userId}
             price={product.price}
             startQuantity={product.quantity}
-            isInCard
+            isInCart
           />
         </div>
       </div>

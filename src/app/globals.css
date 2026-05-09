@@ -39,6 +39,67 @@ video::--webkit-media-controls-start-playback-button {
 @custom-variant blob (&:where([data-theme="blob"] *));
 @custom-variant fire (&:where([data-theme="fire"] *));
 
+@root {
+  --font-scale: 1;
+}
+
+/* Обеспечение доступности */
+.high-contrast-mode:not(img, video, .no-contrast) {
+  filter: contrast(1.5);
+}
+
+/* Увеличенный текст для всех размеров, кроме text-5xl и text-6xl */
+.large-text-mode .text-xs:not(.no-scaling),
+.large-text-mode *:where(.text-xs):not(.no-scaling) {
+  font-size: calc(var(--font-scale) * 0.75rem) !important;
+}
+
+.large-text-mode .text-sm:not(.no-scaling),
+.large-text-mode *:where(.text-sm):not(.no-scaling) {
+  font-size: calc(var(--font-scale) * 0.875rem) !important;
+}
+
+.large-text-mode .text-base:not(.no-scaling),
+.large-text-mode *:where(.text-base):not(.no-scaling) {
+  font-size: calc(var(--font-scale) * 1rem) !important;
+}
+
+.large-text-mode .text-lg:not(.no-scaling),
+.large-text-mode *:where(.text-lg):not(.no-scaling) {
+  font-size: calc(var(--font-scale) * 1.125rem) !important;
+}
+
+.large-text-mode .text-xl:not(.no-scaling),
+.large-text-mode *:where(.text-xl):not(.no-scaling) {
+  font-size: calc(var(--font-scale) * 1.25rem) !important;
+}
+
+.large-text-mode .text-2xl:not(.no-scaling),
+.large-text-mode *:where(.text-2xl):not(.no-scaling) {
+  font-size: calc(var(--font-scale) * 1.5rem) !important;
+}
+
+.large-text-mode .text-3xl:not(.no-scaling),
+.large-text-mode *:where(.text-3xl):not(.no-scaling) {
+  font-size: calc(var(--font-scale) * 1.875rem) !important;
+}
+
+.large-text-mode .text-4xl:not(.no-scaling),
+.large-text-mode *:where(.text-4xl):not(.no-scaling) {
+  font-size: calc(var(--font-scale) * 2.25rem) !important;
+}
+
+/* text-5xl и text-6xl — без масштабирования (оставляем исходный размер) */
+.large-text-mode .text-5xl:not(.no-scaling),
+.large-text-mode *:where(.text-5xl):not(.no-scaling) {
+  font-size: 3rem !important; /* исходный размер для text-5xl */
+}
+
+.large-text-mode .text-6xl:not(.no-scaling),
+.large-text-mode *:where(.text-6xl):not(.no-scaling) {
+  font-size: 3.75rem !important; /* исходный размер для text-6xl */
+}
+
 @theme {
   --animate-shining: shining 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   --animate-hide: hide 1.5s ease-in-out;

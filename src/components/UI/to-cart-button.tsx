@@ -16,7 +16,7 @@ interface Props {
   startQuantity: number;
   setRefresh?: (value: boolean) => void;
   refresh?: boolean;
-  isInCard?: boolean;
+  isInCart?: boolean;
 }
 
 type NotificationPorpose = "login" | "age_verify" | "logout";
@@ -31,7 +31,7 @@ export default function ToCartButton({
   startQuantity,
   setRefresh,
   refresh,
-  isInCard = false,
+  isInCart = false,
 }: Props) {
   const [quantity, setQuantity] = useState(startQuantity);
   const [isLoading, setIsLoading] = useState(false);
@@ -127,7 +127,7 @@ export default function ToCartButton({
           <PiSpinnerGapThin className="text-center animate-spin" size={23.5} />
         </div>
       )}
-      {quantity === 0 && !isLoading && isInCard && (
+      {quantity === 0 && !isLoading && isInCart && (
         <button onClick={handleAddToCart} className={buttonStyle}>
           В корзину
         </button>
