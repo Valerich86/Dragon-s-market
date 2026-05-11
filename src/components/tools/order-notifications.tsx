@@ -19,10 +19,12 @@ export default function OrderNotifications() {
         const orderIds: OrderId[] = (await response.json()).orders;
         // Сравниваем с предыдущим состоянием
         if (!arraysEqual(prevNotifications.current, orderIds)) {
+          if (prevNotifications.current.length < orderIds.length) {
+            const audio = new Audio("/sound/notification.mp3");
+            audio.play();
+          }
           setNotifications(orderIds);
-          prevNotifications.current = [...orderIds]; // Обновляем предыдущее состояние
-          const audio = new Audio("/sound/notification.mp3");
-          audio.play();
+          prevNotifications.current = [...orderIds]; 
         }
       } catch (error) {
         console.error("Ошибка загрузки заказов:", error);

@@ -7,7 +7,7 @@ import type { Product } from "@/lib/types";
 import Link from "next/link";
 import Loading from "@/app/loading";
 import CustomButton from "@/components/UI/custom-button";
-import CatalogUpdater from "@/components/catalog-updater";
+import CatalogUpdater from "@/components/tools/catalog-updater";
 
 interface UpdatingInfo {
   newItems: number | null;
@@ -55,7 +55,7 @@ export default function AdminDetailsPage() {
       </h1>
       <CatalogUpdater />
       <label className="label">Выберите нужный товар</label>
-      <div className={`w-full lg:w-1/2 flex flex-col gap-3 items-center z-50`}>
+      <div className={`w-full lg:w-1/2 flex flex-col gap-3 items-center`}>
         <input
           className="input"
           value={value}

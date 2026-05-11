@@ -10,11 +10,13 @@ import CustomButton from "../UI/custom-button";
 export default function LoginForm() {
   const [form, setForm] = useState({
     password: "",
-    phone: "+7",
+    email: "",
+    verificationCode: "",
   });
   const [error, setError] = useState<string | undefined>(undefined);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [requiresVerification, setRequiresVerification] = useState(false); // Флаг 2FA
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     setIsLoading(true);
@@ -26,12 +28,18 @@ export default function LoginForm() {
       body: JSON.stringify(form),
     });
     if (response.ok) {
-      redirect("/profile");
+      const data = await response.json();
+      if (data.requiresVerification) {
+        // Переключаем форму в режим ввода кода
+        setRequiresVerification(true);
+      } else {
+        redirect("/profile");
+      }
     } else if (response.status === 401) {
       const { error } = await response.json();
       setError(error);
     } else {
-      console.error("Ошибка регистрации");
+      console.error("Ошибка аутентификации: ", error);
     }
     setIsLoading(false);
   }
@@ -44,16 +52,16 @@ export default function LoginForm() {
       {/* телефон */}
       <fieldset>
         <label className="label">
-          Логин (Номер телефона) <span className="text-accent">*</span>
+          Логин (email) <span className="text-accent">*</span>
         </label>
         <input
           className="input"
-          type="tel"
-          value={form.phone}
+          type="email"
+          value={form.email}
           autoFocus
-          placeholder="+7XXXXXXXXXX"
+          placeholder="example@mail.ru"
           required
-          onChange={(e) => setForm({ ...form, phone: e.target.value })}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
       </fieldset>
 
@@ -67,7 +75,6 @@ export default function LoginForm() {
             className="input"
             type={showPassword ? "text" : "password"}
             value={form.password}
-            placeholder="Пока просто не менее 4 символов"
             required
             onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
@@ -82,12 +89,43 @@ export default function LoginForm() {
         {error && <FormError errorField={error} />}
       </div>
 
-      <CustomButton
-        text="Войти"
-        buttonType="submit"
-        options="h-10 mt-6 px-3"
-        isLoading={isLoading}
-      />
+      {!requiresVerification && (
+        <CustomButton
+          text="Войти"
+          buttonType="submit"
+          options="h-10 mt-6 px-3"
+          isLoading={isLoading}
+        />
+      )}
+      {requiresVerification && (
+        <>
+          <p className="text-sm text-gray-500 mt-2">
+            Код отправлен на <span className="italic">{form.email}</span>. Если
+            не пришло письмо, проверьте папку «Спам».
+          </p>
+          <fieldset>
+            <label className="label">
+              Код подтверждения <span className="text-accent">*</span>
+            </label>
+            <input
+              className="input"
+              type="text"
+              placeholder="Введите 6-значный код"
+              value={form.verificationCode}
+              onChange={(e) =>
+                setForm({ ...form, verificationCode: e.target.value })
+              }
+              maxLength={6}
+            />
+          </fieldset>
+          <CustomButton
+            text="Подтвердить вход"
+            buttonType="submit"
+            options="h-10 mt-6 px-6 min-w-70"
+            isLoading={isLoading}
+          />
+        </>
+      )}
       <Link
         href={"/auth/register"}
         className="link mt-2 lg:mt-5 italic h-10 flex items-center justify-center text-gray-200 text-right"

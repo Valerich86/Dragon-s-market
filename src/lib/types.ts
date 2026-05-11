@@ -153,8 +153,11 @@ export type RegisterFormErrors = {
   password?: string[];
   confirmPassword?: string[];
   phone?: string[];
+  email?: string[];
   policy?: string;
+  verificationCode?: string[];
 };
+
 
 export type AddressFormErrors = {
   city?: string[];

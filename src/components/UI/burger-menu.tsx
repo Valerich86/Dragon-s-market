@@ -1,24 +1,18 @@
 "use client";
 
-import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { SlMenu } from "react-icons/sl";
+import { SlMenu, SlPhone } from "react-icons/sl";
 import { PiTelegramLogoLight } from "react-icons/pi";
-import ThemeSwitcher from "../theme-switcher";
+import { TfiEmail } from "react-icons/tfi";
 
 const links = [
   { name: "Kаталог", href: "/catalog" },
   { name: "Новости", href: "/news" },
-  { name: "О доставке", href: "/delivery" },
+  { name: "Доставка и оплата", href: "/delivery" },
   { name: "О нас", href: "/about" },
 ];
-
-// const links_2 = [
-//   {name: "Корзина", href: "/basket"},
-//   {name: "Профиль", href: "/profile"},
-// ];
 
 function BurgerMenu() {
   const [isOpened, setIsOpened] = useState(false);
@@ -56,7 +50,7 @@ function BurgerMenu() {
           className="link"
           onClick={() => setIsOpened(isOpened ? false : true)}
         >
-          <SlMenu size={20} className="lg:w-2/3" color="white"/>
+          <SlMenu size={20} className="lg:w-2/3" color="white" />
         </button>
       </div>
       <AnimatePresence>
@@ -79,14 +73,32 @@ function BurgerMenu() {
           >
             <div className="pb-5 border-b border-gray-400 flex flex-col items-center gap-y-5">
               <strong>г.Пермь, Бульвар Гагарина, 83</strong>
-              <a
-                href={"https://t.me/dragonbazarmag"}
-                target="_blank"
-                aria-label="Telegram"
-                className="link"
-              >
-                <PiTelegramLogoLight size={20} />
-              </a>
+              <div className="w-full flex justify-around">
+                <a
+                  href={"tel:+79223281133"}
+                  target="_blank"
+                  aria-label="phone"
+                  className="link "
+                >
+                  <SlPhone size={20} />
+                </a>
+                <a
+                  href={"https://t.me/dragonbazarmag"}
+                  target="_blank"
+                  aria-label="Telegram"
+                  className="link "
+                >
+                  <PiTelegramLogoLight size={25} />
+                </a>
+                <a
+                  href="mailto:daleksek@mail.ru?subject=Обращение с сайта"
+                  target="_blank"
+                  aria-label="email"
+                  className="link "
+                >
+                  <TfiEmail size={20} />
+                </a>
+              </div>
             </div>
             {links.map((link) => (
               <Link

@@ -22,8 +22,8 @@ export default function ProductImage({
       <Image
         src={src}
         alt="изображение товара"
-        width={200}
-        height={200}
+        width={1024}
+        height={1024}
         loading="lazy"
         className="h-full w-full object-contain rounded-2xl animate-shining select-none pointer-events-none"
         onError={() => setSrc('/images/stickers/please_buy.webp')}

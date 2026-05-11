@@ -22,6 +22,8 @@ export default function ProfileOptions() {
           href={item.href}
           className={
             `link ${pathName === item.href 
+              || (pathName === "/profile/phone") 
+              && (item.href === "/profile")
               || (pathName.startsWith(item.href) 
               && item.href.startsWith("/profile/orders")) 
               ? "bg-accent" : ""} rounded-t p-1`}

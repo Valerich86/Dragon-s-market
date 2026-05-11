@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Loading() {
   return (
     <>
-      <div className="w-full h-[90vh] flex justify-center items-center opacity-80">
+      <div className="w-full h-screen flex justify-center items-center pb-[20vh] opacity-80">
         {/* <PiSpinnerBall size={80} className="animate-spin mb-20"/> */}
         <div className="w-30 h-30 animate-spin">
           <Image

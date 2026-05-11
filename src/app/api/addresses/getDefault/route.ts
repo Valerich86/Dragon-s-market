@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get("userId");
     const data = await pool.query(
       `SELECT * FROM addresses WHERE customer_id=$1 AND is_default=$2`,
-      [userId, true],
+      [Number(userId), true],
     );
     return NextResponse.json({ defaultAddress: data.rows[0] });
   } catch (error) {

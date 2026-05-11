@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Sidebar from "@/components/UI/sidebar";
-import OrderNotifications from "@/components/order-notifications";
+import OrderNotifications from "@/components/tools/order-notifications";
 
 export const metadata: Metadata = {
   title: {

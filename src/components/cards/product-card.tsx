@@ -68,8 +68,8 @@ export default function ProductCard({ item, cloudPath, index, userId }: Props) {
           <Image
             src={src}
             alt=""
-            width={200}
-            height={200}
+            width={1024}
+            height={1024}
             loading="lazy"
             className={`h-full w-full object-contain rounded-2xl animate-shining ${item.category_id === 4 ? "blur-xs" : ""}`}
             onError={() => setSrc("/images/stickers/please_buy.webp")}

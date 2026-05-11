@@ -22,14 +22,29 @@ export default function CartList({ cloudPath, userId }: Props) {
   const [isLoading, setIsLoading] = useState(true);
   const [refresh, setRefresh] = useState(false);
   const [hasCategory4, setHasCategory4] = useState(false);
+  const [isOrderTime, setIsOrderTime] = useState(false);
+
+  useEffect(() => {
+    const checkTime = () => {
+      const now = new Date();
+      const utcOffset = 5;
+      const localTime = new Date(now.getTime() + utcOffset * 60 * 60 * 1000);
+      const hours = localTime.getUTCHours();
+      setIsOrderTime(hours >= 10 && hours < 22);
+    };
+
+    checkTime();
+    const interval = setInterval(checkTime, 60000); // Проверка каждую минуту
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (userId === 0) return;
-    setHasCategory4(false)
+    setHasCategory4(false);
     const fetchCart = async () => {
       try {
         const response = await fetch(`/api/cart?customer_id=${userId}`);
-        const cart:CartItem[] = (await response.json()).cart;
+        const cart: CartItem[] = (await response.json()).cart;
         setCartItems(cart);
         let addToItemsIds = [];
         for (let c of cart) {
@@ -117,13 +132,20 @@ export default function CartList({ cloudPath, userId }: Props) {
       <h1 className={`${font_light.className} uppercase my-10`}>
         Информация для заказа
       </h1>
-      <OrderForm
-        userId={userId}
-        cartItems={itemsIds}
-        totalItems={itemsIds.length}
-        totalSum={cartItems[0].cart_total}
-        hasCategory4={hasCategory4}
-      />
+      {!isOrderTime && (
+        <div className="p-4 bg-yellow-100 text-yellow-800 rounded text-center text-sm lg:text-base">
+          Оформление заказов доступно с 10:00 до 22:00 по пермскому времени
+        </div>
+      )}
+      {isOrderTime && (
+        <OrderForm
+          userId={userId}
+          cartItems={itemsIds}
+          totalItems={itemsIds.length}
+          totalSum={cartItems[0].cart_total}
+          hasCategory4={hasCategory4}
+        />
+      )}
     </div>
   );
 }

@@ -39,11 +39,15 @@ video::--webkit-media-controls-start-playback-button {
 @custom-variant blob (&:where([data-theme="blob"] *));
 @custom-variant fire (&:where([data-theme="fire"] *));
 
+/* Обеспечение доступности */
 @root {
   --font-scale: 1;
 }
 
-/* Обеспечение доступности */
+.large-text-mode:not(img, video, .no-contrast) {
+  --font-scale: 1.2;
+}
+
 .high-contrast-mode:not(img, video, .no-contrast) {
   filter: contrast(1.5);
 }

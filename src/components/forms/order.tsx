@@ -33,7 +33,7 @@ export default function OrderForm({
     total_sum: totalSum,
     notes: "",
   });
-  const [notesErrors, setNotesErrors] = useState<string[] | undefined>(
+  const [notesError, setNotesError] = useState<string | undefined>(
     undefined,
   );
   const [addressError, setAddressError] = useState<string | undefined>(
@@ -69,7 +69,7 @@ export default function OrderForm({
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setAddressError(undefined);
-    setNotesErrors(undefined);
+    setNotesError(undefined);
     setIsLoading(true);
     const response = await fetch("/api/orders", {
       method: "POST",
@@ -80,8 +80,8 @@ export default function OrderForm({
       const { orderId } = await response.json();
       setRefreshCart(!refreshCart);
       router.replace(`/profile/orders/${orderId}`);
-    } else if (response.status === 400) {
-      setNotesErrors((await response.json()).errors);
+    } else if (response.status === 400 || response.status === 403) {
+      setNotesError((await response.json()).error);
     } else {
       console.error("Ошибка оформления заказа");
     }
@@ -165,8 +165,7 @@ export default function OrderForm({
       )}
 
       <div aria-live="polite" aria-atomic="true">
-        {notesErrors &&
-          notesErrors.map((er, i) => <FormError key={i} errorField={er} />)}
+        {notesError && <FormError errorField={notesError} />}
         {hasCategory4 && form.type === "доставка" && (
           <FormError
             errorField={`Невозможно оформить доставку, в списке есть энергетик`}
@@ -187,7 +186,7 @@ export default function OrderForm({
         options="h-10 px-6 min-w-70"
         isLoading={isLoading}
         disabled={
-          notesErrors !== undefined ||
+          notesError !== undefined ||
           addressError != undefined ||
           (hasCategory4 && form.type === "доставка")
         }

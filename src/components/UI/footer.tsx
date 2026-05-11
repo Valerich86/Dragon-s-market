@@ -1,76 +1,92 @@
-'use client';
+"use client";
 
 import Link from "next/link";
-import React from "react";
 import { PiTelegramLogoLight } from "react-icons/pi";
+import { TfiEmail } from "react-icons/tfi";
 import { SlPhone } from "react-icons/sl";
 import { usePathname } from "next/navigation";
 import { AccessibilityPanel } from "./accessibility-panel";
 
-type FooterLink = {
-  name: string;
-  href: string;
-};
-
-const leftLinks = [
+const links = [
   { name: "О нас", href: "/about" },
   { name: "Новости", href: "/news" },
-  { name: "Отзывы", href: "" },
-];
-
-const rightLinks = [
-  { name: "Каталог", href: "/catalog" },
-  { name: "Условия доставки", href: "/delivery" },
+  { name: "Доставка и оплата", href: "" },
 ];
 
 export default function Footer() {
   const pathname = usePathname();
 
-  const FooterBlock = ({ links }: { links: FooterLink[] }) => {
-    return (
-      <div className="w-full lg:w-1/4 flex flex-col justify-center gap-10">
-        {links.map((link, index) => (
-          <div key={index} className="w-full text-center lg:text-left">
-            <Link className="link" href={link.href}>
-              {link.name}
-            </Link>
-          </div>
-        ))}
-        {links[0].name === "Каталог" && (
-          <div className="w-full flex justify-center lg:justify-start"><AccessibilityPanel /></div>
-        )}
-      </div>
-    );
-  };
-
   return (
-    <footer className={`${pathname.startsWith("/admin") ? "hidden" : ""} text-base absolute bg-mascot2/80 text-secondary w-full x-spacing flex flex-col lg:text-xs z-10`}>
+    <footer
+      className={`${pathname.startsWith("/admin") ? "hidden" : ""} 
+        text-sm absolute bg-gray-700 text-secondary 
+        w-full x-spacing flex flex-col lg:text-sm z-10`}
+    >
       <div className="flex flex-col lg:flex-row lg:justify-between gap-20 lg:gap-0 py-10 border-b border-gray-200">
-        <FooterBlock links={leftLinks} />
-        <FooterBlock links={rightLinks} />
-
-        <div className="w-full lg:w-1/4 flex flex-col gap-10 items-center lg:items-start justify-center italic">
-          <p>ИП Михайлов А.С.</p>
-          <p>г.Пермь, Бульвар Гагарина, 83</p>
+        <div className="w-full lg:w-auto flex flex-col gap-5 items-start justify-center">
+          <strong className="text-base">ИП Михайлов Александр Сергеевич</strong>
+          <p>
+            <span className="underline">Юр.адрес:</span> 614051, Пермский край,
+            г.Пермь, Уинская 3, 134
+          </p>
+          <p>
+            <span className="underline">
+              Фактический (почтовый) адрес Магазина:
+            </span>{" "}
+            614077, г.Пермь, бульвар Гагарина, 79
+          </p>
+          <p>
+            <span className="underline">ОГРНИП:</span> 324595800153181
+          </p>
+          <p>
+            <span className="underline">ИНН: </span>222210834999
+          </p>
+        </div>
+        <div className="w-full lg:w-auto flex flex-col items-center lg:items-start lg:justify-between gap-10 lg:gap-0">
+          <p>ежедневно 10:00 - 22:00 </p>
+          <a
+            href={"tel:+79223281133"}
+            target="_blank"
+            aria-label="phone"
+            className="link flex gap-2 w-40 h-7 bg-gray-200 rounded-full py-1 text-primary justify-center items-center"
+          >
+            <SlPhone size={20} />
+            <span>+79223281133</span>
+          </a>
           <a
             href={"https://t.me/dragonbazarmag"}
             target="_blank"
             aria-label="Telegram"
-            className="link flex gap-2 w-2/3 bg-gray-200 rounded-full py-1 text-primary justify-center items-center"
+            className="link flex gap-2 w-40 h-7 bg-gray-200 rounded-full py-1 text-primary justify-center items-center"
           >
-            <PiTelegramLogoLight size={20} />
+            <PiTelegramLogoLight size={25} />
             <span>мы в Telegram</span>
           </a>
+          <a
+            href="mailto:daleksek@mail.ru?subject=Обращение с сайта"
+            target="_blank"
+            aria-label="email"
+            className="link flex gap-2 w-40 h-7 bg-gray-200 rounded-full py-1 text-primary justify-center items-center"
+          >
+            <TfiEmail size={20} />
+            <span>Задать вопрос</span>
+          </a>
         </div>
-        <div className="w-full lg:w-1/4">
-          <iframe
-            src="https://yandex.ru/map-widget/v1/?um=constructor%3A1df9cfcc2a8b054bc91ab82ac71db8f12660013f2ba767cb34bde44ba9ab88bc&amp;source=constructor"
-     
-            className="rounded-md w-full h-[50vh] lg:h-[35vh]"
-          ></iframe>
+
+        <div className="w-full lg:w-auto flex flex-col lg:justify-between gap-10 lg:gap-0">
+          {links.map((link, index) => (
+            <div key={index} className="w-full text-center lg:text-left">
+              <Link className="link" href={link.href}>
+                {link.name}
+              </Link>
+            </div>
+          ))}
+          <div className="w-full flex justify-center lg:justify-start">
+            <AccessibilityPanel />
+          </div>
         </div>
       </div>
-      <div className="py-10">
+      <div className="py-10 w-full">
         2026 ⓒ "Драконий базар" - магазин азиатских снеков
       </div>
     </footer>

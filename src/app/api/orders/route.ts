@@ -1,7 +1,5 @@
-import { z } from "zod";
 import { pool } from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
-import type { Order } from "@/lib/types";
 import { validateAndSanitize } from "@/lib/validation";
 
 export async function GET(request: NextRequest) {
@@ -24,25 +22,69 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const {
-    customer_id,
-    address_id,
-    type,
-    cart_items,
-    total_items,
-    total_sum,
-    notes,
-  } = await request.json();
+  // Проверяем время по Перми (UTC+5)
+  const now = new Date();
+  const utcOffset = 5; // Пермь: UTC+5
+  const localTime = new Date(now.getTime() + utcOffset * 60 * 60 * 1000);
 
-  const validationResult = validateAndSanitize(notes);
-  if (!validationResult.isSafe) {
+  const hours = localTime.getUTCHours(); // UTC‑часы соответствуют пермскому времени из‑за смещения
+
+  if (hours < 10 || hours >= 22) {
     return NextResponse.json(
-      { errors: validationResult.errors },
-      { status: 400 },
+      {
+        error: "Оформление заказов доступно с 10:00 до 22:00 по пермскому времени",
+        availableFrom: "10:00",
+        availableUntil: "22:00"
+      },
+      { status: 403 }
     );
   }
-
+  
   try {
+    const {
+      customer_id,
+      address_id,
+      type,
+      cart_items,
+      total_items,
+      total_sum,
+      notes,
+    } = await request.json();
+
+    if (notes.length > 500) {
+      return NextResponse.json(
+        { error: "Превышен лимит в 500 символов для примечания" },
+        { status: 400 },
+      );
+    }
+
+    const validationResult = validateAndSanitize(notes, {
+      allowMarkdown: true,
+      maxLength: 500,
+    });
+    if (!validationResult.isSafe) {
+      const ip =
+        request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+        request.headers.get("x-real-ip") ||
+        "127.0.0.1";
+      await pool.query(
+        `INSERT INTO security_logs (ip_address, action, timestamp, details)
+          VALUES ($1, $2, NOW(), $3)`,
+        [
+          ip,
+          validationResult.error,
+          JSON.stringify({
+            endpoint: "/api/orders",
+            userAgent: request.headers.get("user-agent"),
+          }),
+        ],
+      );
+      return NextResponse.json(
+        { error: validationResult.error },
+        { status: 400 },
+      );
+    }
+
     await pool.query("BEGIN");
     let orderItemsData = [];
     for (let cartItemId of cart_items) {
@@ -65,7 +107,7 @@ export async function POST(request: NextRequest) {
         cart_items,
         total_items,
         total_sum,
-        notes,
+        validationResult.cleanedValue,
       ],
     );
     const { id, created_at } = result.rows[0];

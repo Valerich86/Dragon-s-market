@@ -8,7 +8,7 @@ import { getUserInfo } from "@/lib/actions";
 import { verifySession } from "@/lib/auth";
 import { CartProvider } from "@/context/cart-context";
 import CookieNotification from "@/components/UI/cookie-notification";
-import { AccessibilityProvider } from "@/components/accessibility-provider";
+import { AccessibilityProvider } from "@/components/providers/accessibility-provider";
 import { AccessibilityStyles } from "@/components/UI/accessibility-styles ";
 
 export const metadata: Metadata = {

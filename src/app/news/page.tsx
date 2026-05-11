@@ -1,4 +1,4 @@
-import NoInfo from "@/components/no-info";
+import NoInfo from "@/components/UI/no-info";
 import ContentSection from "@/components/sections/content";
 import { getContent } from "@/lib/actions";
 import { useCloudPath } from "@/lib/cloud";

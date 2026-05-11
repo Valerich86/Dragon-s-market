@@ -9,7 +9,7 @@ import Link from "next/link";
 import type { Order } from "@/lib/types";
 import CustomButton from "@/components/UI/custom-button";
 import Loading from "@/app/loading";
-import NoInfo from "@/components/no-info";
+import NoInfo from "@/components/UI/no-info";
 import { orderStatuses } from "@/lib/types";
 
 export default function AdminOrdersPage() {

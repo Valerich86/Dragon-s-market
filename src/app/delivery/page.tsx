@@ -1,4 +1,4 @@
-import NoInfo from "@/components/no-info";
+import NoInfo from "@/components/UI/no-info";
 import ContentSection from "@/components/sections/content";
 import { getContent } from "@/lib/actions";
 import { useCloudPath } from "@/lib/cloud";
@@ -6,7 +6,7 @@ import { font_light } from "@/lib/fonts";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "О доставке",
+  title: "Доставка и оплата",
   description: 'Инструкция по заказу, оплате и достаке товара из магазина "Драконий базар", г. Пермь',
 };
 
@@ -22,7 +22,7 @@ export default async function NewsPage() {
       className={`w-full overflow-x-hidden min-h-screen x-spacing py-30 flex flex-col`}
     >
       <h1 className={`${font_light.className} uppercase mb-10`}>
-        О доставке
+        Доставка и оплата
       </h1>
 
       {content && content.length !== 0 && <ContentSection content={content}/>}

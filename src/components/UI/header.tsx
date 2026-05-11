@@ -14,7 +14,7 @@ import NavIcon from "./nav-icon";
 const centeredLinks = [
   { name: "Kаталог", href: "/catalog" },
   { name: "Новости", href: "/news" },
-  { name: "О доставке", href: "/delivery" },
+  { name: "Доставка и оплата", href: "/delivery" },
   { name: "О нас", href: "/about" },
 ];
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAccessibility } from "../accessibility-provider";
+import { useAccessibility } from "../providers/accessibility-provider";
 import { useState } from "react";
 
 export function AccessibilityPanel() {
@@ -14,11 +14,11 @@ export function AccessibilityPanel() {
         aria-label="Настройки доступности"
         className="bg-gray-200 link text-lg text-primary px-2 rounded-full shadow-lg flex items-center"
       >
-        👁️ <span className="text-[0.5rem]">для слабовидящих</span>
+        👁️ <span className="lg:text-sm">версия для слабовидящих</span>
       </button>
 
       {isOpen && (
-        <div className="fixed top-1/2 -translate-y-[50%] left-1/2 -translate-x-[50%] bg-primary p-4 rounded-xl shadow-lg border w-64 z-100 no-contrast">
+        <div className="absolute -top-10 left-1/2 -translate-x-[50%] bg-primary p-4 rounded-xl shadow-lg border w-64 z-100 no-contrast no-scaling">
           <h2 className="font-bold mb-2">Режим для слабовидящих</h2>
           <div className="space-y-2">
             <label className="flex items-center">

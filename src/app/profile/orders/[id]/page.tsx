@@ -8,7 +8,7 @@ import { MdOutlineRefresh } from "react-icons/md";
 import { useRouter, useParams } from "next/navigation";
 import type { Order, OrderItem } from "@/lib/types";
 import Loading from "@/app/loading";
-import NoInfo from "@/components/no-info";
+import NoInfo from "@/components/UI/no-info";
 import PaintCaption from "@/components/UI/paint-caption";
 import ProductImage from "@/components/UI/product-image";
 

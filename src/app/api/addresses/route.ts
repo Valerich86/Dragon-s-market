@@ -2,40 +2,85 @@ import { z } from "zod";
 import { pool } from "@/lib/db";
 import { NextResponse } from "next/server";
 import type { Address } from "@/lib/types";
+import { validateAndSanitize } from "@/lib/validation";
 
 export const AddressFormSchema = z.object({
   id: z.number(),
   customer_id: z.number(),
   city: z
     .string()
-    .min(2, "Название города должно содержать минимум 2 символа")
-    .max(100, "Название города не может быть длиннее 100 символов")
     .trim()
-    .refine((value) => /^[а-яА-ЯёЁa-zA-Z\s\-]+$/.test(value), {
-      message: "Город может содержать только буквы, пробелы и дефисы",
+    .min(1, "Введите значение")
+    .max(30, "Слишком длинное значение")
+    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
+      message: "Есть недопустимые символы",
     }),
-  street: z.string().trim().min(1, "Введите значение"),
-  house: z.string().trim().min(1, "Введите значение"),
-  entrance: z.string().trim().min(1, "Введите значение"),
+  street: z
+    .string()
+    .trim()
+    .min(1, "Введите значение")
+    .max(30, "Слишком длинное значение")
+    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
+      message: "Есть недопустимые символы",
+    }),
+  house: z
+    .string()
+    .trim()
+    .min(1, "Введите значение")
+    .max(20, "Слишком длинное значение")
+    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
+      message: "Есть недопустимые символы",
+    }),
+  entrance: z
+    .string()
+    .trim()
+    .min(1, "Введите значение")
+    .max(20, "Слишком длинное значение")
+    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
+      message: "Есть недопустимые символы",
+    }),
   floor: z
     .string()
     .trim()
-    .min(0, "Этаж не может быть отрицательным")
-    .max(999, "Слишком большое значение этажа")
-    .nullable()
     .optional()
-    .default(null),
+    .nullable()
+    .default(null)
+    .refine(
+      (value) => {
+        if (value === null || value === undefined || value === "") return true;
+        const num = parseInt(value, 10);
+        return !isNaN(num) && num >= 0 && num <= 999;
+      },
+      {
+        message: "Этаж должен быть числом от 0 до 999",
+      },
+    ),
   apartment: z
     .string()
     .trim()
-    .min(1, "Номер квартиры обязателен")
-    .max(15, "Номер квартиры не может быть длиннее 15 символов")
-    .regex(
-      /^[0-9a-zA-Zа-яА-ЯёЁ\-\s]+$/,
-      "Недопустимые символы в номере квартиры",
-    ),
-  intercom_number: z.string().trim().optional().default(""),
-  additional_info: z.string().trim().optional().default(""),
+    .min(1, "Введите значение")
+    .max(20, "Слишком длинное значение")
+    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
+      message: "Есть недопустимые символы",
+    }),
+  intercom_number: z
+    .string()
+    .trim()
+    .max(20, "Слишком длинное значение")
+    .optional()
+    .default("")
+    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
+      message: "Есть недопустимые символы",
+    }),
+  additional_info: z
+    .string()
+    .trim()
+    .max(500, "Дополнительная информация не может быть длиннее 500 символов")
+    .optional()
+    .default("")
+    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
+      message: "Есть недопустимые символы",
+    }),
   is_default: z.boolean().optional(),
 });
 

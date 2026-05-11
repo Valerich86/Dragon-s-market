@@ -234,7 +234,8 @@ export default function AddressForm({
           </div>
         </fieldset>
 
-        <div className="w-full text-sm mt-5 text-zinc-500">
+        {method === "post" && (
+          <div className="w-full text-sm mt-5 text-zinc-500">
           <label className="flex items-start cursor-pointer">
             <div
               onClick={() => setPrivacyAgreed((prev) => !prev)}
@@ -259,13 +260,14 @@ export default function AddressForm({
           </label>
           {errors?.policy && <FormError errorField={errors.policy} />}
         </div>
+        )}
 
         <CustomButton
           text={method === "post" ? "Сохранить" : "Изменить"}
           buttonType="submit"
           options="h-10 mt-6 px-6 min-w-70"
           isLoading={isLoading}
-          disabled={!privacyAgreed}
+          disabled={method === "post" && !privacyAgreed}
         />
       </div>
     </form>

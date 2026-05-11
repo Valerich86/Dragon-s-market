@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAccessibility } from "../accessibility-provider";
+import { useAccessibility } from "../providers/accessibility-provider";
 
 export function AccessibilityStyles () {
   const { settings } = useAccessibility();

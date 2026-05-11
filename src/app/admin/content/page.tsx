@@ -9,7 +9,7 @@ import Link from "next/link";
 import { Content, contentTypes } from "@/lib/types";
 import CustomButton from "@/components/UI/custom-button";
 import Loading from "@/app/loading";
-import NoInfo from "@/components/no-info";
+import NoInfo from "@/components/UI/no-info";
 
 export default function AdminContentPage() {
   const [content, setContent] = useState<Content[]>([]);

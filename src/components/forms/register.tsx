@@ -16,6 +16,8 @@ export default function RegisterForm() {
     password: "",
     confirmPassword: "",
     phone: "+7",
+    email: "",
+    verificationCode: "",
   });
   const [errors, setErrors] = useState<RegisterFormErrors | undefined>(
     undefined,
@@ -24,6 +26,7 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
+  const [requiresVerification, setRequiresVerification] = useState(false); // Флаг 2FA
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -35,7 +38,13 @@ export default function RegisterForm() {
       body: JSON.stringify(form),
     });
     if (response.ok) {
-      redirect("/profile");
+      const data = await response.json();
+      if (data.requiresVerification) {
+        // Переключаем форму в режим ввода кода
+        setRequiresVerification(true);
+      } else {
+        redirect("/profile");
+      }
     } else if (response.status === 400) {
       setErrors((await response.json()).errors);
     } else {
@@ -57,7 +66,6 @@ export default function RegisterForm() {
           className="input"
           value={form.first_name}
           autoFocus
-          required
           onChange={(e) => setForm({ ...form, first_name: e.target.value })}
         />
         <div aria-live="polite" aria-atomic="true">
@@ -76,12 +84,31 @@ export default function RegisterForm() {
         <input
           className="input"
           value={form.last_name}
-          required
           onChange={(e) => setForm({ ...form, last_name: e.target.value })}
         />
         <div aria-live="polite" aria-atomic="true">
           {errors?.last_name &&
             errors.last_name.map((error: string, i) => (
+              <FormError errorField={error} key={i} />
+            ))}
+        </div>
+      </fieldset>
+
+      {/* почта */}
+      <fieldset>
+        <label className="label">
+          Email (логин для входа)<span className="text-accent">*</span>
+        </label>
+        <input
+          className="input"
+          type="email"
+          placeholder="example@mail.ru"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+        />
+        <div aria-live="polite" aria-atomic="true">
+          {errors?.email &&
+            errors.email.map((error: string, i) => (
               <FormError errorField={error} key={i} />
             ))}
         </div>
@@ -97,7 +124,6 @@ export default function RegisterForm() {
           type="tel"
           value={form.phone}
           placeholder="+7XXXXXXXXXX"
-          required
           onChange={(e) => setForm({ ...form, phone: e.target.value })}
         />
         <div aria-live="polite" aria-atomic="true">
@@ -118,8 +144,7 @@ export default function RegisterForm() {
             className="input"
             type={showPassword ? "text" : "password"}
             value={form.password}
-            placeholder="Пока просто не менее 4 символов"
-            required
+            placeholder="не менее 8 символов"
             onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
           <PiEyesLight
@@ -146,7 +171,6 @@ export default function RegisterForm() {
             className="input"
             type={showConfirm ? "text" : "password"}
             value={form.confirmPassword}
-            required
             onChange={(e) =>
               setForm({ ...form, confirmPassword: e.target.value })
             }
@@ -167,9 +191,12 @@ export default function RegisterForm() {
 
       <div className="w-full text-sm mt-5 text-zinc-500">
         <label className="flex items-start cursor-pointer">
-          <div onClick={() => setPrivacyAgreed(prev => !prev)} className="mt-0.5 text-indigo-700">
-            {!privacyAgreed && <GrCheckbox size={15}/>}
-            {privacyAgreed && <GrCheckboxSelected size={15}/>}
+          <div
+            onClick={() => setPrivacyAgreed((prev) => !prev)}
+            className="mt-0.5 text-indigo-700"
+          >
+            {!privacyAgreed && <GrCheckbox size={15} />}
+            {privacyAgreed && <GrCheckboxSelected size={15} />}
           </div>
           <span className="ml-2 text-zinc-500">
             Я даю согласие на обработку моих персональных данных в соответствии
@@ -188,13 +215,51 @@ export default function RegisterForm() {
         {errors?.policy && <FormError errorField={errors.policy} />}
       </div>
 
-      <CustomButton
-        text="Зарегистрироваться"
-        buttonType="submit"
-        options="h-10 mt-6 px-6 min-w-70"
-        isLoading={isLoading}
-        disabled={!privacyAgreed}
-      />
+      {!requiresVerification && (
+        <CustomButton
+          text="Зарегистрироваться"
+          buttonType="submit"
+          options="h-10 mt-6 px-6 min-w-70"
+          isLoading={isLoading}
+          disabled={!privacyAgreed}
+        />
+      )}
+
+      {requiresVerification && (
+        <>
+          <p className="text-sm text-gray-500 mt-2">
+            Код отправлен на <span className="italic">{form.email}</span>. Если не пришло письмо, проверьте
+            папку «Спам».
+          </p>
+          <fieldset>
+            <label className="label">
+              Код подтверждения <span className="text-accent">*</span>
+            </label>
+            <input
+              className="input"
+              type="text"
+              placeholder="Введите 6-значный код"
+              value={form.verificationCode}
+              onChange={(e) =>
+                setForm({ ...form, verificationCode: e.target.value })
+              }
+              maxLength={6}
+            />
+            <div aria-live="polite" aria-atomic="true">
+              {errors?.verificationCode &&
+                errors.verificationCode.map((error: string, i) => (
+                  <FormError errorField={error} key={i} />
+                ))}
+            </div>
+          </fieldset>
+          <CustomButton
+            text="Подтвердить регистрацию"
+            buttonType="submit"
+            options="h-10 mt-6 px-6 min-w-70"
+            isLoading={isLoading}
+          />
+        </>
+      )}
       <Link
         href={"/auth/login"}
         className="link mt-2 lg:mt-5 italic h-10 flex items-center justify-center text-gray-200 text-right"

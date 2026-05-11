@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import NoInfo from "@/components/no-info";
+import NoInfo from "@/components/UI/no-info";
 import ProductCard from "@/components/cards/product-card";
 import { useCatalog } from "@/context/catalog-context";
 import { Product, Category } from "@/lib/types";

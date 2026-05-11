@@ -67,7 +67,11 @@ export default function ContentForm({ method, content = undefined }: Props) {
         const { error, details } = await response.json();
         setError(`Ошибка обработки данных: ${details}`);
       } else {
-        alert(method === "POST" ? "Данные успешно добавлены!" : "Данные успешно обновлены!");
+        alert(
+          method === "POST"
+            ? "Данные успешно добавлены!"
+            : "Данные успешно обновлены!",
+        );
         router.replace("/admin/content");
       }
     } catch (err) {
@@ -100,15 +104,17 @@ export default function ContentForm({ method, content = undefined }: Props) {
       </fieldset>
 
       {/* заголовок */}
-      <fieldset>
-        <label className="label">Заголовок (опционально)</label>
-        <input
-          autoFocus
-          className="input"
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
-        />
-      </fieldset>
+      {form.type !== "about" && (
+        <fieldset>
+          <label className="label">Заголовок (опционально)</label>
+          <input
+            autoFocus
+            className="input"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+          />
+        </fieldset>
+      )}
 
       {/* текст */}
       <fieldset>

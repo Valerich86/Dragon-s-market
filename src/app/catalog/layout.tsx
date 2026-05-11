@@ -1,13 +1,12 @@
-import CatalogProvider from "@/components/catalog-provider";
+import CatalogProvider from "@/components/providers/catalog-provider";
 import CategoriesList from "@/components/sections/categories-list";
 import SearchInput from "@/components/UI/search-input";
 import { getCategories, getCatalog, getBonusParams } from "@/lib/actions";
 import { font_light } from "@/lib/fonts";
 import type { Metadata } from "next";
 import { verifySession } from "@/lib/auth";
-import UserIdProvider from "@/components/userId-provider";
+import UserIdProvider from "@/components/providers/userId-provider";
 import { useCloudPath } from "@/lib/cloud";
-import MascotCookie from "@/components/mascot-cookie";
 
 export const metadata: Metadata = {
   title: {

@@ -6,6 +6,7 @@ import DiscountPlan from "@/components/sections/discount-plan";
 import VideoCarouselSection from "@/components/sections/video-carousel";
 import { getContent } from "@/lib/actions";
 import Link from "next/link";
+import Headline from "@/components/UI/headline";
 
 export const metadata: Metadata = {
   description:
@@ -25,9 +26,7 @@ export default async function Home() {
       <HeroSection cloudPath={cloudPath} />
       <DiscountPlan />
       <div className="x-spacing mt-10">
-        {news && news.length !== 0 && (
-          <ContentSection content={news} />
-        )}
+        {news && news.length !== 0 && <ContentSection content={news} />}
         <div className="w-full flex justify-end">
           <Link
             href={"/news"}
@@ -40,16 +39,19 @@ export default async function Home() {
       <VideoCarouselSection cloudPath={cloudPath} />
       <div className="x-spacing mt-10">
         {about && about.length !== 0 && (
-          <ContentSection content={about} />
+          <>
+            <Headline text="Немного о нас"/>
+            <ContentSection content={about} />
+            <div className="w-full flex justify-end">
+              <Link
+                href={"/about"}
+                className={`text-accent animate-pulse italic mt-5`}
+              >
+                Подробнее о нас ➢
+              </Link>
+            </div>
+          </>
         )}
-        <div className="w-full flex justify-end">
-          <Link
-            href={"/about"}
-            className={`text-accent animate-pulse italic mt-5`}
-          >
-            Подробнее о нас ➢
-          </Link>
-        </div>
       </div>
     </main>
   );

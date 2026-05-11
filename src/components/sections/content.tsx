@@ -1,6 +1,5 @@
 "use client";
 
-import NavLink from "../UI/nav-link";
 import Image from "next/image";
 import { Content } from "@/lib/types";
 import Headline from "../UI/headline";
@@ -13,11 +12,12 @@ interface Props {
 
 export default function ContentSection({ content }: Props) {
   const ContentItem = ({ item }: { item: Content }) => {
+    const isOnlyMedia = item.info.length === 0 || !item.info; 
     const isVideo = item.media_url
       ? /\.(mp4|mov|webm|ogg|avi|wmv)$/i.test(item.media_url)
       : false;
     return (
-      <div>
+      <div className={isOnlyMedia ? "md:w-1/3" : ""}>
         {item.title && <Headline text={item.title} />}
         <div
           className={`w-full flex flex-col md:flex-row gap-10 
@@ -33,7 +33,7 @@ export default function ContentSection({ content }: Props) {
                 ease: "easeOut",
               }}
               className={
-                `w-full flex items-center justify-center rounded-xl h-[70vh] md:w-1/2`
+                `flex items-center justify-center rounded-xl h-[70vh] w-full ${isOnlyMedia ? "" : "md:w-1/2"}`
               }
             >
               <Image
@@ -42,19 +42,23 @@ export default function ContentSection({ content }: Props) {
                 width={200}
                 height={200}
                 loading="lazy"
-                className={`h-full w-auto object-contain rounded-xl`}
+                className={`h-full w-auto ${isOnlyMedia ? "object-cover" : "object-contain"} rounded-xl`}
               />
             </motion.div>
           )}
 
           {/* текст новости или конкурса */}
           {item.info.length > 0 && (
-            <div className="w-full md:w-1/2 min-h-[70vh] flex flex-col justify-between items-center md:items-start gap-5 rounded-xl p-5 shadow-[0px_0px_40px_5px_rgba(59,130,246,0.15)]">
+            <div className={
+              `${item.media_url ? "md:w-1/2" : "justify-center"} 
+              w-full min-h-[70vh] flex flex-col justify-between items-center 
+              md:items-start gap-5 rounded-xl p-5 shadow-[0px_0px_40px_5px_rgba(59,130,246,0.15)]`
+            }>
               <pre className="whitespace-pre-wrap text-left md:text-left">
                 {item.info}
               </pre>
               <div className="w-full flex justify-end gap-5 text-xs mt-5">
-                <p>{new Date(item.created_at).toLocaleDateString()}</p>
+                {item.type === "news" && <p>{new Date(item.created_at).toLocaleDateString()}</p>}
                 {item.link_name && item.link_href && (
                   <Link
                     href={item.link_href}
@@ -104,7 +108,7 @@ export default function ContentSection({ content }: Props) {
 
   return (
     <section aria-label="контент" className="section">
-      <div className={`w-full flex flex-col justify-between gap-y-30`}>
+      <div className={`w-full flex flex-wrap justify-between gap-y-30`}>
         {content.map((item) => (
           <ContentItem key={item.id} item={item} />
         ))}

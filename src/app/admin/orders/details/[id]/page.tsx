@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Order, OrderItem, orderStatuses } from "@/lib/types";
 import Loading from "@/app/loading";
-import NoInfo from "@/components/no-info";
+import NoInfo from "@/components/UI/no-info";
 import ProductImage from "@/components/UI/product-image";
 import CustomButton from "@/components/UI/custom-button";
 
@@ -18,8 +18,8 @@ export default function Orders() {
   const [cloudPath, setCloudPath] = useState("");
   const [order, setOrder] = useState<Order | undefined>(undefined);
   const [items, setItems] = useState<OrderItem[]>([]);
-  const [currentStatus, setCurrentStatus] = useState("");
 
+  // Первый useEffect: загрузка данных при монтировании
   useEffect(() => {
     const fetchOrder = async () => {
       setIsFetching(true);
@@ -28,7 +28,7 @@ export default function Orders() {
         const { order, items } = await response.json();
         setOrder(order);
         setItems(items);
-        setCurrentStatus(order.status)
+
         const cpResponse = await fetch(`/api/cloud`);
         const { cloudPath } = await cpResponse.json();
         setCloudPath(cloudPath);
@@ -39,24 +39,27 @@ export default function Orders() {
       }
     };
     fetchOrder();
-  }, []);
+  }, [id]); // Зависимость от id — если id изменится, перезапросим данные
 
+  // Второй useEffect: обновление статуса (только если order существует)
+  useEffect(() => {
+    // Проверяем, есть ли order и не находится ли компонент в процессе загрузки
+    if (!order || isFetching) return;
+    handleUpdateStatus();
+  }, [order, id, isFetching]); // Зависимости: order, id, isFetching
+  
   const handleUpdateStatus = async () => {
     try {
       await fetch(`/api/admin/orders/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({status: currentStatus}),
+        body: JSON.stringify({ status: order?.status }),
       });
-      console.log(currentStatus)
+      console.log("Статус обновлён:", order?.status);
     } catch (error) {
-      console.error(error);
-    } 
+      console.error("Ошибка обновления статуса:", error);
+    }
   };
-
-  useEffect(() => {
-    handleUpdateStatus();
-  }, [currentStatus]);
 
   if (isFetching) return <Loading />;
   if (!order || items.length === 0) {
@@ -73,11 +76,11 @@ export default function Orders() {
       >
         <strong>Заказ № {id}</strong>
       </div>
-      <form className="w-full flex flex-col lg:flex-row lg:justify-between gap-5 z-60" onSubmit={handleUpdateStatus}>
+      <form className="w-full flex flex-col lg:flex-row lg:justify-between gap-5" onSubmit={(e) => { e.preventDefault(); handleUpdateStatus(); }}>
         <p className="">Текущий статус:</p>
         <select
-          value={currentStatus}
-          onChange={(e) => setCurrentStatus(e.target.value)}
+          value={order.status}
+          onChange={(e) => setOrder(prev => prev ? { ...prev, status: e.target.value } : undefined)}
           className="input focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           {orderStatuses.map((option) => (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import CustomButton from "./UI/custom-button";
+import CustomButton from "../UI/custom-button";
 import type { Category } from "@/lib/types";
 
 interface UpdatingInfo {
@@ -55,7 +55,7 @@ export default function CatalogUpdater() {
         onClick={handleUpdateCatalog}
       />
       {showInfo && (
-        <div className="text-xs lg:text-end">
+        <div className="text-xs">
           <p className="text-accent text-lg">{message}</p>
           <p>Загружено новых товаров: {newItems}</p>
           <p>Изменено товаров: {updated}</p>
