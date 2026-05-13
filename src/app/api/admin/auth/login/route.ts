@@ -63,7 +63,6 @@ export async function POST(req: Request) {
 
     const { email, password, verificationCode, captchaToken } = validatedFields.data;
     if (!verificationCode) {
-      // Проверяем CAPTCHA только на первом этапе (до отправки кода)
       if (!captchaToken) {
         console.log("Требуется подтверждение reCAPTCHA");
         return NextResponse.json(
@@ -71,7 +70,6 @@ export async function POST(req: Request) {
           { status: 400 },
         );
       }
-
       const captchaValid = await verifyCaptcha(captchaToken, ip);
       if (!captchaValid.success) {
         return NextResponse.json(
@@ -83,10 +81,6 @@ export async function POST(req: Request) {
           { status: 400 },
         );
       }
-    }
-
-    // Если код не предоставлен — отправляем его
-    if (!verificationCode) {
       const validationResult = await validateUserCredentials(email, password);
 
       if (!validationResult.isValid) {
@@ -141,20 +135,6 @@ export async function POST(req: Request) {
           { status: 400 },
         );
       }
-      if (captchaToken) {
-        const captchaValid = await verifyCaptcha(captchaToken, ip);
-        if (!captchaValid.success) {
-          return NextResponse.json(
-            {
-              errors: {
-                captcha: [captchaValid.error ],
-              },
-            },
-            { status: 400 },
-          );
-        }
-      }
-
       // Проверяем существование и валидность кода в БД
       const result = await pool.query(
         `SELECT * FROM temp_auth_codes
