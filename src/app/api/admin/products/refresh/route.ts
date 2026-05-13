@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
-import { validateAndSanitize } from "@/lib/validation";
 import { checkMemoryRateLimit } from "@/lib/memory-rate-limiter";
 
 type Price = {
@@ -65,8 +64,6 @@ export async function GET(request: NextRequest) {
     request.headers.get("x-real-ip") ||
     "127.0.0.1";
   const { allowed, resetAfter } = checkMemoryRateLimit(ip, 50, 10);
-  console.log("allowed: ", allowed)
-  console.log("resetAfter: ", resetAfter)
   if (!allowed) {
     try {
       await pool.query(
@@ -98,32 +95,6 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const categoryId = searchParams.get("categoryId") || "";
 
-  const validationResult = validateAndSanitize(categoryId);
-  if (!validationResult.isSafe) {
-    const ip =
-      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      request.headers.get("x-real-ip") ||
-      "127.0.0.1";
-    await pool.query(
-      `INSERT INTO security_logs (ip_address, action, timestamp, details)
-          VALUES ($1, $2, NOW(), $3)`,
-      [
-        ip,
-        validationResult.error,
-        JSON.stringify({
-          endpoint: "/api/admin/products/refresh",
-          userAgent: request.headers.get("user-agent"),
-        }),
-      ],
-    );
-    return NextResponse.json(
-      { error: validationResult.error },
-      { status: 400 },
-    );
-  }
-
-  const cleanedCategoryId = validationResult.cleanedValue;
-
   try {
     const authResult = await auth();
     if (authResult?.success) {
@@ -131,7 +102,7 @@ export async function GET(request: NextRequest) {
       let updated = 0;
       const authToken = authResult.authToken;
       const headers = { "X-Auth-Token": authToken || "" };
-      const url = `${host_name}/api/query/itemsExpanded?types=${cleanedCategoryId}&order=id&withMoves=1`;
+      const url = `${host_name}/api/query/itemsExpanded?types=${categoryId}&order=id&withMoves=1`;
       const response = await fetch(url, {
         method: "GET",
         headers: headers,
@@ -143,7 +114,7 @@ export async function GET(request: NextRequest) {
         let offset = 0;
         while (products.length === 100) {
           offset += 100;
-          const url = `${host_name}/api/query/itemsExpanded?offset=${offset}&types=${cleanedCategoryId}&order=id&withMoves=1`;
+          const url = `${host_name}/api/query/itemsExpanded?offset=${offset}&types=${categoryId}&order=id&withMoves=1`;
           const response = await fetch(url, {
             method: "GET",
             headers: headers,

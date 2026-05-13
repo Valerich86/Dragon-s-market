@@ -3,13 +3,12 @@
 import { SubmitEvent, useState } from "react";
 import { PiEyesLight } from "react-icons/pi";
 import { redirect } from "next/navigation";
-import Captcha from "../tools/captcha";
 import FormError from "../UI/form-error";
-import Link from "next/link";
 import CustomButton from "../UI/custom-button";
 import type { LoginFormErrors } from "@/lib/types";
+import Captcha from "../tools/captcha";
 
-export default function LoginForm() {
+export default function AdminLoginForm() {
   const [form, setForm] = useState({
     password: "",
     email: "",
@@ -32,7 +31,7 @@ export default function LoginForm() {
       return;
     }
 
-    const response = await fetch("/api/auth/login", {
+    const response = await fetch("/api/admin/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...form, captchaToken }),
@@ -43,7 +42,8 @@ export default function LoginForm() {
         // Переключаем форму в режим ввода кода
         setRequiresVerification(true);
       } else {
-        redirect("/profile");
+        window.alert("Вход успешно выполнен");
+        redirect("/admin");
       }
     } else if ([400, 401, 500].includes(response.status)) {
       const { errors } = await response.json();
@@ -70,6 +70,7 @@ export default function LoginForm() {
           value={form.email}
           autoFocus
           placeholder="example@mail.ru"
+          required
           onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
       </fieldset>
@@ -90,6 +91,7 @@ export default function LoginForm() {
             className="input"
             type={showPassword ? "text" : "password"}
             value={form.password}
+            required
             onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
           <PiEyesLight
@@ -98,12 +100,6 @@ export default function LoginForm() {
             onClick={() => setShowPassword((prev) => !prev)}
           />
         </div>
-        <Link
-          href={"/auth/forgot-password"}
-          className="link mt-3 italic text-indigo-500 text-xs"
-        >
-          Забыли пароль? ➢
-        </Link>
       </fieldset>
       <div aria-live="polite" aria-atomic="true">
         {errors?.password &&
@@ -166,15 +162,10 @@ export default function LoginForm() {
             buttonType="submit"
             options="h-10 mt-6 px-6 min-w-70"
             isLoading={isLoading}
+            disabled={!captchaToken}
           />
         </>
       )}
-      <Link
-        href={"/auth/register"}
-        className="link mt-2 lg:mt-5 italic h-10 flex items-center justify-center text-gray-200 text-right"
-      >
-        Ешё не зарегистрированы? ➢
-      </Link>
     </form>
   );
 }

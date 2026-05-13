@@ -97,8 +97,8 @@ export default function MascotBonusAnimation({
       onClick={(e) => handleClick(e)}
       className={`${animationClass} ${
         mascotSide === "left"
-          ? "-left-16 md:-left-19.5"
-          : "left-37 md:left-45"
+          ? "-left-17 md:-left-19.5"
+          : "left-35 md:left-45"
       } ${mascotRotation}
         absolute bottom-0 w-1/2 z-20`}
     >

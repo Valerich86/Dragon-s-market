@@ -13,6 +13,7 @@ const navLinks = [
   { name: "Фото товара", href: "/admin/products/image-upload" },
   { name: "Заказы", href: "/admin/orders" },
   { name: "Контент", href: "/admin/content" },
+  { name: "Политика ОПД", href: "/admin/privacy-policy" },
 ];
 
 export default function Sidebar() {

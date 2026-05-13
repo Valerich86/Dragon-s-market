@@ -15,6 +15,7 @@ export async function GET(
       c.first_name,
       c.last_name,
       c.phone,
+      c.email,
       a.city,
       a.address,
       a.street,

@@ -55,7 +55,6 @@ export default function Orders() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: order?.status }),
       });
-      console.log("Статус обновлён:", order?.status);
     } catch (error) {
       console.error("Ошибка обновления статуса:", error);
     }
@@ -113,6 +112,9 @@ export default function Orders() {
       </p>
       <p className="">
         Телефон: <strong>{order.phone}</strong>
+      </p>
+      <p className="">
+        Email: <strong>{order.email}</strong>
       </p>
       {items.map((item) => (
         <div

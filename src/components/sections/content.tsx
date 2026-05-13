@@ -54,7 +54,7 @@ export default function ContentSection({ content }: Props) {
               w-full min-h-[70vh] flex flex-col justify-between items-center 
               md:items-start gap-5 rounded-xl p-5 shadow-[0px_0px_40px_5px_rgba(59,130,246,0.15)]`
             }>
-              <pre className="whitespace-pre-wrap text-left md:text-left">
+              <pre className="whitespace-pre-wrap text-left">
                 {item.info}
               </pre>
               <div className="w-full flex justify-end gap-5 text-xs mt-5">

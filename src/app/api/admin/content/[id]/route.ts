@@ -36,7 +36,6 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
         });
 
         await s3Client.send(deleteCommand);
-        console.log(`Медиафайл ${key} успешно удалён из облака`);
       } catch (deleteError) {
         console.error("Ошибка при удалении медиафайла из облака:", deleteError);
         // Не прерываем удаление записи из БД, если удаление из облака не удалось

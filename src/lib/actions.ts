@@ -27,13 +27,13 @@ export async function getUserInfo(userId: number) {
 export type BonusResult = {
   mascotPositionId: number;
   showMascot: boolean;
-}
+};
 
 export async function getBonusParams(
   userId: number,
   catalog: Product[],
 ): Promise<BonusResult> {
-  if (userId === 0) return {mascotPositionId: 0, showMascot: false};
+  if (userId === 0) return { mascotPositionId: 0, showMascot: false };
   const randomIndex = Math.floor(Math.random() * catalog.length);
   let currentPosition: 0;
   // const newPosition = 717;
@@ -61,22 +61,22 @@ export async function getBonusParams(
           `UPDATE customers SET bonus_created_at = NOW(), bonus_received=false, bonus_position_id=$2 WHERE id=$1`,
           [userId, newPosition],
         );
-        return {mascotPositionId: newPosition, showMascot: true};
+        return { mascotPositionId: newPosition, showMascot: true };
       } else if (timeDiffMs < twelveHoursMs && !customer.bonus_received) {
-        return {mascotPositionId: currentPosition, showMascot: true};
+        return { mascotPositionId: currentPosition, showMascot: true };
       } else {
-        return {mascotPositionId: 0, showMascot: false};
+        return { mascotPositionId: 0, showMascot: false };
       }
     } else {
       await pool.query(
         `UPDATE customers SET bonus_created_at = NOW(), bonus_received=false, bonus_position_id=$2 WHERE id=$1`,
         [userId, newPosition],
       );
-      return {mascotPositionId: newPosition, showMascot: true};
+      return { mascotPositionId: newPosition, showMascot: true };
     }
   } catch (error) {
     console.error("Ошибка получения данных пользователя: ", error);
-    return {mascotPositionId: 0, showMascot: false};
+    return { mascotPositionId: 0, showMascot: false };
   }
 }
 
@@ -172,9 +172,9 @@ export async function getProductOfADay() {
   return { product: data.rows[data.rows.length - 1] };
 }
 
-export async function getContent(type:string, limit?:number) {
+export async function getContent(type: string, limit?: number) {
   let query = `SELECT * FROM content WHERE type=$1 ORDER BY created_at DESC`;
-  let params:(string|number)[] = [type];
+  let params: (string | number)[] = [type];
   if (limit) {
     query += ` LIMIT $2`;
     params.push(limit);
@@ -183,9 +183,24 @@ export async function getContent(type:string, limit?:number) {
   return { content: data.rows };
 }
 
-export async function getOneFromContent(id:number) {
-  const data = await pool.query(`SELECT * FROM content WHERE id=$1;`, [id]);
-  return { content: data.rows[0] };
+export async function getOneFromContent(id: number) {
+  try {
+    const data = await pool.query(`SELECT * FROM content WHERE id=$1;`, [id]);
+    return { content: data.rows[0] };
+  } catch (error) {
+    console.error("Ошибка получения данных: ", error);
+    return { content: null };
+  }
+}
+
+export async function getPrivacyPolicy() {
+  try {
+    const data = await pool.query(`SELECT * FROM privacy_policy`);
+    return { data: data.rows[0] };
+  } catch (error) {
+    console.error("Ошибка получения данных: ", error);
+    return { content: null };
+  }
 }
 
 export async function getProductData(id: number, userId: number) {
@@ -209,4 +224,3 @@ export async function getProductData(id: number, userId: number) {
     return { product: null };
   }
 }
-

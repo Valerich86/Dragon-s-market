@@ -46,7 +46,6 @@ export default function Orders() {
     try {
       const response = await fetch(`/api/orders/refresh/${id}`);
       const {orderStatus} = await response.json();
-      console.log(orderStatus)
       if (order) setOrder({...order, status: orderStatus});
     } catch (error) {
       console.error(error);

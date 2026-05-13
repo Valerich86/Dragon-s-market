@@ -1,11 +1,11 @@
 import { pool } from "@/lib/db";
 import { NextResponse } from "next/server";
-import { AddressFormSchema } from "../route";
+import { AddressSchema } from "@/lib/validation";
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const body = await req.json();
-  const validatedFields = await AddressFormSchema.safeParseAsync(body);
+  const validatedFields = await AddressSchema.safeParseAsync(body);
 
   if (!validatedFields.success) {
     const errors = validatedFields.error.flatten().fieldErrors;

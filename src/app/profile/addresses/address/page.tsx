@@ -1,7 +1,7 @@
 import { getAddress } from "@/lib/actions";
 import type { Metadata } from "next";
 import { font_light } from "@/lib/fonts";
-import AddressForm from "@/components/forms/address-form";
+import AddressForm from "@/components/forms/address";
 
 export const metadata: Metadata = {
   title: "Редактирование адреса",

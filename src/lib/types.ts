@@ -83,6 +83,7 @@ export type Order = {
   first_name: string;
   last_name: string;
   phone: string;
+  email: string;
 
   // Поля из addresses (могут быть null, если address_id = NULL)
   city: string | null;
@@ -156,8 +157,15 @@ export type RegisterFormErrors = {
   email?: string[];
   policy?: string;
   verificationCode?: string[];
+  captcha?: string[];
 };
 
+export type LoginFormErrors = {
+  password?: string[];
+  email?: string[];
+  verificationCode?: string[];
+  captcha?: string[];
+};
 
 export type AddressFormErrors = {
   city?: string[];
@@ -205,3 +213,18 @@ export interface VerificationResult {
   message: string;
   data?: any;
 }
+
+export type PrivacyPolicy = {
+  id: number;
+  text: string;
+  site_url: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type PrivacyPolicyFormErrors = {
+  text?: string[];
+  site_url?: string[];
+  email?: string[];
+};

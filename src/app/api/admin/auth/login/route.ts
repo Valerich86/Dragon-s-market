@@ -22,7 +22,7 @@ async function validateUserCredentials(
 }> {
   try {
     const result = await pool.query(
-      `SELECT id, first_name, password FROM customers WHERE email = $1`,
+      `SELECT id, first_name, password FROM customers WHERE email = $1 AND role IN ('admin', 'superadmin')`,
       [email.toLowerCase()],
     );
 
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
 
       if (!validationResult.isValid) {
         return NextResponse.json(
-          { errors: { password: ["Неверный email или пароль"] } },
+          { errors: { password: ["Недостаточно прав"] } },
           { status: 401 },
         );
       }
@@ -105,7 +105,7 @@ export async function POST(req: Request) {
       // Сохраняем код во временной таблице
       await pool.query(
         `INSERT INTO temp_auth_codes (user_id, email, code, expires_at, ip_address, purpose)
-         VALUES ($1, $2, $3, NOW() + INTERVAL '10 minutes', $4, 'login')`,
+         VALUES ($1, $2, $3, NOW() + INTERVAL '10 minutes', $4, 'admin_login')`,
         [validationResult.userId, email.toLowerCase(), code, ip],
       );
 
@@ -164,7 +164,7 @@ export async function POST(req: Request) {
       // Проверяем существование и валидность кода в БД
       const result = await pool.query(
         `SELECT * FROM temp_auth_codes
-         WHERE email = $1 AND code = $2 AND expires_at > NOW() AND purpose='login'`,
+         WHERE email = $1 AND code = $2 AND expires_at > NOW() AND purpose='admin_login'`,
         [email.toLowerCase(), verificationCode],
       );
       if (result.rows.length === 0) {
@@ -186,16 +186,16 @@ export async function POST(req: Request) {
       ]);
 
       // Создаём токен сессии
-      const token = await createSessionToken(loginCode.user_id, "customer");
+      const token = await createSessionToken(loginCode.user_id, "admin");
 
       const response = NextResponse.json({ success: true });
 
       response.cookies.set({
-        name: "dragon_bazar_session", // Отдельное имя cookie для админов
+        name: "dragon_bazar_session_admin", // Отдельное имя cookie для админов
         value: token,
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        maxAge: 60 * 60 * 24 * 120, // 120 дней
+        maxAge: 60 * 60 * 24 * 1, // 1 день
         path: "/",
         sameSite: "strict",
       });

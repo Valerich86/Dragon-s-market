@@ -1,12 +1,12 @@
-import { z } from "zod";
 import { pool } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { createSessionToken } from "@/lib/auth";
 import { NextResponse } from "next/server";
-import { checkMemoryRateLimit } from "@/lib/memory-rate-limiter";
+import { RegistrationSchema } from "@/lib/validation";
+import { verifyCaptcha } from "@/lib/captcha";
 import {
   generateVerificationCode,
-  sendVerificationCode,
+  sendEmail,
 } from "@/lib/email-service";
 
 // проверка логина
@@ -15,85 +15,12 @@ async function checkEmailAvailability(email: string): Promise<boolean> {
     const data = await pool.query(`SELECT * FROM customers WHERE email=$1`, [
       email,
     ]);
+    console.log(data.rows[0])
     return data.rows.length === 0;
   } catch (error) {
     throw new Error("Ошибка проверки данных почты.");
   }
 }
-
-const RegistrationFormSchema = z
-  .object({
-    first_name: z
-      .string()
-      .trim()
-      .min(1, "Введите значение")
-      .max(50, "Слишком длинное значение")
-      .refine(
-        (value) => {
-          if (value.trim() === "") return true;
-          return /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value);
-        },
-        {
-          message: "Есть недопустимые символы",
-        },
-      ),
-    last_name: z
-      .string()
-      .trim()
-      .min(1, "Введите значение")
-      .max(50, "Слишком длинное значение")
-      .refine(
-        (value) => {
-          if (value.trim() === "") return true;
-          return /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value);
-        },
-        {
-          message: "Есть недопустимые символы",
-        },
-      ),
-    phone: z
-      .string()
-      .regex(
-        /^(\+7|8)?[\s\-]?\(?[0-9]{3}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/,
-        "Телефон должен соответствовать формату: +7XXXXXXXXXX или 8XXXXXXXXXX",
-      )
-      .transform((phone) => {
-        const digits = phone.replace(/\D/g, "");
-        if (digits.startsWith("8") || digits.startsWith("7")) {
-          return `+7${digits.slice(1)}`;
-        }
-        return `+${digits}`;
-      }),
-    email: z
-      .string()
-      .trim()
-      .email("Введите корректный email-адрес")
-      .min(1, "Введите email")
-      .max(254, "Email слишком длинный (максимум 254 символа)")
-      .refine((value) => value.toLowerCase() === value, {
-        message: "Email должен быть в нижнем регистре",
-      })
-      .refine(
-        async (value) => {
-          const isAvailable = await checkEmailAvailability(value.toLowerCase());
-          return isAvailable;
-        },
-        { message: "Этот email уже зарегистрирован" },
-      ),
-    password: z
-      .string()
-      .trim()
-      .min(8, "Пароль должен содержать минимум 8 символов")
-      .regex(/[a-z]/, "Пароль должен содержать хотя бы одну строчную букву")
-      .regex(/[A-Z]/, "Пароль должен содержать хотя бы одну прописную букву")
-      .regex(/\d/, "Пароль должен содержать хотя бы одну цифру"),
-    confirmPassword: z.string(),
-    verificationCode: z.string().optional(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Пароли не совпадают",
-    path: ["confirmPassword"],
-  });
 
 export async function POST(req: Request) {
   try {
@@ -102,50 +29,52 @@ export async function POST(req: Request) {
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
       req.headers.get("x-real-ip") ||
       "127.0.0.1";
-    // Проверяем лимит: 5 запросов за 1 минуту
-    const { allowed, resetAfter } = checkMemoryRateLimit(ip, 5, 1);
-
-    if (!allowed) {
-      // Логируем попытку брутфорса в БД
-      try {
-        await pool.query(
-          `INSERT INTO security_logs (ip_address, action, timestamp, details)
-           VALUES ($1, $2, NOW(), $3)`,
-          [
-            ip,
-            "попытка брутфорса",
-            JSON.stringify({
-              endpoint: "/api/auth/register",
-              resetAfter: resetAfter,
-              userAgent: req.headers.get("user-agent"),
-            }),
-          ],
-        );
-      } catch (logError) {
-        console.error("Ошибка логирования попытки брутфорса:", logError);
-        // Продолжаем выполнение, даже если логирование не удалось
-      }
-      return NextResponse.json(
-        {
-          error: `Слишком много попыток. Повторите через ${resetAfter} секунд.`,
-          resetAfter,
-        },
-        { status: 429 }, // HTTP 429 Too Many Requests
-      );
-    }
-
     const body = await req.json();
-    const validatedFields = await RegistrationFormSchema.safeParseAsync(body);
+    const validatedFields = await RegistrationSchema.safeParseAsync(body);
 
     if (!validatedFields.success) {
+      console.log(validatedFields.error.flatten().fieldErrors)
       return NextResponse.json(
         { errors: validatedFields.error.flatten().fieldErrors },
         { status: 400 },
       );
     }
 
-    const { first_name, last_name, phone, password, email, verificationCode } =
+    const { first_name, last_name, phone, password, email, verificationCode, captchaToken } =
       validatedFields.data;
+    // ПРОВЕРКА reCAPTCHA ПЕРЕД ПРОВЕРКОЙ УЧЁТНЫХ ДАННЫХ
+    if (!verificationCode) {
+      // Проверяем CAPTCHA только на первом этапе (до отправки кода)
+      if (!captchaToken) {
+        console.log("Требуется подтверждение reCAPTCHA");
+        return NextResponse.json(
+          { errors: { captcha: ["Требуется подтверждение reCAPTCHA"] } },
+          { status: 400 },
+        );
+      }
+
+      const captchaValid = await verifyCaptcha(captchaToken);
+      if (!captchaValid) {
+        return NextResponse.json(
+          {
+            errors: {
+              captcha: [
+                "Проверка reCAPTCHA не пройдена на этапе подтверждения",
+              ],
+            },
+          },
+          { status: 400 },
+        );
+      }
+    }
+
+    const emailIsAvailable = await checkEmailAvailability(email);
+    if (!emailIsAvailable) {
+      return NextResponse.json(
+        { errors: { email: ["Этот email уже зарегистрирован"] } },
+        { status: 400 },
+      );
+    }
 
     // Если нет кода подтверждения — отправляем его
     if (!verificationCode) {
@@ -153,23 +82,13 @@ export async function POST(req: Request) {
 
       // Сохраняем код и данные пользователя во временной таблице
       await pool.query(
-        `INSERT INTO temp_users (first_name, last_name, phone, password_hash, email, verification_code, verification_expires, ip_address)
-         VALUES ($1, $2, $3, $4, $5, $6, NOW() + INTERVAL '10 minutes', $7)
-         ON CONFLICT (email) DO UPDATE
-         SET verification_code = $6, verification_expires = NOW() + INTERVAL '10 minutes'`,
-        [
-          first_name,
-          last_name,
-          phone,
-          await bcrypt.hash(password, 10),
-          email.toLowerCase(),
-          code,
-          ip,
-        ],
+        `INSERT INTO temp_auth_codes (email, code, expires_at, ip_address, purpose)
+        VALUES ($1, $2, NOW() + INTERVAL '10 minutes', $3, 'register')`,
+        [email.toLowerCase(), code, ip ]
       );
 
       // Отправляем код на email
-      const emailSent = await sendVerificationCode(email, code);
+      const emailSent = await sendEmail(email, "auth-code", code);
 
       if (!emailSent) {
         return NextResponse.json(
@@ -192,10 +111,32 @@ export async function POST(req: Request) {
 
     // Если код предоставлен — проверяем его
     if (verificationCode) {
+      if (!/^\d{6}$/.test(verificationCode)) {
+        return NextResponse.json(
+          { errors: { verificationCode: ["Должно быть 6 цифр"] } },
+          { status: 400 },
+        );
+      }
+      // ДОПОЛНИТЕЛЬНАЯ ПРОВЕРКА reCAPTCHA НА ВТОРОМ ЭТАПЕ (опционально)
+      if (captchaToken) {
+        const captchaValid = await verifyCaptcha(captchaToken);
+        if (!captchaValid) {
+          return NextResponse.json(
+            {
+              errors: {
+                captcha: [
+                  "Проверка reCAPTCHA не пройдена на этапе подтверждения",
+                ],
+              },
+            },
+            { status: 400 },
+          );
+        }
+      }
       // Проверяем существование и валидность кода в БД
       const result = await pool.query(
-        `SELECT * FROM temp_users
-         WHERE email = $1 AND verification_code = $2 AND verification_expires > NOW()`,
+        `SELECT * FROM temp_auth_codes
+         WHERE email = $1 AND code = $2 AND expires_at > NOW() AND purpose='register'`,
         [email.toLowerCase(), verificationCode],
       );
 
@@ -206,17 +147,15 @@ export async function POST(req: Request) {
         );
       }
 
-      const tempUser = result.rows[0];
-
       // Переносим пользователя в основную таблицу
       const userResult = await pool.query(
         `INSERT INTO customers (first_name, last_name, phone, password, email)
-         VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+         VALUES ($1, $2, $3, $4, $5) RETURNING id, role`,
         [
-          tempUser.first_name,
-          tempUser.last_name,
-          tempUser.phone,
-          tempUser.password_hash,
+          first_name,
+          last_name,
+          phone,
+          await bcrypt.hash(password, 10),
           email.toLowerCase(),
         ],
       );
@@ -225,7 +164,7 @@ export async function POST(req: Request) {
         throw new Error("Не удалось создать пользователя");
       }
 
-      const { id } = userResult.rows[0];
+      const { id, role } = userResult.rows[0];
 
       // Удаляем временную запись
       await pool.query(`DELETE FROM temp_users WHERE email = $1`, [
@@ -233,7 +172,7 @@ export async function POST(req: Request) {
       ]);
 
       // Создаём токен сессии
-      const token = await createSessionToken(id);
+      const token = await createSessionToken(id, role);
 
       // Логируем согласие на обработку данных
       await pool.query(
@@ -247,16 +186,19 @@ export async function POST(req: Request) {
         ],
       );
 
-      return NextResponse.json(
-        { success: true },
-        {
-          status: 200,
-          headers: {
-            "Set-Cookie": `dragon_bazar_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=10368000`,
-            "Content-Type": "application/json",
-          },
-        },
-      );
+      const response = NextResponse.json({ success: true });
+
+      response.cookies.set({
+        name: "dragon_bazar_session", // Отдельное имя cookie для админов
+        value: token,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 60 * 60 * 24 * 120, // 120 дней
+        path: "/",
+        sameSite: "strict",
+      });
+
+      return response;
     }
   } catch (error) {
     console.error("Ошибка регистрации:", error);

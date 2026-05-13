@@ -36,7 +36,7 @@ export default async function ProfileLayout({
         Добрый день, {user.general.first_name} !
       </h1>
       <div className="flex gap-5 items-center mt-3">
-        <p className="text-xs">тел.для связи: {user.general.phone}</p>
+        <p className="text-xs">тел. для связи: {user.general.phone}</p>
         <Link href={`/profile/phone`} className="link">
           <AiFillEdit size={20} />
         </Link>

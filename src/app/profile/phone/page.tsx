@@ -46,7 +46,7 @@ export default function PhonePage() {
     >
       <fieldset>
         <label className="label">
-          Новый номер (логин для аутентификации)
+          Новый номер 
         </label>
         <input
           className="input"

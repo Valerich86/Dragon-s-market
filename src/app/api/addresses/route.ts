@@ -1,92 +1,11 @@
-import { z } from "zod";
 import { pool } from "@/lib/db";
 import { NextResponse } from "next/server";
 import type { Address } from "@/lib/types";
-import { validateAndSanitize } from "@/lib/validation";
-
-export const AddressFormSchema = z.object({
-  id: z.number(),
-  customer_id: z.number(),
-  city: z
-    .string()
-    .trim()
-    .min(1, "Введите значение")
-    .max(30, "Слишком длинное значение")
-    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
-      message: "Есть недопустимые символы",
-    }),
-  street: z
-    .string()
-    .trim()
-    .min(1, "Введите значение")
-    .max(30, "Слишком длинное значение")
-    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
-      message: "Есть недопустимые символы",
-    }),
-  house: z
-    .string()
-    .trim()
-    .min(1, "Введите значение")
-    .max(20, "Слишком длинное значение")
-    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
-      message: "Есть недопустимые символы",
-    }),
-  entrance: z
-    .string()
-    .trim()
-    .min(1, "Введите значение")
-    .max(20, "Слишком длинное значение")
-    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
-      message: "Есть недопустимые символы",
-    }),
-  floor: z
-    .string()
-    .trim()
-    .optional()
-    .nullable()
-    .default(null)
-    .refine(
-      (value) => {
-        if (value === null || value === undefined || value === "") return true;
-        const num = parseInt(value, 10);
-        return !isNaN(num) && num >= 0 && num <= 999;
-      },
-      {
-        message: "Этаж должен быть числом от 0 до 999",
-      },
-    ),
-  apartment: z
-    .string()
-    .trim()
-    .min(1, "Введите значение")
-    .max(20, "Слишком длинное значение")
-    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
-      message: "Есть недопустимые символы",
-    }),
-  intercom_number: z
-    .string()
-    .trim()
-    .max(20, "Слишком длинное значение")
-    .optional()
-    .default("")
-    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
-      message: "Есть недопустимые символы",
-    }),
-  additional_info: z
-    .string()
-    .trim()
-    .max(500, "Дополнительная информация не может быть длиннее 500 символов")
-    .optional()
-    .default("")
-    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
-      message: "Есть недопустимые символы",
-    }),
-  is_default: z.boolean().optional(),
-});
+import { AddressSchema } from "@/lib/validation";
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const validatedFields = await AddressFormSchema.safeParseAsync(body);
+  const validatedFields = await AddressSchema.safeParseAsync(body);
 
   if (!validatedFields.success) {
     const errors = validatedFields.error.flatten().fieldErrors;

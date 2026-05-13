@@ -1,6 +1,6 @@
 import { pool } from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
-import { validateAndSanitize } from "@/lib/validation";
+import { textAreaValidation } from "@/lib/validation";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -58,27 +58,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const validationResult = validateAndSanitize(notes, {
-      allowMarkdown: true,
-      maxLength: 500,
-    });
+    const validationResult = textAreaValidation(notes, 500);
     if (!validationResult.isSafe) {
-      const ip =
-        request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-        request.headers.get("x-real-ip") ||
-        "127.0.0.1";
-      await pool.query(
-        `INSERT INTO security_logs (ip_address, action, timestamp, details)
-          VALUES ($1, $2, NOW(), $3)`,
-        [
-          ip,
-          validationResult.error,
-          JSON.stringify({
-            endpoint: "/api/orders",
-            userAgent: request.headers.get("user-agent"),
-          }),
-        ],
-      );
       return NextResponse.json(
         { error: validationResult.error },
         { status: 400 },
@@ -107,7 +88,7 @@ export async function POST(request: NextRequest) {
         cart_items,
         total_items,
         total_sum,
-        validationResult.cleanedValue,
+        notes,
       ],
     );
     const { id, created_at } = result.rows[0];

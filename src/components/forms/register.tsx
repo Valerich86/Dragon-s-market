@@ -8,6 +8,7 @@ import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
 import CustomButton from "../UI/custom-button";
 import { RegisterFormErrors } from "@/lib/types";
 import { PiEyesLight } from "react-icons/pi";
+import Captcha from "../tools/captcha";
 
 export default function RegisterForm() {
   const [form, setForm] = useState({
@@ -26,16 +27,24 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
-  const [requiresVerification, setRequiresVerification] = useState(false); // Флаг 2FA
+  const [requiresVerification, setRequiresVerification] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrors(undefined);
     setIsLoading(true);
+
+    if (!captchaToken) {
+      setErrors({ captcha: ["Подтвердите, что вы не робот"] });
+      setIsLoading(false);
+      return;
+    }
+
     const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({ ...form, captchaToken }),
     });
     if (response.ok) {
       const data = await response.json();
@@ -45,7 +54,7 @@ export default function RegisterForm() {
       } else {
         redirect("/profile");
       }
-    } else if (response.status === 400) {
+    } else if ([400, 401, 500].includes(response.status)) {
       setErrors((await response.json()).errors);
     } else {
       console.error("Ошибка регистрации");
@@ -216,20 +225,33 @@ export default function RegisterForm() {
       </div>
 
       {!requiresVerification && (
-        <CustomButton
-          text="Зарегистрироваться"
-          buttonType="submit"
-          options="h-10 mt-6 px-6 min-w-70"
-          isLoading={isLoading}
-          disabled={!privacyAgreed}
-        />
+        <>
+          <Captcha onChange={setCaptchaToken} />
+          <div
+            aria-live="polite"
+            aria-atomic="true"
+            className="w-full text-center"
+          >
+            {errors?.captcha &&
+              errors.captcha.map((error: string, i) => (
+                <FormError errorField={error} key={i} />
+              ))}
+          </div>
+          <CustomButton
+            text="Зарегистрироваться"
+            buttonType="submit"
+            options="h-10 mt-6 px-6 min-w-70"
+            isLoading={isLoading}
+            disabled={!privacyAgreed || !captchaToken}
+          />
+        </>
       )}
 
       {requiresVerification && (
         <>
           <p className="text-sm text-gray-500 mt-2">
-            Код отправлен на <span className="italic">{form.email}</span>. Если не пришло письмо, проверьте
-            папку «Спам».
+            Код отправлен на <span className="italic">{form.email}</span>. Если
+            не пришло письмо, проверьте папку «Спам».
           </p>
           <fieldset>
             <label className="label">
@@ -264,7 +286,7 @@ export default function RegisterForm() {
         href={"/auth/login"}
         className="link mt-2 lg:mt-5 italic h-10 flex items-center justify-center text-gray-200 text-right"
       >
-        Уже зарегистрированы? ⭢
+        Уже зарегистрированы? ➢
       </Link>
     </form>
   );

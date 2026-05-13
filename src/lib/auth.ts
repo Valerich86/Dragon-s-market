@@ -1,30 +1,46 @@
 import { SignJWT, jwtVerify } from "jose";
 
-const secretKey = new TextEncoder().encode(process.env.JWT_SECRET);
+const secretKey = new TextEncoder().encode(process.env.JWT_SECRET!);
 const alg = "HS256";
 
-// Создание токена (вход)
-export async function createSessionToken(userId?: number) {
-  return new SignJWT({ userId })
+export async function createSessionToken(
+  userId: number,
+  role: string
+) {
+  return new SignJWT({ userId, role })
     .setProtectedHeader({ alg })
-    .setExpirationTime("1d")
+    .setExpirationTime("7d") // Увеличенный срок для админов
     .sign(secretKey);
 }
 
-// Проверка токена (получение пользователя)
-export async function verifySession() {
+export async function verifySession(name:string = "dragon_bazar_session") {
   try {
     const cookieStore = await import("next/headers").then((mod) =>
       mod.cookies(),
     );
-    const token = cookieStore.get("dragon_bazar_session")?.value;
+    const token = cookieStore.get(name)?.value;
     if (!token) return null;
+
     const { payload } = await jwtVerify(token, secretKey);
+
     return {
       userId: payload.userId as number,
+      role: payload.role as string,
     };
-  } catch {
+  } catch (error) {
+    console.error("Admin session verification error:", error);
     return null;
   }
 }
 
+// Утилита для проверки прав администратора
+export async function requireAdminAccess() {
+  const user = await verifySession("dragon_bazar_session_admin");
+  if (!user) {
+    throw new Error("Authentication required");
+  }
+  if (user.role !== "admin" && user.role !== "superadmin") {
+    throw new Error("Admin access required");
+  }
+  return user;
+}
