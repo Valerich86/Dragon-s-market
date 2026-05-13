@@ -111,16 +111,6 @@ export default function AdminLoginForm() {
       {!requiresVerification && (
         <>
           <Captcha onChange={setCaptchaToken} />
-          <div
-            aria-live="polite"
-            aria-atomic="true"
-            className="w-full text-center"
-          >
-            {errors?.captcha &&
-              errors.captcha.map((error: string, i) => (
-                <FormError errorField={error} key={i} />
-              ))}
-          </div>
           <CustomButton
             text="Войти"
             buttonType="submit"
@@ -130,6 +120,12 @@ export default function AdminLoginForm() {
           />
         </>
       )}
+      <div aria-live="polite" aria-atomic="true" className="w-full text-center">
+        {errors?.captcha &&
+          errors.captcha.map((error: string, i) => (
+            <FormError errorField={error} key={i} />
+          ))}
+      </div>
       {requiresVerification && (
         <>
           <p className="text-sm text-gray-500 mt-2">
