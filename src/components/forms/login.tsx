@@ -1,6 +1,6 @@
 "use client";
 
-import { SubmitEvent, useState } from "react";
+import { SubmitEvent, useState, useEffect } from "react";
 import { PiEyesLight } from "react-icons/pi";
 import { redirect } from "next/navigation";
 import Captcha from "../tools/captcha";
@@ -20,7 +20,8 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [requiresVerification, setRequiresVerification] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-
+  const isProduction = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
+  
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     setIsLoading(true);
     e.preventDefault();
@@ -130,7 +131,7 @@ export default function LoginForm() {
             buttonType="submit"
             options="h-10 mt-6 px-3"
             isLoading={isLoading}
-            disabled={!captchaToken}
+            disabled={isProduction && !captchaToken}
           />
         </>
       )}
@@ -166,6 +167,7 @@ export default function LoginForm() {
             buttonType="submit"
             options="h-10 mt-6 px-6 min-w-70"
             isLoading={isLoading}
+            disabled={isProduction && !captchaToken}
           />
         </>
       )}

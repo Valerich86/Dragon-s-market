@@ -84,10 +84,7 @@ export async function POST(req: Request) {
           { status: 400 },
         );
       }
-    }
 
-    // Если код не предоставлен — отправляем его
-    if (!verificationCode) {
       const validationResult = await validateUserCredentials(email, password);
 
       if (!validationResult.isValid) {
@@ -142,21 +139,6 @@ export async function POST(req: Request) {
           { status: 400 },
         );
       }
-      // ДОПОЛНИТЕЛЬНАЯ ПРОВЕРКА reCAPTCHA НА ВТОРОМ ЭТАПЕ (опционально)
-      if (captchaToken) {
-        const captchaValid = await verifyCaptcha(captchaToken, ip);
-        if (!captchaValid.success) {
-          return NextResponse.json(
-            {
-              errors: {
-                captcha: [captchaValid.error],
-              },
-            },
-            { status: 400 },
-          );
-        }
-      }
-
       // Проверяем существование и валидность кода в БД
       const result = await pool.query(
         `SELECT * FROM temp_auth_codes
