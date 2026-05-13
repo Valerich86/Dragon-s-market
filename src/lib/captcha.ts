@@ -1,8 +1,10 @@
 export async function verifyCaptcha(
   token: string,
-): Promise<boolean> {
+  clientIp?: string
+): Promise<{ success: boolean; score?: number; error?: string }> {
   const isProduction = process.env.NODE_ENV === "production";
-  if (!isProduction) return true;
+  if (!isProduction) return { success: true };
+
   try {
     const response = await fetch(
       `https://www.google.com/recaptcha/api/siteverify`,
@@ -12,13 +14,40 @@ export async function verifyCaptcha(
         body: new URLSearchParams({
           secret: process.env.RECAPTCHA_SECRET_KEY!,
           response: token,
+          ...(clientIp && { remoteip: clientIp }), // Передаём IP, если есть
         }).toString(),
       },
     );
+
     const data = await response.json();
-    return data.success;
+
+    // Логируем полный ответ от Google для отладки
+    console.log("Ответ reCAPTCHA API:", data);
+
+    if (!data.success) {
+      const errorCodes = data["error-codes"] || [];
+      console.error("Ошибки reCAPTCHA:", errorCodes);
+      return {
+        success: false,
+        error: `Ошибка reCAPTCHA: ${errorCodes.join(", ")}`,
+      };
+    }
+
+    // Для reCAPTCHA v3 проверяем score
+    if (data.score !== undefined && data.score < 0.5) {
+      return {
+        success: false,
+        score: data.score,
+        error: "Оценка reCAPTCHA слишком низкая",
+      };
+    }
+
+    return { success: true, score: data.score };
   } catch (error) {
-    console.error("Ошибка проверки reCAPTCHA:", error);
-    return false;
+    console.error("Критическая ошибка проверки reCAPTCHA:", error);
+    return {
+      success: false,
+      error: "Ошибка связи с сервером reCAPTCHA",
+    };
   }
 }

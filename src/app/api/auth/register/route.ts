@@ -4,10 +4,7 @@ import { createSessionToken } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { RegistrationSchema } from "@/lib/validation";
 import { verifyCaptcha } from "@/lib/captcha";
-import {
-  generateVerificationCode,
-  sendEmail,
-} from "@/lib/email-service";
+import { generateVerificationCode, sendEmail } from "@/lib/email-service";
 
 // проверка логина
 async function checkEmailAvailability(email: string): Promise<boolean> {
@@ -15,7 +12,7 @@ async function checkEmailAvailability(email: string): Promise<boolean> {
     const data = await pool.query(`SELECT * FROM customers WHERE email=$1`, [
       email,
     ]);
-    console.log(data.rows[0])
+    console.log(data.rows[0]);
     return data.rows.length === 0;
   } catch (error) {
     throw new Error("Ошибка проверки данных почты.");
@@ -33,15 +30,22 @@ export async function POST(req: Request) {
     const validatedFields = await RegistrationSchema.safeParseAsync(body);
 
     if (!validatedFields.success) {
-      console.log(validatedFields.error.flatten().fieldErrors)
+      console.log(validatedFields.error.flatten().fieldErrors);
       return NextResponse.json(
         { errors: validatedFields.error.flatten().fieldErrors },
         { status: 400 },
       );
     }
 
-    const { first_name, last_name, phone, password, email, verificationCode, captchaToken } =
-      validatedFields.data;
+    const {
+      first_name,
+      last_name,
+      phone,
+      password,
+      email,
+      verificationCode,
+      captchaToken,
+    } = validatedFields.data;
     // ПРОВЕРКА reCAPTCHA ПЕРЕД ПРОВЕРКОЙ УЧЁТНЫХ ДАННЫХ
     if (!verificationCode) {
       // Проверяем CAPTCHA только на первом этапе (до отправки кода)
@@ -53,14 +57,12 @@ export async function POST(req: Request) {
         );
       }
 
-      const captchaValid = await verifyCaptcha(captchaToken);
-      if (!captchaValid) {
+      const captchaValid = await verifyCaptcha(captchaToken, ip);
+      if (!captchaValid.success) {
         return NextResponse.json(
           {
             errors: {
-              captcha: [
-                "Проверка reCAPTCHA не пройдена на этапе подтверждения",
-              ],
+              captcha: [captchaValid.error],
             },
           },
           { status: 400 },
@@ -84,7 +86,7 @@ export async function POST(req: Request) {
       await pool.query(
         `INSERT INTO temp_auth_codes (email, code, expires_at, ip_address, purpose)
         VALUES ($1, $2, NOW() + INTERVAL '10 minutes', $3, 'register')`,
-        [email.toLowerCase(), code, ip ]
+        [email.toLowerCase(), code, ip],
       );
 
       // Отправляем код на email
@@ -119,14 +121,12 @@ export async function POST(req: Request) {
       }
       // ДОПОЛНИТЕЛЬНАЯ ПРОВЕРКА reCAPTCHA НА ВТОРОМ ЭТАПЕ (опционально)
       if (captchaToken) {
-        const captchaValid = await verifyCaptcha(captchaToken);
-        if (!captchaValid) {
+        const captchaValid = await verifyCaptcha(captchaToken, ip);
+        if (!captchaValid.success) {
           return NextResponse.json(
             {
               errors: {
-                captcha: [
-                  "Проверка reCAPTCHA не пройдена на этапе подтверждения",
-                ],
+                captcha: [captchaValid.error],
               },
             },
             { status: 400 },

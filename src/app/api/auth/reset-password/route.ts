@@ -18,19 +18,20 @@ export async function POST(req: Request) {
       );
     }
 
-    const { password, confirmPassword, token, captchaToken } = validatedFields.data;
+    const { password, token, captchaToken } =
+      validatedFields.data;
     const captchaValid = await verifyCaptcha(captchaToken);
-    if (!captchaValid) {
+    if (!captchaValid.success) {
       return NextResponse.json(
         {
           errors: {
-            captcha: ["Проверка reCAPTCHA не пройдена на этапе подтверждения"],
+            captcha: [captchaValid.error],
           },
         },
         { status: 400 },
       );
     }
-    
+
     // Ищем запись с токеном в БД
     const tokenResult = await pool.query(`
       SELECT user_id, token AS hashed_token FROM password_reset_tokens
@@ -39,8 +40,8 @@ export async function POST(req: Request) {
 
     if (tokenResult.rowCount === 0) {
       return NextResponse.json(
-        { success: false, message: 'Неверный или истёкший токен' },
-        { status: 400 }
+        { success: false, message: "Неверный или истёкший токен" },
+        { status: 400 },
       );
     }
 
@@ -59,28 +60,32 @@ export async function POST(req: Request) {
 
     if (!found || user_id === null) {
       return NextResponse.json(
-        { errors: {password: ["Неверный или истёкший токен"]} },
-        { status: 400 }
+        { errors: { password: ["Неверный или истёкший токен"] } },
+        { status: 400 },
       );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await pool.query('BEGIN');
+    await pool.query("BEGIN");
 
     try {
-      await pool.query(`UPDATE customers SET password = $1 WHERE id = $2`, [hashedPassword, user_id]);
-      await pool.query(`DELETE FROM password_reset_tokens WHERE user_id = $1`, [user_id]);
-      await pool.query('COMMIT');
+      await pool.query(`UPDATE customers SET password = $1 WHERE id = $2`, [
+        hashedPassword,
+        user_id,
+      ]);
+      await pool.query(`DELETE FROM password_reset_tokens WHERE user_id = $1`, [
+        user_id,
+      ]);
+      await pool.query("COMMIT");
     } catch (updateError) {
-      await pool.query('ROLLBACK');
+      await pool.query("ROLLBACK");
       throw updateError;
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Пароль успешно изменён. Теперь вы можете войти в систему.',
+      message: "Пароль успешно изменён. Теперь вы можете войти в систему.",
     });
-
   } catch (error) {
     console.error("Ошибка сервера:", error);
     return NextResponse.json({ status: 500 });

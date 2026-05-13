@@ -62,7 +62,6 @@ export async function POST(req: Request) {
     }
 
     const { email, password, verificationCode, captchaToken } = validatedFields.data;
-    // ПРОВЕРКА reCAPTCHA ПЕРЕД ПРОВЕРКОЙ УЧЁТНЫХ ДАННЫХ
     if (!verificationCode) {
       // Проверяем CAPTCHA только на первом этапе (до отправки кода)
       if (!captchaToken) {
@@ -73,14 +72,12 @@ export async function POST(req: Request) {
         );
       }
 
-      const captchaValid = await verifyCaptcha(captchaToken);
-      if (!captchaValid) {
+      const captchaValid = await verifyCaptcha(captchaToken, ip);
+      if (!captchaValid.success) {
         return NextResponse.json(
           {
             errors: {
-              captcha: [
-                "Проверка reCAPTCHA не пройдена на этапе подтверждения",
-              ],
+              captcha: [captchaValid.error],
             },
           },
           { status: 400 },
@@ -144,16 +141,13 @@ export async function POST(req: Request) {
           { status: 400 },
         );
       }
-      // ДОПОЛНИТЕЛЬНАЯ ПРОВЕРКА reCAPTCHA НА ВТОРОМ ЭТАПЕ (опционально)
       if (captchaToken) {
-        const captchaValid = await verifyCaptcha(captchaToken);
-        if (!captchaValid) {
+        const captchaValid = await verifyCaptcha(captchaToken, ip);
+        if (!captchaValid.success) {
           return NextResponse.json(
             {
               errors: {
-                captcha: [
-                  "Проверка reCAPTCHA не пройдена на этапе подтверждения",
-                ],
+                captcha: [captchaValid.error ],
               },
             },
             { status: 400 },

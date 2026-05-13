@@ -28,11 +28,11 @@ export async function POST(req: Request) {
     }
 
     const captchaValid = await verifyCaptcha(captchaToken);
-    if (!captchaValid) {
+    if (!captchaValid.success) {
       return NextResponse.json(
         {
           errors: {
-            captcha: ["Проверка reCAPTCHA не пройдена на этапе подтверждения"],
+            captcha: [captchaValid.error],
           },
         },
         { status: 400 },
