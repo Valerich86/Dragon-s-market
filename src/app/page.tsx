@@ -4,7 +4,7 @@ import ContentSection from "@/components/sections/content";
 import { useCloudPath } from "@/lib/cloud";
 import DiscountPlan from "@/components/sections/discount-plan";
 import VideoCarouselSection from "@/components/sections/video-carousel";
-import { getContent } from "@/lib/actions";
+import { getContent, getDiscountedProducts } from "@/lib/actions";
 import Link from "next/link";
 import Headline from "@/components/UI/headline";
 
@@ -23,8 +23,8 @@ export default async function Home() {
       aria-label="главная страница"
       className={`w-full overflow-x-hidden pb-50`}
     >
-      <HeroSection cloudPath={cloudPath} />
-      <DiscountPlan />
+      <HeroSection />
+      <DiscountPlan cloudPath={cloudPath}/>
       <div className="x-spacing mt-10">
         {news && news.length !== 0 && <ContentSection content={news} />}
         <div className="w-full flex justify-end">

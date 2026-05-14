@@ -1,8 +1,8 @@
-"use client";
-
 import { font_mg, font_heading } from "@/lib/fonts";
 import Image from "next/image";
 import Headline from "../UI/headline";
+import { getProductOfADay } from "@/lib/actions";
+import DayProduct from "../UI/day-product";
 
 type DayInfo = {
   day: string;
@@ -75,7 +75,8 @@ const daysInfo2 = [
   },
 ];
 
-export default function DiscountPlan() {
+export default async function DiscountPlan({cloudPath}: {cloudPath: string}) {
+  const { product } = await getProductOfADay();
   const DayItem = ({ item }: { item: DayInfo }) => {
     return (
       <div
@@ -101,7 +102,7 @@ export default function DiscountPlan() {
   };
 
   return (
-    <section aria-label="план скидок" className="section x-spacing">
+    <section aria-label="план скидок" className="section z-20 bg-primary x-spacing relative">
       <Headline text="Драконий план скидок" emojiIndex={19}/>
       <div className="w-full flex flex-wrap gap-1 lg:gap-2 justify-center text-xs lg:text-lg lg:mt-10">
         <div className="flex flex-col gap-1 lg:gap-2 w-full lg:w-[45%]">
@@ -119,6 +120,7 @@ export default function DiscountPlan() {
         </div>
         <p>скидка действует только при офлайн покупке*</p>
       </div>
+      {product && <DayProduct cloudPath={cloudPath} product={product} />}
     </section>
   );
 }

@@ -67,11 +67,12 @@ export default function General() {
         />
       </div>
       <Notification
-        text="Удаляя свою учётную запись, Вы не сможете использовать некоторые функции сайта. Согласны?"
-        showNotification={showWarning}
+        text="Удаляя свою учётную запись, Вы отзываете согласие на использование персональных данных, но не сможете использовать некоторые функции сайта. Согласны?"
+        show={showWarning}
+        withAcception
+        mood="evil"
         onAccept={handleDeleteProfile}
         onAbort={() => setShowWarning(false)}
-        notificationPurpose={"delete-user"}
       />
     </section>
   );

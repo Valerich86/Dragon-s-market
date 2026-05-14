@@ -82,11 +82,18 @@ export default function NavIcon({ href, icon, userId }: NavLinkProps) {
         </>
       )}
       <Notification
-        text="Вы действительно хотите выйти из учётной записи?"
-        notificationPurpose="logout"
-        showNotification={showNotification}
+        text={
+          userId !== 0
+            ? "Вы действительно хотите выйти из учётной записи?"
+            : "У Вас нет активной сессии"
+        }
+        withAcception
+        mood="evil"
+        show={showNotification}
         onAbort={() => setShowNotification(false)}
-        onAccept={handleLogout}
+        onAccept={
+          userId !== 0 ? handleLogout : () => setShowNotification(false)
+        }
       />
     </div>
   );

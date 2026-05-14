@@ -1,13 +1,14 @@
 "use client";
 
 import { SubmitEvent, useState } from "react";
-import { redirect } from "next/navigation";
-import FormError from "../UI/form-error";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { PiEyesLight } from "react-icons/pi";
 import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
+import Notification from "../UI/notification";
+import FormError from "../UI/form-error";
 import CustomButton from "../UI/custom-button";
 import { RegisterFormErrors } from "@/lib/types";
-import { PiEyesLight } from "react-icons/pi";
 import Captcha from "../tools/captcha";
 
 export default function RegisterForm() {
@@ -26,9 +27,11 @@ export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
   const [requiresVerification, setRequiresVerification] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const router = useRouter();
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -52,10 +55,18 @@ export default function RegisterForm() {
         // Переключаем форму в режим ввода кода
         setRequiresVerification(true);
       } else {
-        redirect("/profile");
+        setShowSuccess(true);
+        router.prefetch("/profile");
+        setTimeout(() => {
+          setShowSuccess(false);
+          router.replace("/profile");
+        }, 2000);
       }
     } else if ([400, 401, 500].includes(response.status)) {
       setErrors((await response.json()).errors);
+    } else if (response.status === 429) {
+      const { error } = await response.json();
+      window.alert(error);
     } else {
       console.error("Ошибка регистрации");
     }
@@ -288,6 +299,7 @@ export default function RegisterForm() {
       >
         Уже зарегистрированы? ➢
       </Link>
+      <Notification text={"Регистрация успешно завершена"} show={showSuccess} />
     </form>
   );
 }

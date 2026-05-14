@@ -12,7 +12,6 @@ async function checkEmailAvailability(email: string): Promise<boolean> {
     const data = await pool.query(`SELECT * FROM customers WHERE email=$1`, [
       email,
     ]);
-    console.log(data.rows[0]);
     return data.rows.length === 0;
   } catch (error) {
     throw new Error("Ошибка проверки данных почты.");
@@ -30,7 +29,6 @@ export async function POST(req: Request) {
     const validatedFields = await RegistrationSchema.safeParseAsync(body);
 
     if (!validatedFields.success) {
-      console.log(validatedFields.error.flatten().fieldErrors);
       return NextResponse.json(
         { errors: validatedFields.error.flatten().fieldErrors },
         { status: 400 },
@@ -50,7 +48,6 @@ export async function POST(req: Request) {
     if (!verificationCode) {
       // Проверяем CAPTCHA только на первом этапе (до отправки кода)
       if (!captchaToken) {
-        console.log("Требуется подтверждение reCAPTCHA");
         return NextResponse.json(
           { errors: { captcha: ["Требуется подтверждение reCAPTCHA"] } },
           { status: 400 },

@@ -2,12 +2,13 @@
 
 import { SubmitEvent, useState, useEffect } from "react";
 import { PiEyesLight } from "react-icons/pi";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Captcha from "../tools/captcha";
 import FormError from "../UI/form-error";
 import Link from "next/link";
 import CustomButton from "../UI/custom-button";
 import type { LoginFormErrors } from "@/lib/types";
+import Notification from "../UI/notification";
 
 export default function LoginForm() {
   const [form, setForm] = useState({
@@ -18,10 +19,12 @@ export default function LoginForm() {
   const [errors, setErrors] = useState<LoginFormErrors | undefined>(undefined);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [requiresVerification, setRequiresVerification] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const isProduction = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
-  
+  const isProduction = process.env.NEXT_PUBLIC_NODE_ENV === "production";
+  const router = useRouter();
+
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     setIsLoading(true);
     e.preventDefault();
@@ -44,11 +47,19 @@ export default function LoginForm() {
         // Переключаем форму в режим ввода кода
         setRequiresVerification(true);
       } else {
-        redirect("/profile");
+        setShowSuccess(true);
+        router.prefetch("/profile");
+        setTimeout(() => {
+          setShowSuccess(false);
+          router.replace("/profile");
+        }, 2000);
       }
     } else if ([400, 401, 500].includes(response.status)) {
       const { errors } = await response.json();
       setErrors(errors);
+    } else if (response.status === 429) {
+      const { error } = await response.json();
+      window.alert(error);
     } else {
       console.error("Ошибка аутентификации");
     }
@@ -177,6 +188,7 @@ export default function LoginForm() {
       >
         Ешё не зарегистрированы? ➢
       </Link>
+      <Notification text={"Вход успешно выполнен"} show={showSuccess} />
     </form>
   );
 }

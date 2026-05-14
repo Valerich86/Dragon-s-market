@@ -2,8 +2,9 @@
 
 import { SubmitEvent, useState } from "react";
 import { PiEyesLight } from "react-icons/pi";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import FormError from "../UI/form-error";
+import Notification from "../UI/notification";
 import CustomButton from "../UI/custom-button";
 import type { LoginFormErrors } from "@/lib/types";
 import Captcha from "../tools/captcha";
@@ -16,9 +17,11 @@ export default function AdminLoginForm() {
   });
   const [errors, setErrors] = useState<LoginFormErrors | undefined>(undefined);
   const [showPassword, setShowPassword] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [requiresVerification, setRequiresVerification] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const router = useRouter();
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     setIsLoading(true);
@@ -42,12 +45,19 @@ export default function AdminLoginForm() {
         // Переключаем форму в режим ввода кода
         setRequiresVerification(true);
       } else {
-        window.alert("Вход успешно выполнен");
-        redirect("/admin");
+        setShowSuccess(true);
+        router.prefetch("/admin");
+        setTimeout(() => {
+          setShowSuccess(false);
+          router.replace("/admin");
+        }, 2000);
       }
     } else if ([400, 401, 500].includes(response.status)) {
       const { errors } = await response.json();
       setErrors(errors);
+    } else if (response.status === 429) {
+      const { error } = await response.json();
+      window.alert(error);
     } else {
       console.error("Ошибка аутентификации");
     }
@@ -162,6 +172,7 @@ export default function AdminLoginForm() {
           />
         </>
       )}
+      <Notification text={"Вход успешно выполнен"} show={showSuccess} />
     </form>
   );
 }

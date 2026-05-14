@@ -11,7 +11,6 @@ export async function POST(req: Request) {
     const validatedFields = await EmailPhoneSchema.safeParseAsync(body);
 
     if (!validatedFields.success) {
-      console.log(validatedFields.error.flatten().fieldErrors);
       return NextResponse.json(
         { errors: validatedFields.error.flatten().fieldErrors },
         { status: 400 },
@@ -20,7 +19,6 @@ export async function POST(req: Request) {
 
     const { phone, email, captchaToken } = validatedFields.data;
     if (!captchaToken) {
-      console.log("Требуется подтверждение reCAPTCHA");
       return NextResponse.json(
         { errors: { captcha: ["Требуется подтверждение reCAPTCHA"] } },
         { status: 400 },

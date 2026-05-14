@@ -1,14 +1,13 @@
 "use client";
 
 import { SubmitEvent, useState } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import FormError from "../UI/form-error";
-import Link from "next/link";
-import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
 import CustomButton from "../UI/custom-button";
 import { RegisterFormErrors } from "@/lib/types";
 import { PiEyesLight } from "react-icons/pi";
 import Captcha from "../tools/captcha";
+import Notification from "../UI/notification";
 
 export default function ResetPasswordForm({ token }: { token: string }) {
   const [form, setForm] = useState({
@@ -21,8 +20,10 @@ export default function ResetPasswordForm({ token }: { token: string }) {
   );
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const router = useRouter();
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -41,11 +42,17 @@ export default function ResetPasswordForm({ token }: { token: string }) {
       body: JSON.stringify({ ...form, captchaToken }),
     });
     if (response.ok) {
-      const {message} = await response.json();
-      window.alert(message);
-      redirect("/auth/login");
+      setShowSuccess(true);
+      router.prefetch("/auth/login");
+      setTimeout(() => {
+        setShowSuccess(false);
+        router.replace("/auth/login");
+      }, 2000);
     } else if ([400, 401, 500].includes(response.status)) {
       setErrors((await response.json()).errors);
+    } else if (response.status === 429) {
+      const { error } = await response.json();
+      window.alert(error);
     } else {
       console.error("Ошибка регистрации");
     }
@@ -125,6 +132,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
         isLoading={isLoading}
         disabled={!captchaToken}
       />
+      <Notification text={"Пароль успешно заменён"} show={showSuccess} />
     </form>
   );
 }

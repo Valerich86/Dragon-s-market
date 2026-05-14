@@ -64,7 +64,6 @@ export async function POST(req: Request) {
     const { email, password, verificationCode, captchaToken } = validatedFields.data;
     if (!verificationCode) {
       if (!captchaToken) {
-        console.log("Требуется подтверждение reCAPTCHA");
         return NextResponse.json(
           { errors: { captcha: ["Требуется подтверждение reCAPTCHA"] } },
           { status: 400 },
@@ -85,7 +84,7 @@ export async function POST(req: Request) {
 
       if (!validationResult.isValid) {
         return NextResponse.json(
-          { errors: { password: ["Недостаточно прав"] } },
+          { errors: { password: ["Аутентификация не пройдена"] } },
           { status: 401 },
         );
       }

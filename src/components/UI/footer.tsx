@@ -20,7 +20,7 @@ export default function Footer() {
     <footer
       className={`${pathname.startsWith("/admin") ? "hidden" : ""} 
         text-sm absolute bg-gray-700 text-secondary 
-        w-full x-spacing flex flex-col lg:text-sm z-10`}
+        w-full x-spacing flex flex-col z-10`}
     >
       <div className="flex flex-col lg:flex-row lg:justify-between gap-20 lg:gap-0 py-10 border-b border-gray-200">
         <div className="w-full lg:w-auto flex flex-col gap-5 items-start justify-center">

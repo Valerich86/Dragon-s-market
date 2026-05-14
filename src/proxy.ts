@@ -47,7 +47,11 @@ export async function proxy(request: NextRequest) {
   }
 
   // 2. ЗАЩИТА ОТ БРУТФОРСА ДЛЯ API‑ЭНДПОИНТОВ С ФОРМАМИ
-  if (pathname.startsWith("/api") && pathname.includes("auth")) {
+  if (
+    pathname.startsWith("/api") &&
+    request.method === "POST" &&
+    (pathname.includes("auth") || pathname.includes("orders"))
+  ) {
     const { allowed, resetAfter } = checkMemoryRateLimit(ip, 5, 1);
 
     if (!allowed) {
@@ -70,10 +74,7 @@ export async function proxy(request: NextRequest) {
       }
 
       return NextResponse.json(
-        {
-          error: `Слишком много попыток. Повторите через ${resetAfter} секунд.`,
-          resetAfter,
-        },
+        { error: `Повторите попытку через ${resetAfter} секунд` },
         { status: 429 },
       );
     }

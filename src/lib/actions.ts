@@ -3,6 +3,16 @@ import { pool } from "./db";
 import type { CartItem, Content } from "./types";
 import type { Product } from "./types";
 
+export const weekDaysCategoties = [
+  { title: "Товары понедельника", dayNumber: 1, categories: [9, 10] },
+  { title: "Товары вторника", dayNumber: 2, categories: [2, 3, 21] },
+  { title: "Товары среды", dayNumber: 3, categories: [7, 28] },
+  { title: "Товары четверга", dayNumber: 4, categories: [25, 6] },
+  { title: "Товары пятницы", dayNumber: 5, categories: [1, 8, 22] },
+  { title: "Товары субботы", dayNumber: 6, categories: [11, 12, 5, 16] },
+  { title: "Товары воскресенья", dayNumber: 7, categories: [26, 23, 30] },
+];
+
 export async function getUserInfo(userId: number) {
   try {
     const userData = await pool.query(`SELECT * FROM customers WHERE id=$1`, [
@@ -96,10 +106,17 @@ export async function getAddress(addressId: number) {
 }
 
 export async function getCategories() {
+  const today = new Date().getDay();
+  let newTitle = "";
+  for (const day of weekDaysCategoties) {
+    if (day.dayNumber === today) {
+      newTitle = day.title;
+    }
+  }
   try {
     const data = await pool.query(`SELECT * FROM categories ORDER BY name ASC`);
     const categories = data.rows;
-    categories.unshift({ id: 0, name: "Все" });
+    categories.unshift({ id: 0, name: newTitle });
     return { categories: categories };
   } catch (error) {
     console.error("Ошибка получения категорий: ", error);
@@ -162,14 +179,51 @@ export async function getCatalog(userId: number, categoryId: number) {
   }
 }
 
+export async function getDiscountedProducts(userId: number) {
+  const { cart } = await getCart(userId);
+  let products: Product[] = [];
+  let title = "";
+  const today = new Date().getDay();
+  await pool.query("BEGIN");
+  try {
+    for (const day of weekDaysCategoties) {
+      if (day.dayNumber === today) {
+        title = day.title;
+        for (const c of day.categories) {
+          const result = await pool.query(
+            `SELECT * FROM products WHERE remains>0 AND is_active=TRUE AND category_id=$1 ORDER BY name ASC`,
+            [c],
+          );
+          Array.prototype.push.apply(products, result.rows);
+        }
+      }
+    }
+    for (let p of products) {
+      const cartItem = cart.find((c) => c.product_id === p.id);
+      p.quantity = cartItem ? cartItem.quantity : 0;
+    }
+    await pool.query("COMMIT");
+    return { products: products, title: title };
+  } catch (error) {
+    await pool.query("ROLLBACK");
+    console.error("Ошибка получения товаров: ", error);
+    return { products: [], title: title };
+  }
+}
+
 export async function getProductOfADay() {
-  const data = await pool.query(
-    `SELECT * FROM products 
+  try {
+    const data = await pool.query(
+      `SELECT * FROM products 
     WHERE status=$1 AND is_active=TRUE AND remains>0 
     ORDER BY updated_at`,
-    ["productOfADay"],
-  );
-  return { product: data.rows[data.rows.length - 1] };
+      ["productOfADay"],
+    );
+    return { product: data.rows[data.rows.length - 1] };
+  } catch (error) {
+    console.error("Ошибка получения данных: ", error);
+    return { product: null };
+  }
 }
 
 export async function getContent(type: string, limit?: number) {

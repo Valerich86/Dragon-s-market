@@ -19,8 +19,6 @@ interface Props {
   isInCart?: boolean;
 }
 
-type NotificationPorpose = "login" | "age_verify" | "logout";
-
 const buttonStyle =
   "bg-accent p-1 rounded-lg text-secondary hover:shadow-[0px_0px_20px_-5px_#E23324] transition duration-400 w-full cursor-pointer outline-none active:scale-98 text-center";
 
@@ -36,10 +34,7 @@ export default function ToCartButton({
   const [quantity, setQuantity] = useState(startQuantity);
   const [isLoading, setIsLoading] = useState(false);
   const [messageVisible, setMessageVisible] = useState(false);
-  const [notificationPurpose, setNotificationPurpose] =
-    useState<NotificationPorpose>("login");
   const { refreshCart, setRefreshCart } = useContext(CartContext)!;
-  const [notify, setNotify] = useState("");
   const router = useRouter();
 
   const handleAddToCart = async (
@@ -48,10 +43,6 @@ export default function ToCartButton({
     event.stopPropagation();
 
     if (customer_id === 0 || !customer_id) {
-      setNotificationPurpose("login");
-      setNotify(
-        "Вы пока не можете использовать корзину, сначала войдите в приложение",
-      );
       const timer = setTimeout(() => {
         setMessageVisible(false);
       }, 5000);
@@ -163,11 +154,11 @@ export default function ToCartButton({
         </div>
       )}
       <Notification
-        text={notify}
-        onAbort={ageAbort}
-        onAccept={ageConfirm}
-        showNotification={messageVisible}
-        notificationPurpose={notificationPurpose}
+        text={
+          "Вы пока не можете использовать корзину, сначала войдите в приложение"
+        }
+        mood="evil"
+        show={messageVisible}
       />
     </>
   );

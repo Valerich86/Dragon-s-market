@@ -158,6 +158,7 @@ export type RegisterFormErrors = {
   policy?: string;
   verificationCode?: string[];
   captcha?: string[];
+  bruteForceAttack?: string[];
 };
 
 export type LoginFormErrors = {
@@ -165,6 +166,7 @@ export type LoginFormErrors = {
   email?: string[];
   verificationCode?: string[];
   captcha?: string[];
+  bruteForceAttack?: string[];
 };
 
 export type AddressFormErrors = {
@@ -177,6 +179,7 @@ export type AddressFormErrors = {
   intercom_number?: string[];
   additional_info?: string[];
   policy?: string;
+  bruteForceAttack?: string[];
 };
 
 export interface UploadedFile {

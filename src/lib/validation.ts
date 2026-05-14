@@ -83,8 +83,6 @@ export function checkMaliciousQueryAndPathParams(
       }
     }
   }
-  console.log("isMalicious: ", suspiciousParams.length > 0);
-  console.log("suspiciousParams: ", suspiciousParams);
   return {
     isMalicious: suspiciousParams.length > 0,
     suspiciousParams,

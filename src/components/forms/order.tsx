@@ -4,6 +4,7 @@ import { SubmitEvent, useState, useEffect, useContext } from "react";
 import FormError from "../UI/form-error";
 import CustomButton from "../UI/custom-button";
 import { CartContext } from "@/context/cart-context";
+import Notification from "../UI/notification";
 import { font_bold } from "@/lib/fonts";
 import { Address } from "@/lib/types";
 import Link from "next/link";
@@ -33,9 +34,7 @@ export default function OrderForm({
     total_sum: totalSum,
     notes: "",
   });
-  const [notesError, setNotesError] = useState<string | undefined>(
-    undefined,
-  );
+  const [notesError, setNotesError] = useState<string | undefined>(undefined);
   const [addressError, setAddressError] = useState<string | undefined>(
     undefined,
   );
@@ -43,6 +42,8 @@ export default function OrderForm({
     undefined,
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [orderId, setOrderId] = useState(0);
   const { refreshCart, setRefreshCart } = useContext(CartContext)!;
   const router = useRouter();
 
@@ -77,11 +78,20 @@ export default function OrderForm({
       body: JSON.stringify(form),
     });
     if (response.ok) {
+      setShowSuccess(true);
       const { orderId } = await response.json();
+      setOrderId(orderId);
       setRefreshCart(!refreshCart);
-      router.replace(`/profile/orders/${orderId}`);
+      router.prefetch(`/profile/orders/${orderId}`);
+      setTimeout(() => {
+        setShowSuccess(false);
+        router.replace(`/profile/orders/${orderId}`);
+      }, 2000);
     } else if (response.status === 400 || response.status === 403) {
       setNotesError((await response.json()).error);
+    } else if (response.status === 429) {
+      const { error } = await response.json();
+      window.alert(error);
     } else {
       console.error("Ошибка оформления заказа");
     }
@@ -190,6 +200,10 @@ export default function OrderForm({
           addressError != undefined ||
           (hasCategory4 && form.type === "доставка")
         }
+      />
+      <Notification
+        text={`Заказ № ${orderId} успешно создан`}
+        show={showSuccess}
       />
     </form>
   );

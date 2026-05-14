@@ -12,7 +12,7 @@ export function AccessibilityPanel() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Настройки доступности"
-        className="bg-gray-200 link text-lg text-primary px-2 rounded-full shadow-lg flex items-center"
+        className="bg-gray-200 link text-sm text-primary px-2 rounded-full shadow-lg flex items-center"
       >
         👁️ <span className="lg:text-sm">версия для слабовидящих</span>
       </button>

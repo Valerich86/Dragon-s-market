@@ -27,7 +27,7 @@ export default function ContentSection({ content }: Props) {
             <motion.div
               initial={{ scale: 0.9, rotate: -4 }}
               whileInView={{ scale: 1, rotate: 0 }}
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.3 }}
               transition={{
                 duration: 0.6,
                 ease: "easeOut",
@@ -76,7 +76,7 @@ export default function ContentSection({ content }: Props) {
             <motion.div
               initial={{ scale: 0.9, rotate: 4 }}
               whileInView={{ scale: 1, rotate: 0 }}
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.3 }}
               transition={{
                 duration: 0.6,
                 ease: "easeOut",

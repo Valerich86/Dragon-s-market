@@ -6,7 +6,6 @@ export default function AdminMain() {
     <>
       <DarknedImage
         src={"/images/interior.png"}
-        options="w-full h-screen bg-right"
       />
       <h1
         className={

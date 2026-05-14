@@ -11,7 +11,6 @@ export async function POST(req: Request) {
     const validatedFields = await ResetPasswordSchema.safeParseAsync(body);
 
     if (!validatedFields.success) {
-      console.log(validatedFields.error.flatten().fieldErrors);
       return NextResponse.json(
         { errors: validatedFields.error.flatten().fieldErrors },
         { status: 400 },

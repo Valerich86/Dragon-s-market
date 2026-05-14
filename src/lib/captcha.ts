@@ -21,9 +21,6 @@ export async function verifyCaptcha(
 
     const data = await response.json();
 
-    // Логируем полный ответ от Google для отладки
-    console.log("Ответ reCAPTCHA API:", data);
-
     if (!data.success) {
       const errorCodes = data["error-codes"] || [];
       console.error("Ошибки reCAPTCHA:", errorCodes);

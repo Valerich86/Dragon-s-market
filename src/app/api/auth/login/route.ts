@@ -66,7 +66,6 @@ export async function POST(req: Request) {
     if (!verificationCode) {
       // Проверяем CAPTCHA только на первом этапе (до отправки кода)
       if (!captchaToken) {
-        console.log("Требуется подтверждение reCAPTCHA");
         return NextResponse.json(
           { errors: { captcha: ["Требуется подтверждение reCAPTCHA"] } },
           { status: 400 },

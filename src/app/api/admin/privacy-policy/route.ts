@@ -7,7 +7,6 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const validatedFields = await PrivacyPolicySchema.safeParseAsync(body);
     if (!validatedFields.success) {
-      console.log(validatedFields.error.flatten().fieldErrors)
       return NextResponse.json(
         { errors: validatedFields.error.flatten().fieldErrors },
         { status: 400 },

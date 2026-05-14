@@ -38,6 +38,9 @@ export default function ForgotPasswordForm() {
       window.alert(message);
     } else if ([400, 401, 500].includes(response.status)) {
       setErrors((await response.json()).errors);
+    } else if (response.status === 429) {
+      const {error} = await response.json();
+      window.alert(error);
     } else {
       console.error("Ошибка регистрации");
     }

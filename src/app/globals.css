@@ -111,8 +111,9 @@ video::--webkit-media-controls-start-playback-button {
   --animate-gotcha: gotcha 5s cubic-bezier(0.4, 0, 0.2, 1);
   --animate-tremor: tremor 0.3s ease-in-out infinite alternate;
   --animate-spin: spin 5s linear infinite;
-  --animate-emodji: emodji 7s ease-in infinite;
+  --animate-emodji: emodji 10s ease-in infinite;
   --animate-swing: swing 4s ease-in-out infinite;
+  --animate-hero: hero 23s ease-in-out infinite;
   --animate-address: address 0.7s ease-in;
 
   @keyframes swing {
@@ -122,6 +123,31 @@ video::--webkit-media-controls-start-playback-button {
     }
     50% {
       transform: rotate(10deg);
+    }
+  }
+
+  @keyframes hero {
+    0% {
+      transform: translateY(100vh) translateX(0) rotate(-2deg);
+      opacity: 0;
+    }
+    20% {
+      transform: translateY(0) rotate(2deg);
+      opacity: 1;
+    }
+    45% {
+      transform: rotate(-2deg);
+    }
+    55% {
+      transform: rotate(2deg);
+    }
+    60% {
+      transform: translateY(-40vh) rotate(-2deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) rotate(2deg);
+      opacity: 0;
     }
   }
 
@@ -228,39 +254,21 @@ video::--webkit-media-controls-start-playback-button {
   }
 
   @keyframes emodji {
-    0% {
-      transform: rotate(0deg) scale(1);
-    }
-    10%,
+    0%,
     100% {
-      transform: rotate(360deg) scale(1);
+      transform: translateY(0) rotate(0deg);
     }
-    25% {
-      transform: scale(1);
+    20% {
+      transform: translateY(-5px) rotate(6deg);
     }
-    30%,
-    35% {
-      transform: scale(1.1);
+    40% {
+      transform: translateY(3px) rotate(-5deg);
     }
-    40%,
-    45% {
-      transform: scale(1);
+    60% {
+      transform: translateY(-4px) rotate(4deg);
     }
-    50%,
-    55% {
-      transform: scale(1.1);
-    }
-    60%,
-    65% {
-      transform: scale(1);
-    }
-    70%,
-    75% {
-      transform: scale(1.1);
-    }
-    80%,
-    85% {
-      transform: scale(1);
+    80% {
+      transform: translateY(2px) rotate(-3deg);
     }
   }
 

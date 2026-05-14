@@ -15,7 +15,7 @@ export default function Headline({ text, emojiIndex }: Props) {
   if (isValidIndex) {
     parts = [
       text.slice(0, emojiIndex - 1),
-      <Smiler />,
+      <Smiler iconType="emodji"/>,
       text.slice(emojiIndex),
     ];
   } else {
