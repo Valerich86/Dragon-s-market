@@ -198,11 +198,12 @@ export async function getDiscountedProducts(userId: number) {
         }
       }
     }
+    await pool.query("COMMIT");
     for (let p of products) {
       const cartItem = cart.find((c) => c.product_id === p.id);
       p.quantity = cartItem ? cartItem.quantity : 0;
     }
-    await pool.query("COMMIT");
+    products = [...products].sort(() => Math.random() - 0.5);
     return { products: products, title: title };
   } catch (error) {
     await pool.query("ROLLBACK");

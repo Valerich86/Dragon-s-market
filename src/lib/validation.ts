@@ -302,9 +302,10 @@ export const AddressSchema = z.object({
     .max(500, "Дополнительная информация не может быть длиннее 500 символов")
     .optional()
     .default("")
-    .refine((value) => /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value), {
-      message: "Есть недопустимые символы",
-    }),
+    .refine(
+      (value) => value === "" || /^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/.test(value),
+      { message: "Есть недопустимые символы" },
+    ),
   is_default: z.boolean().optional(),
 });
 

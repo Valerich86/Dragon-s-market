@@ -38,7 +38,7 @@ export default function AdminOrdersPage() {
   return (
     <main
       aria-label="заказы"
-      className="w-full overflow-x-hidden px-5 lg:pr-25"
+      className="w-full overflow-x-hidden"
     >
       <h1 className={`${font_light.className} uppercase mb-10`}>
         Ваши заказы

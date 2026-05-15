@@ -66,6 +66,11 @@ export default function LoginForm() {
     setIsLoading(false);
   }
 
+  const resetVerification = () => {
+    setCaptchaToken(null);
+    setRequiresVerification(false);
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -154,25 +159,39 @@ export default function LoginForm() {
           </p>
           <fieldset>
             <label className="label">
-              Код подтверждения <span className="text-accent">*</span>
+              Введите 6-значный код подтверждения{" "}
+              <span className="text-accent">*</span>
             </label>
-            <input
-              className="input"
-              type="text"
-              placeholder="Введите 6-значный код"
-              value={form.verificationCode}
-              onChange={(e) =>
-                setForm({ ...form, verificationCode: e.target.value })
-              }
-              maxLength={6}
-            />
+            <div className="relative">
+              <div className="flex h-10">
+                {Array.from({ length: 6 }, (_, index) => (
+                  <div
+                    key={index}
+                    className="rounded h-10 w-10 border bg-gray-700"
+                  ></div>
+                ))}
+                <button onClick={resetVerification} className="link ml-3 italic text-indigo-500 text-xs">
+                  Повторить ➢
+                </button>
+              </div>
+              <input
+                className="absolute inset-0 h-10 w-67 outline-none border-none text-2xl px-3"
+                style={{ letterSpacing: "26px" }}
+                type="text"
+                value={form.verificationCode}
+                onChange={(e) =>
+                  setForm({ ...form, verificationCode: e.target.value })
+                }
+                maxLength={6}
+              />
+            </div>
+            <div aria-live="polite" aria-atomic="true">
+              {errors?.verificationCode &&
+                errors.verificationCode.map((error: string, i) => (
+                  <FormError errorField={error} key={i} />
+                ))}
+            </div>
           </fieldset>
-          <div aria-live="polite" aria-atomic="true">
-            {errors?.verificationCode &&
-              errors.verificationCode.map((error: string, i) => (
-                <FormError errorField={error} key={i} />
-              ))}
-          </div>
           <CustomButton
             text="Подтвердить вход"
             buttonType="submit"
