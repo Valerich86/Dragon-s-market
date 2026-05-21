@@ -299,24 +299,4 @@ export async function getProductData(id: number, userId: number) {
   }
 }
 
-export async function getCartData(userId: number) {
-  try {
-    const response = await fetch(`/api/cart?customer_id=${userId}`);
-    const cart: CartItem[] = (await response.json()).cart;
-    let addToItemsIds = [];
-    let setHasCategory4 = false;
-    for (let c of cart) {
-      addToItemsIds.push(c.id);
-      if (c.product_category === 4) setHasCategory4 = true;
-    }
-    return {
-      cartItems: cart,
-      itemsIds: addToItemsIds,
-      setHasCategory4: setHasCategory4,
-    };
-  } catch (error) {
-    console.error("Ошибка получения корзины: ", error);
-  } finally {
-    setIsLoading(false);
-  }
-}
+
