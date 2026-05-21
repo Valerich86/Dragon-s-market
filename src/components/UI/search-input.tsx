@@ -65,7 +65,10 @@ export default function SearchInput({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
             aria-label="поиск"
-            className={`w-full h-screen fixed bg-primary/90 flex flex-col gap-3 items-center left-1/2 -translate-x-[50%] top-0 z-50 py-[10vh] px-[5vw] md:px-[30vw]`}
+            className={
+              `w-full h-screen fixed bg-primary/90 flex flex-col gap-3 items-center 
+              left-1/2 -translate-x-[50%] top-0 z-50 py-[10vh] px-[5vw] md:px-[30vw]`
+            }
           >
             <input
               ref={elementRef}

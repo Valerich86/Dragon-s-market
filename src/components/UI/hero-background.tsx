@@ -3,18 +3,13 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
-interface Props {
-  src: string;
-  options?: string;
-}
+interface Props {src: string; options?: string;}
 
 export default function HeroBackground({ src, options = "" }: Props) {
   const [showAnimation, setShowAnimation] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowAnimation(false);
-    }, 23000);
+    const timer = setTimeout(() => {setShowAnimation(false)}, 23000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -31,13 +26,17 @@ export default function HeroBackground({ src, options = "" }: Props) {
         height={1024}
         loading="eager"
         quality={75}
-        className={`animate-fadeOut h-full w-full object-top-right lg:object-top-left 
-          object-cover select-none pointer-events-none`}
+        className={
+          `animate-fadeOut h-full w-full object-top-right lg:object-top-left 
+          object-cover select-none pointer-events-none`
+        }
       />
       {showAnimation && (
         <div
-          className={`absolute h-[60vh] md:h-[80vh] bottom-0 lg:-bottom-25 animate-hero 
-          -right-[40%] sm:right-0 lg:right-10`}
+          className={
+            `absolute h-[60vh] md:h-[80vh] bottom-0 lg:-bottom-25 
+            animate-hero -right-[40%] sm:right-0 lg:right-10`
+          }
         >
           <video
             onContextMenu={(e) => e.preventDefault()}
@@ -51,9 +50,7 @@ export default function HeroBackground({ src, options = "" }: Props) {
             controls={false}
             className={`h-full w-auto object-contain pointer-events-none select-none rounded-xl`}
           >
-            <source src={"/video/hero.webm"} type="video/mp4" />
-            Ваш браузер не поддерживает видео.
-          </video>
+            <source src={"/video/hero.webm"} type="video/mp4"/>Not supported</video>
         </div>
       )}
     </div>

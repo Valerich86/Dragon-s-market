@@ -1,4 +1,4 @@
-import { getAddress } from "@/lib/actions";
+import { getAddress } from "@/lib/server-data";
 import type { Metadata } from "next";
 import { font_light } from "@/lib/fonts";
 import AddressForm from "@/components/forms/address";

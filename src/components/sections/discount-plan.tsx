@@ -1,7 +1,7 @@
 import { font_mg, font_heading } from "@/lib/fonts";
 import Image from "next/image";
 import Headline from "../UI/headline";
-import { getProductOfADay } from "@/lib/actions";
+import { getProductOfADay } from "@/lib/server-data";
 import DayProduct from "../UI/day-product";
 
 type DayInfo = {

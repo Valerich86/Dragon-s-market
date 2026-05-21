@@ -1,5 +1,5 @@
 interface Props {
-  caption?: string;
+  caption?: string|number;
   options?: string;
 }
 

@@ -282,7 +282,10 @@ export default function RegisterForm() {
                     className="rounded h-10 w-10 border bg-gray-700"
                   ></div>
                 ))}
-                <button onClick={resetVerification} className="link ml-3 italic text-indigo-500 text-xs">
+                <button
+                  onClick={resetVerification}
+                  className="link ml-3 italic text-indigo-500 text-xs"
+                >
                   Повторить ➢
                 </button>
               </div>

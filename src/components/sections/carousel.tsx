@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSwipeable } from "react-swipeable";
 import Headline from "../UI/headline";
 import type { Product } from "@/lib/types";
-import CarouselItem from "../cards/carousel-item";
+import CarouselItem from "../list-items/carousel-item";
 
 interface Props {
   cloudPath: string;

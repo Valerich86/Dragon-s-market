@@ -1,7 +1,7 @@
 "use client";
 
 import NoInfo from "@/components/UI/no-info";
-import ProductCard from "@/components/cards/product-card";
+import ProductCard from "@/components/list-items/product-card";
 import { useCatalog } from "@/context/catalog-context";
 import { Product } from "@/lib/types";
 import { useUserId } from "@/context/userId-context";

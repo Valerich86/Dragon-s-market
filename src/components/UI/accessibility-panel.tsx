@@ -2,6 +2,7 @@
 
 import { useAccessibility } from "../providers/accessibility-provider";
 import { useState } from "react";
+import { PiEyeglasses } from "react-icons/pi";
 
 export function AccessibilityPanel() {
   const { settings, toggleLargeText, toggleHighContrast } = useAccessibility();
@@ -12,9 +13,9 @@ export function AccessibilityPanel() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Настройки доступности"
-        className="bg-gray-200 link text-sm text-primary px-2 rounded-full shadow-lg flex items-center"
+        className="bg-gray-200 link text-sm text-primary h-7 px-3 rounded-full shadow-lg flex items-center"
       >
-        👁️ <span className="lg:text-sm">версия для слабовидящих</span>
+        <PiEyeglasses size={25}/> <span className="lg:text-sm ml-1">версия для слабовидящих</span>
       </button>
 
       {isOpen && (

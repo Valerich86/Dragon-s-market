@@ -1,5 +1,5 @@
 import { useCloudPath } from "@/lib/cloud";
-import { getProductData } from "@/lib/actions";
+import { getProductData } from "@/lib/server-data";
 import ProductForm from "@/components/forms/product";
 import { font_bold, font_light } from "@/lib/fonts";
 import ProductImage from "@/components/UI/product-image";

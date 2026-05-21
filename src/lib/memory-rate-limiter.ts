@@ -64,5 +64,5 @@ export function cleanupOldRecords() {
   });
 }
 
-// Запускаем сборщик мусора каждые 5 минут
-setInterval(cleanupOldRecords, 15 * 60 * 1000);
+// Запускаем сборщик мусора каждые 10 минут
+setInterval(cleanupOldRecords, 10 * 60 * 1000);

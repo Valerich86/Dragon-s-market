@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import ProductImage from "../UI/product-image";
-import { CartItem } from "@/lib/types";
+import { CartItem, Delivery } from "@/lib/types";
 import { font_bold, font_light } from "@/lib/fonts";
 import ToCartButton from "../UI/to-cart-button";
 import Loading from "@/app/loading";
@@ -16,7 +16,7 @@ interface Props {
   userId: number;
 }
 
-export default function CartList({ cloudPath, userId }: Props) {
+export default function CartOrderData({ cloudPath, userId }: Props) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [itemsIds, setItemsIds] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +44,7 @@ export default function CartList({ cloudPath, userId }: Props) {
     const fetchCart = async () => {
       try {
         const response = await fetch(`/api/cart?customer_id=${userId}`);
-        const cart: CartItem[] = (await response.json()).cart;
+        const {cart} = await response.json();
         setCartItems(cart);
         let addToItemsIds = [];
         for (let c of cart) {
@@ -114,7 +114,9 @@ export default function CartList({ cloudPath, userId }: Props) {
                         product_id={item.product_id}
                         customer_id={item.customer_id}
                         price={item.product_price}
+                        remains={item.product_remains}
                         startQuantity={item.quantity}
+                        order_minimum={item.product_minimum}
                         setRefresh={setRefresh}
                         refresh={refresh}
                       />
@@ -142,7 +144,7 @@ export default function CartList({ cloudPath, userId }: Props) {
           userId={userId}
           cartItems={itemsIds}
           totalItems={itemsIds.length}
-          totalSum={cartItems[0].cart_total}
+          itemsSum={cartItems[0].cart_total}
           hasCategory4={hasCategory4}
         />
       )}

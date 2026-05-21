@@ -1,5 +1,5 @@
 import PrivacyPolicyForm from "@/components/forms/privacy-policy";
-import { getPrivacyPolicy } from "@/lib/actions";
+import { getPrivacyPolicy } from "@/lib/server-data";
 import { font_light } from "@/lib/fonts";
 
 export default async function PrivacyPolicyDetailsPage() {

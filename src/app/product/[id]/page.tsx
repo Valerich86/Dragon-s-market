@@ -1,7 +1,7 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { useCloudPath } from "@/lib/cloud";
 import ProductSection from "@/components/sections/product";
-import { getProductData } from "@/lib/actions";
+import { getProductData } from "@/lib/server-data";
 import { verifySession } from "@/lib/auth";
 
 export async function generateMetadata(

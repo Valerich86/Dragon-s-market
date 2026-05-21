@@ -4,7 +4,7 @@ import ContentSection from "@/components/sections/content";
 import { useCloudPath } from "@/lib/cloud";
 import DiscountPlan from "@/components/sections/discount-plan";
 import VideoCarouselSection from "@/components/sections/video-carousel";
-import { getContent, getDiscountedProducts } from "@/lib/actions";
+import { getContent } from "@/lib/server-data";
 import Link from "next/link";
 import Headline from "@/components/UI/headline";
 

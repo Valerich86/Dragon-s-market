@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { PiTelegramLogoLight } from "react-icons/pi";
 import { TfiEmail } from "react-icons/tfi";
 import { SlPhone } from "react-icons/sl";
 import { usePathname } from "next/navigation";
-import { AccessibilityPanel } from "./accessibility-panel";
+import { AccessibilityPanel } from "../UI/accessibility-panel";
 
 const links = [
   { name: "О нас", href: "/about" },
@@ -24,6 +25,16 @@ export default function Footer() {
     >
       <div className="flex flex-col lg:flex-row lg:justify-between gap-20 lg:gap-0 py-10 border-b border-gray-200">
         <div className="w-full lg:w-auto flex flex-col gap-5 items-start justify-center">
+          <Link href={"/about"} className="bg-primary rounded link">
+            <Image
+              src={`/images/logo-white.webp`}
+              alt="logo"
+              width={150}
+              height={100}
+              loading="eager"
+              className="h-10 w-auto select-none pointer-events-none "
+            />
+          </Link>
           <strong className="text-base">ИП Михайлов Александр Сергеевич</strong>
           <p>
             <span className="underline">Юр.адрес:</span> 614051, Пермский край,
@@ -69,7 +80,7 @@ export default function Footer() {
             className="link flex gap-2 w-40 h-7 bg-gray-200 rounded-full py-1 text-primary justify-center items-center"
           >
             <TfiEmail size={20} />
-            <span>Задать вопрос</span>
+            <span>задать вопрос</span>
           </a>
         </div>
 

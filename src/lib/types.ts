@@ -28,6 +28,7 @@ export type Product = {
   old_price?: number;
   category_id: number;
   remains: number;
+  order_minimum: number;
   is_active: boolean;
   to_carousel: boolean;
   status: string;
@@ -47,6 +48,8 @@ export type CartItem = {
   product_weight: number;
   product_unit: string;
   product_category: number;
+  product_minimum: number;
+  product_remains: number;
   quantity: number;
   product_price: number;
   total_price: number;
@@ -65,17 +68,27 @@ export type Content = {
   updated_at: string;
 };
 
+export type Delivery = {
+  delivery_cost: number;
+  assembly_cost: number;
+  total_sum: number;
+  expected_arrival_time: string;
+}
+
 export type Order = {
   // Поля из таблицы orders
   id: number;
   customer_id: number;
   address_id: number | null;
   type: string;
-  cart_items: number[];
-  total_items: number;
+  items_amount: number;
+  items_sum: number;
+  delivery_cost: number;
+  assembly_cost: number;
   total_sum: number;
   status: string;
   notes: string | null;
+  expected_arrival_time: string;
   created_at: string;
   updated_at: string;
 
@@ -90,7 +103,7 @@ export type Order = {
   address: string | null;
   street: string | null;
   house: string | null;
-  entrance: string | null; // опечатка сохранена как в исходной схеме
+  entrance: string | null; 
   floor: string | null;
   apartment: string | null;
   intercom_number: string | null;
@@ -114,7 +127,7 @@ export type OrderItem = {
 export type OrderNotification = {
   id: number;
   type: string;
-  total_items: number;
+  items_amount: number;
   total_sum: number;
   created_at: string;
 };

@@ -47,6 +47,8 @@ export default function ProductSection({ product, cloudPath, userId }: Props) {
             product_id={product.id}
             customer_id={userId}
             price={product.price}
+            order_minimum={product.order_minimum}
+            remains={product.remains}
             startQuantity={product.quantity}
             isInCart
           />

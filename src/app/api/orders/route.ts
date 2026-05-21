@@ -1,6 +1,7 @@
 import { pool } from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
 import { textAreaValidation } from "@/lib/validation";
+import { sendEmail } from "@/lib/email-service";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -32,31 +33,29 @@ export async function POST(request: NextRequest) {
   if (hours < 10 || hours >= 22) {
     return NextResponse.json(
       {
-        error: "Оформление заказов доступно с 10:00 до 22:00 по пермскому времени",
+        error:
+          "Оформление заказов доступно с 10:00 до 22:00 по пермскому времени",
         availableFrom: "10:00",
-        availableUntil: "22:00"
+        availableUntil: "22:00",
       },
-      { status: 403 }
+      { status: 403 },
     );
   }
-  
+
   try {
     const {
       customer_id,
       address_id,
       type,
       cart_items,
-      total_items,
+      items_amount,
+      items_sum,
+      delivery_cost,
+      assembly_cost,
       total_sum,
+      expected_arrival_time,
       notes,
     } = await request.json();
-
-    if (notes.length > 500) {
-      return NextResponse.json(
-        { error: "Превышен лимит в 500 символов для примечания" },
-        { status: 400 },
-      );
-    }
 
     const validationResult = textAreaValidation(notes, 500);
     if (!validationResult.isSafe) {
@@ -67,9 +66,13 @@ export async function POST(request: NextRequest) {
     }
 
     await pool.query("BEGIN");
+    let result = await pool.query(`SELECT email FROM customers WHERE id=$1`, [
+      customer_id,
+    ]);
+    const email = result.rows[0].email;
     let orderItemsData = [];
     for (let cartItemId of cart_items) {
-      const result = await pool.query(`SELECT * FROM cart_items WHERE id=$1`, [
+      result = await pool.query(`SELECT * FROM cart_items WHERE id=$1`, [
         cartItemId,
       ]);
       orderItemsData.push(result.rows[0]);
@@ -77,17 +80,20 @@ export async function POST(request: NextRequest) {
     await pool.query(`DELETE FROM cart_items WHERE customer_id=$1`, [
       customer_id,
     ]);
-    const result = await pool.query(
+    result = await pool.query(
       `INSERT INTO orders 
-      (customer_id, address_id, type, cart_items, total_items, total_sum, notes)
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, created_at`,
+      (customer_id, address_id, type, items_amount, items_sum, delivery_cost, assembly_cost, total_sum, expected_arrival_time, notes )
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id, created_at`,
       [
         customer_id,
         address_id,
         type,
-        cart_items,
-        total_items,
+        items_amount,
+        items_sum,
+        delivery_cost,
+        assembly_cost,
         total_sum,
+        expected_arrival_time,
         notes,
       ],
     );
@@ -100,10 +106,19 @@ export async function POST(request: NextRequest) {
       );
     }
     await pool.query("COMMIT");
+    // Отправляем код на email
+    const emailSent = await sendEmail(email, "pay-link", `${total_sum}₽`, id);
+
+    if (!emailSent) {
+      return NextResponse.json(
+        { error: "Не удалось отправить ссылку на оплату. Попробуйте позже." },
+        { status: 500 },
+      );
+    }
     return NextResponse.json({
       status: 201,
       orderId: id,
-      createdAt: created_at,
+      message: `Создан новый заказ № ${id}. На e-mail "${email}" отправлена ссылка для оплаты.`
     });
   } catch (error) {
     await pool.query("ROLLBACK");

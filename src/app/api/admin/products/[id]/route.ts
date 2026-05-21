@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const {description, composition, is_active, status} = await req.json();
+  const {description, composition, is_active, status, order_minimum} = await req.json();
 
   try {
     switch (status) {
@@ -15,8 +15,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       default: break;
     }
     await pool.query(
-      `UPDATE products SET description=$1, composition=$2, is_active=$3, status=$4 WHERE id=$5`,
-      [description, composition, is_active, status, id ],
+      `UPDATE products SET description=$1, composition=$2, is_active=$3, status=$4, order_minimum=$5 WHERE id=$6`,
+      [description, composition, is_active, status, order_minimum, id ],
     );
     return NextResponse.json({status: 200});
   } catch (error) {

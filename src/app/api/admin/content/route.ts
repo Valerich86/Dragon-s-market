@@ -55,7 +55,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
     // Если файл отсутствует, media_url остаётся undefined
 
-    // Формируем SQL‑запрос с возвратом всех полей
+    // Формируем SQL‑запрос
     const query = `
       INSERT INTO content (type, title, info, media_url, link_href, link_name)
       VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;

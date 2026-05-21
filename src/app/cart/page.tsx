@@ -1,4 +1,4 @@
-import CartList from "@/components/sections/cart-list";
+import CartOrderData from "@/components/sections/cart-order-data";
 import Smiler from "@/components/UI/smiler";
 import { verifySession } from "@/lib/auth";
 import { useCloudPath } from "@/lib/cloud";
@@ -26,16 +26,16 @@ export default async function CartPage() {
         Корзина товаров
       </h1>
 
-      {userId !== 0 && <CartList cloudPath={cloudPath} userId={userId} />}
+      {userId !== 0 && <CartOrderData cloudPath={cloudPath} userId={userId} />}
 
       {userId === 0 && (
         <div className="w-full flex">
           <div>
             <p>Вы пока не можете использовать корзину, </p>
             <p>
-              сначала настройте свой{" "}
-              <Link href={"/profile"} className="link italic underline">
-                профиль пользователя
+              сначала выполните{" "}
+              <Link href={"/auth/login"} className="link italic underline">
+                вход 
               </Link>
             </p>
           </div>

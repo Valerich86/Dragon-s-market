@@ -1,13 +1,10 @@
 "use client";
 
-import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 import { font_light } from "@/lib/fonts";
 import { motion } from "framer-motion";
-import { AiTwotoneDelete, AiFillEdit } from "react-icons/ai";
 import Link from "next/link";
 import type { Order } from "@/lib/types";
-import CustomButton from "@/components/UI/custom-button";
 import Loading from "@/app/loading";
 import NoInfo from "@/components/UI/no-info";
 import { orderStatuses } from "@/lib/types";

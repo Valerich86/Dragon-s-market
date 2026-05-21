@@ -62,8 +62,8 @@ export async function POST(req: Request) {
 
     // 4. Сохранение токена в БД
     await pool.query(
-      `INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)
-      ON CONFLICT (user_id) DO UPDATE SET token = $2, expires_at = $3`,
+      `INSERT INTO password_reset_tokens (customer_id, token, expires_at) VALUES ($1, $2, $3)
+      ON CONFLICT (customer_id) DO UPDATE SET token = $2, expires_at = $3`,
       [userId, hashedToken, expiresAt],
     );
 

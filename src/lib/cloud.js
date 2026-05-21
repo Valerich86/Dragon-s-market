@@ -1,11 +1,4 @@
-import {
-  S3Client,
-  ListBucketsCommand,
-  GetObjectCommand,
-  PutObjectCommand,
-  DeleteObjectCommand,
-  ListObjectsV2Command,
-} from "@aws-sdk/client-s3";
+import { S3Client } from "@aws-sdk/client-s3";
 
 export const baseUrl = process.env.VK_CLOUD_ENDPOINT;
 export const bucketName = process.env.VK_CLOUD_BUCKET;
@@ -23,4 +16,3 @@ export const s3Client = new S3Client({
   },
   forcePathStyle: true,
 });
-

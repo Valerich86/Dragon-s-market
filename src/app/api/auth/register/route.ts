@@ -6,7 +6,7 @@ import { RegistrationSchema } from "@/lib/validation";
 import { verifyCaptcha } from "@/lib/captcha";
 import { generateVerificationCode, sendEmail } from "@/lib/email-service";
 
-// проверка логина
+// проверка email
 async function checkEmailAvailability(email: string): Promise<boolean> {
   try {
     const data = await pool.query(`SELECT * FROM customers WHERE email=$1`, [
@@ -46,7 +46,6 @@ export async function POST(req: Request) {
     } = validatedFields.data;
     // ПРОВЕРКА reCAPTCHA ПЕРЕД ПРОВЕРКОЙ УЧЁТНЫХ ДАННЫХ
     if (!verificationCode) {
-      // Проверяем CAPTCHA только на первом этапе (до отправки кода)
       if (!captchaToken) {
         return NextResponse.json(
           { errors: { captcha: ["Требуется подтверждение reCAPTCHA"] } },
@@ -92,7 +91,7 @@ export async function POST(req: Request) {
       if (!emailSent) {
         return NextResponse.json(
           {
-            error: "Не удалось отправить код подтверждения. Попробуйте позже.",
+            errors: {email: ["Не удалось отправить код подтверждения. Попробуйте позже."]},
           },
           { status: 500 },
         );
@@ -125,7 +124,7 @@ export async function POST(req: Request) {
 
       if (result.rows.length === 0) {
         return NextResponse.json(
-          { error: "Неверный или просроченный код подтверждения" },
+          { errors: {verificationCode: ["Неверный или просроченный код подтверждения"]} },
           { status: 400 },
         );
       }

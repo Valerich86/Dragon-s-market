@@ -1,6 +1,6 @@
 import { font_light } from "@/lib/fonts";
 import { Metadata } from "next";
-import { getPrivacyPolicy } from "@/lib/actions";
+import { getPrivacyPolicy } from "@/lib/server-data";
 
 export const metadata: Metadata = {
   title: "Политика конфиденциальности",

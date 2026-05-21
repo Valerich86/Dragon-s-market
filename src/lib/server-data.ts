@@ -3,7 +3,8 @@ import { pool } from "./db";
 import type { CartItem, Content } from "./types";
 import type { Product } from "./types";
 
-export const weekDaysCategoties = [
+//массив категорий для плана скидок
+export const weekDaysCategories = [
   { title: "Товары понедельника", dayNumber: 1, categories: [9, 10] },
   { title: "Товары вторника", dayNumber: 2, categories: [2, 3, 21] },
   { title: "Товары среды", dayNumber: 3, categories: [7, 28] },
@@ -13,6 +14,7 @@ export const weekDaysCategoties = [
   { title: "Товары воскресенья", dayNumber: 7, categories: [26, 23, 30] },
 ];
 
+// получение данных конкретного пользователя
 export async function getUserInfo(userId: number) {
   try {
     const userData = await pool.query(`SELECT * FROM customers WHERE id=$1`, [
@@ -39,6 +41,7 @@ export type BonusResult = {
   showMascot: boolean;
 };
 
+// получение параметров бонуса
 export async function getBonusParams(
   userId: number,
   catalog: Product[],
@@ -90,6 +93,7 @@ export async function getBonusParams(
   }
 }
 
+// получение конкретного адреса
 export async function getAddress(addressId: number) {
   try {
     const addressesData = await pool.query(
@@ -105,10 +109,11 @@ export async function getAddress(addressId: number) {
   }
 }
 
+// получение всех категорий
 export async function getCategories() {
   const today = new Date().getDay();
   let newTitle = "";
-  for (const day of weekDaysCategoties) {
+  for (const day of weekDaysCategories) {
     if (day.dayNumber === today) {
       newTitle = day.title;
     }
@@ -124,6 +129,7 @@ export async function getCategories() {
   }
 }
 
+// получение пути для облачного хранилища
 export async function getCloudPath() {
   return useCloudPath();
 }
@@ -132,6 +138,7 @@ interface GetCartResult {
   cart: CartItem[];
 }
 
+// получение корзины пользователя
 export async function getCart(userId: number): Promise<GetCartResult> {
   if (userId !== 0) {
     try {
@@ -150,6 +157,7 @@ export async function getCart(userId: number): Promise<GetCartResult> {
   return { cart: [] };
 }
 
+// получение каталога товаров
 export async function getCatalog(userId: number, categoryId: number) {
   const { cart } = await getCart(userId);
   let products = [];
@@ -179,6 +187,7 @@ export async function getCatalog(userId: number, categoryId: number) {
   }
 }
 
+// получение товаров категорий дня
 export async function getDiscountedProducts(userId: number) {
   const { cart } = await getCart(userId);
   let products: Product[] = [];
@@ -186,7 +195,7 @@ export async function getDiscountedProducts(userId: number) {
   const today = new Date().getDay();
   await pool.query("BEGIN");
   try {
-    for (const day of weekDaysCategoties) {
+    for (const day of weekDaysCategories) {
       if (day.dayNumber === today) {
         title = day.title;
         for (const c of day.categories) {
@@ -212,6 +221,7 @@ export async function getDiscountedProducts(userId: number) {
   }
 }
 
+// получение товара дня
 export async function getProductOfADay() {
   try {
     const data = await pool.query(
@@ -227,17 +237,24 @@ export async function getProductOfADay() {
   }
 }
 
+// получение контента по типу
 export async function getContent(type: string, limit?: number) {
-  let query = `SELECT * FROM content WHERE type=$1 ORDER BY created_at DESC`;
-  let params: (string | number)[] = [type];
-  if (limit) {
-    query += ` LIMIT $2`;
-    params.push(limit);
+  try {
+    let query = `SELECT * FROM content WHERE type=$1 ORDER BY created_at DESC`;
+    let params: (string | number)[] = [type];
+    if (limit) {
+      query += ` LIMIT $2`;
+      params.push(limit);
+    }
+    const data = await pool.query(query, params);
+    return { content: data.rows };
+  } catch (error) {
+    console.error("Ошибка получения данных: ", error);
+    return { content: [] };
   }
-  const data = await pool.query(query, params);
-  return { content: data.rows };
 }
 
+// получение контента по id
 export async function getOneFromContent(id: number) {
   try {
     const data = await pool.query(`SELECT * FROM content WHERE id=$1;`, [id]);
@@ -248,6 +265,7 @@ export async function getOneFromContent(id: number) {
   }
 }
 
+// получение политики ОПД
 export async function getPrivacyPolicy() {
   try {
     const data = await pool.query(`SELECT * FROM privacy_policy`);
@@ -258,6 +276,7 @@ export async function getPrivacyPolicy() {
   }
 }
 
+// получение одного товара с проверкой наличия в корзине
 export async function getProductData(id: number, userId: number) {
   try {
     const productData = await pool.query(`SELECT * FROM products WHERE id=$1`, [
@@ -277,5 +296,27 @@ export async function getProductData(id: number, userId: number) {
   } catch (error) {
     console.error("Ошибка получения товара: ", error);
     return { product: null };
+  }
+}
+
+export async function getCartData(userId: number) {
+  try {
+    const response = await fetch(`/api/cart?customer_id=${userId}`);
+    const cart: CartItem[] = (await response.json()).cart;
+    let addToItemsIds = [];
+    let setHasCategory4 = false;
+    for (let c of cart) {
+      addToItemsIds.push(c.id);
+      if (c.product_category === 4) setHasCategory4 = true;
+    }
+    return {
+      cartItems: cart,
+      itemsIds: addToItemsIds,
+      setHasCategory4: setHasCategory4,
+    };
+  } catch (error) {
+    console.error("Ошибка получения корзины: ", error);
+  } finally {
+    setIsLoading(false);
   }
 }

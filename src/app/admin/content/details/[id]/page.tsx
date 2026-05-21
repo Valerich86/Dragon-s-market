@@ -1,5 +1,5 @@
 import ContentForm from "@/components/forms/content";
-import { getOneFromContent } from "@/lib/actions";
+import { getOneFromContent } from "@/lib/server-data";
 
 export default async function ContentDetailsPage({
   params,

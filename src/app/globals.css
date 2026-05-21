@@ -1,4 +1,3 @@
-@config "../../tailwind.config.js";
 @import "tailwindcss";
 
 p,
@@ -33,11 +32,6 @@ video::--webkit-media-controls-start-playback-button {
   transform: translateZ(0); /* Активирует аппаратное ускорение */
   backface-visibility: hidden; /* Оптимизация рендеринга */
 }
-
-@custom-variant light (&:where([data-theme="light"] *));
-@custom-variant dark (&:where([data-theme="dark"] *));
-@custom-variant blob (&:where([data-theme="blob"] *));
-@custom-variant fire (&:where([data-theme="fire"] *));
 
 /* Обеспечение доступности */
 @root {
@@ -308,12 +302,6 @@ video::--webkit-media-controls-start-playback-button {
   --color-primary: #080808;
   --color-secondary: #fefefe;
   --color-accent: #e23324;
-
-  --color-mascot1: #a7a18d;
-  --color-mascot2: #403d3e;
-  --color-mascot3: #591628;
-  --color-mascot4: #a65c41;
-  --color-mascot5: #f2785c;
 }
 
 .link {

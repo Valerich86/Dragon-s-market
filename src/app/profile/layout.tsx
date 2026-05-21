@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { AiFillEdit } from "react-icons/ai";
 import { verifySession } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { getUserInfo } from "@/lib/actions";
+import { getUserInfo } from "@/lib/server-data";
 import { font_light } from "@/lib/fonts";
 import ProfileOptions from "@/components/sections/profile-options";
 import ProfileProvider from "@/components/providers/profile-provider";

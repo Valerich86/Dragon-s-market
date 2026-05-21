@@ -1,6 +1,6 @@
 import NoInfo from "@/components/UI/no-info";
 import ContentSection from "@/components/sections/content";
-import { getContent } from "@/lib/actions";
+import { getContent } from "@/lib/server-data";
 import { useCloudPath } from "@/lib/cloud";
 import { font_light } from "@/lib/fonts";
 import { Metadata } from "next";

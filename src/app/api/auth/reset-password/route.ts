@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 
     // Ищем запись с токеном в БД
     const tokenResult = await pool.query(`
-      SELECT user_id, token AS hashed_token FROM password_reset_tokens
+      SELECT customer_id, token AS hashed_token FROM password_reset_tokens
       WHERE expires_at > NOW()
     `);
 
@@ -45,19 +45,19 @@ export async function POST(req: Request) {
     }
 
     let found = false;
-    let user_id: number | null = null;
+    let customer_id: number | null = null;
 
     // Перебираем все записи и сравниваем хеши
     for (const row of tokenResult.rows) {
       const isMatch = await bcrypt.compare(token, row.hashed_token);
       if (isMatch) {
         found = true;
-        user_id = row.user_id;
+        customer_id = row.customer_id;
         break;
       }
     }
 
-    if (!found || user_id === null) {
+    if (!found || customer_id === null) {
       return NextResponse.json(
         { errors: { password: ["Неверный или истёкший токен"] } },
         { status: 400 },
@@ -70,10 +70,10 @@ export async function POST(req: Request) {
     try {
       await pool.query(`UPDATE customers SET password = $1 WHERE id = $2`, [
         hashedPassword,
-        user_id,
+        customer_id,
       ]);
-      await pool.query(`DELETE FROM password_reset_tokens WHERE user_id = $1`, [
-        user_id,
+      await pool.query(`DELETE FROM password_reset_tokens WHERE customer_id = $1`, [
+        customer_id,
       ]);
       await pool.query("COMMIT");
     } catch (updateError) {

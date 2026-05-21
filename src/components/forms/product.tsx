@@ -16,6 +16,7 @@ export default function ProductForm({
     description: product.description || "",
     composition: product.composition || "",
     is_active: product.is_active,
+    order_minimum: product.order_minimum,
     status: product.status,
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -80,6 +81,18 @@ export default function ProductForm({
           checked={form.is_active}
           onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
           className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+        />
+      </fieldset>
+
+      {/* активный */}
+      <fieldset className="flex gap-5 my-5">
+        <label className="label">Минимум в заказе</label>
+        <input
+          className="input"
+          type="number"
+          step={0.1}
+          value={form.order_minimum}
+          onChange={(e) => setForm({ ...form, order_minimum: Number(e.target.value) })}
         />
       </fieldset>
 

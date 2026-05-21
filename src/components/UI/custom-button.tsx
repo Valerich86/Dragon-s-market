@@ -24,11 +24,12 @@ export default function CustomButton({
       type={buttonType}
       onClick={onClick}
       disabled={isLoading || disabled}
-      className={
-        `${options} ${!isLoading && !disabled 
-          ? "active:scale-98 hover:shadow-[0px_0px_20px_-5px_#E23324] bg-accent cursor-pointer" : "bg-gray-600"} 
-          p-1 rounded-full text-secondary transition duration-400 outline-none text-center`
-        }
+      className={`${options} ${
+        !isLoading && !disabled
+          ? "active:scale-98 hover:shadow-[0px_0px_20px_-5px_#E23324] bg-accent cursor-pointer"
+          : "bg-gray-600"
+      } 
+          p-1 rounded-full text-secondary transition duration-400 outline-none text-center`}
     >
       {!isLoading ? (
         text

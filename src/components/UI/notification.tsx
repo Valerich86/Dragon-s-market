@@ -38,8 +38,8 @@ export default function Notification({
         >
           <div
             className={`w-[90vw] p-5 gap-5 md:w-3/5 lg:w-1/3 flex flex-col rounded-xl
-        items-center justify-center bg-primary text-secondary 
-        shadow-[0px_0px_30px_25px_rgba(59,130,246,0.12)]`}
+            items-center justify-center bg-primary text-secondary text-sm
+            shadow-[0px_0px_30px_25px_rgba(59,130,246,0.12)]`}
           >
             <div className="flex w-full items-center justify-around">
               <p>{text}</p>

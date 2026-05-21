@@ -5,7 +5,7 @@ import { font_bold } from "@/lib/fonts";
 import { IoClose } from "react-icons/io5";
 import Link from "next/link";
 import { MdOutlineRefresh } from "react-icons/md";
-import { useRouter, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import type { Order, OrderItem } from "@/lib/types";
 import Loading from "@/app/loading";
 import NoInfo from "@/components/UI/no-info";
@@ -13,12 +13,11 @@ import PaintCaption from "@/components/UI/paint-caption";
 import ProductImage from "@/components/UI/product-image";
 
 export default function Orders() {
-  const router = useRouter();
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [cloudPath, setCloudPath] = useState("");
-  const [order, setOrder] = useState<Order|undefined>(undefined);
+  const [order, setOrder] = useState<Order | undefined>(undefined);
   const [items, setItems] = useState<OrderItem[]>([]);
 
   useEffect(() => {
@@ -39,20 +38,7 @@ export default function Orders() {
       }
     };
     fetchOrder();
-  }, []);
-
-  const refreshStatus = async () => {
-    setRefreshing(true);
-    try {
-      const response = await fetch(`/api/orders/refresh/${id}`);
-      const {orderStatus} = await response.json();
-      if (order) setOrder({...order, status: orderStatus});
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setRefreshing(false);
-    }
-  };
+  }, [refresh]);
 
   if (isLoading) return <Loading />;
   if (!order || items.length === 0) {
@@ -68,7 +54,10 @@ export default function Orders() {
         className={`${font_bold.className} w-full flex items-center gap-5 text-xl`}
       >
         <strong>Заказ № {id}</strong>
-        <MdOutlineRefresh className={`${refreshing ? "animate-spin" : "animate-pulse"} cursor-pointer`} onClick={refreshStatus}/>
+        <MdOutlineRefresh
+          className={`cursor-pointer`}
+          onClick={() => setRefresh((prev) => !prev)}
+        />
       </div>
       <div className="flex items-baseline gap-5 w-full lg:w-1/3">
         <p className="">Текущий статус:</p>
@@ -92,6 +81,18 @@ export default function Orders() {
           />
         </div>
       </div>
+      {order.type === "доставка" && (
+        <div className="flex items-baseline gap-5 w-full lg:w-1/3">
+          <p>Ожидается:</p>
+          <div className="relative -translate-y-5 lg:-translate-y-6">
+            <PaintCaption
+              caption={new Date(order.expected_arrival_time)
+                .toLocaleString()
+                .substring(0, 17)}
+            />
+          </div>
+        </div>
+      )}
 
       {items.map((item) => (
         <div
@@ -134,8 +135,31 @@ export default function Orders() {
         </div>
       ))}
 
+      <div className="flex items-baseline gap-5 w-full lg:w-1/3">
+        <p>Товары, сумма:</p>
+        <div className="relative -translate-y-5 lg:-translate-y-6">
+          <PaintCaption caption={order.items_sum} />
+        </div>
+      </div>
+
+      <div className="flex items-baseline gap-5 w-full lg:w-1/3">
+        <p>Сборка:</p>
+        <div className="relative -translate-y-5 lg:-translate-y-6">
+          <PaintCaption caption={order.assembly_cost} />
+        </div>
+      </div>
+
+      {order.type === "доставка" && (
+        <div className="flex items-baseline gap-5 w-full lg:w-1/3">
+          <p>Доставка:</p>
+          <div className="relative -translate-y-5 lg:-translate-y-6">
+            <PaintCaption caption={order.delivery_cost} />
+          </div>
+        </div>
+      )}
+
       <div className="w-full flex justify-end items-center pt-5 border-t border-accent text-xl">
-        <p className={font_bold.className}>{order.total_sum}₽</p>
+        <p className={font_bold.className}>Итого: {order.total_sum}₽</p>
       </div>
 
       {order.type === "доставка" && (

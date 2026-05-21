@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, SubmitEvent } from "react";
+import { useState, useEffect } from "react";
 import { font_bold } from "@/lib/fonts";
 import { IoClose } from "react-icons/io5";
 import Link from "next/link";
@@ -9,7 +9,6 @@ import { Order, OrderItem, orderStatuses } from "@/lib/types";
 import Loading from "@/app/loading";
 import NoInfo from "@/components/UI/no-info";
 import ProductImage from "@/components/UI/product-image";
-import CustomButton from "@/components/UI/custom-button";
 
 export default function Orders() {
   const { id } = useParams();
@@ -47,7 +46,7 @@ export default function Orders() {
     if (!order || isFetching) return;
     handleUpdateStatus();
   }, [order, id, isFetching]); // Зависимости: order, id, isFetching
-  
+
   const handleUpdateStatus = async () => {
     try {
       await fetch(`/api/admin/orders/${id}`, {
@@ -75,11 +74,21 @@ export default function Orders() {
       >
         <strong>Заказ № {id}</strong>
       </div>
-      <form className="w-full flex flex-col lg:flex-row lg:justify-between gap-5" onSubmit={(e) => { e.preventDefault(); handleUpdateStatus(); }}>
+      <form
+        className="w-full flex flex-col lg:flex-row lg:justify-between gap-5"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleUpdateStatus();
+        }}
+      >
         <p className="">Текущий статус:</p>
         <select
           value={order.status}
-          onChange={(e) => setOrder(prev => prev ? { ...prev, status: e.target.value } : undefined)}
+          onChange={(e) =>
+            setOrder((prev) =>
+              prev ? { ...prev, status: e.target.value } : undefined,
+            )
+          }
           className="input focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           {orderStatuses.map((option) => (
@@ -96,6 +105,14 @@ export default function Orders() {
         Создан:{" "}
         <strong>
           {new Date(order.created_at).toLocaleString().substring(0, 17)}
+        </strong>
+      </p>
+      <p className="">
+        Ожидается:{" "}
+        <strong>
+          {new Date(order.expected_arrival_time)
+            .toLocaleString()
+            .substring(0, 17)}
         </strong>
       </p>
       <p className="">
@@ -157,8 +174,18 @@ export default function Orders() {
         </div>
       ))}
 
+      <p className="">
+        Товары, сумма: <strong>{order.items_sum}</strong>
+      </p>
+      <p className="">
+        Сборка: <strong>{order.assembly_cost}</strong>
+      </p>
+      <p className="">
+        Доставка: <strong>{order.delivery_cost}</strong>
+      </p>
+
       <div className="w-full flex justify-end items-center pt-5 border-t border-accent text-xl">
-        <p className={font_bold.className}>{order.total_sum}₽</p>
+        <p className={font_bold.className}>Итого: {order.total_sum}₽</p>
       </div>
 
       {order.type === "доставка" && (

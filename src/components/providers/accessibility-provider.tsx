@@ -1,4 +1,3 @@
-// components/AccessibilityProvider.tsx
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
@@ -30,21 +29,18 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
   useEffect(() => {
     localStorage.setItem('dragon-bazar-accessibility-settings', JSON.stringify(settings));
   }, [settings]);
-
   const toggleLargeText = () => {
     setSettings(prev => ({
       ...prev,
       isLargeTextMode: !prev.isLargeTextMode
     }));
   };
-
   const toggleHighContrast = () => {
     setSettings(prev => ({
       ...prev,
       isHighContrastMode: !prev.isHighContrastMode
     }));
   };
-
   return (
     <AccessibilityContext.Provider value={{ settings, toggleLargeText, toggleHighContrast }}>
       {children}

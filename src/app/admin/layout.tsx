@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import Sidebar from "@/components/UI/sidebar";
+import Sidebar from "@/components/sections/sidebar";
 import OrderNotifications from "@/components/tools/order-notifications";
 import { verifySession } from "@/lib/auth";
 

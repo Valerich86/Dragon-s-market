@@ -1,12 +1,12 @@
 "use client";
 
-import NavLink from "./nav-link";
+import NavLink from "../UI/nav-link";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import CustomButton from "./custom-button";
-import SoundEnableButton from "./sound-enabled-button";
+import CustomButton from "../UI/custom-button";
+import SoundEnableButton from "../UI/sound-enabled-button";
 
 const navLinks = [
   { name: "Карточки товара", href: "/admin/products/details" },

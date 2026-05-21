@@ -6,7 +6,7 @@ import CustomButton from "../UI/custom-button";
 import { CartContext } from "@/context/cart-context";
 import Notification from "../UI/notification";
 import { font_bold } from "@/lib/fonts";
-import { Address } from "@/lib/types";
+import { Address, Delivery } from "@/lib/types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -14,7 +14,7 @@ interface Props {
   userId: number;
   cartItems: number[];
   totalItems: number;
-  totalSum: number;
+  itemsSum: number;
   hasCategory4: boolean;
 }
 
@@ -22,7 +22,7 @@ export default function OrderForm({
   userId,
   cartItems,
   totalItems,
-  totalSum,
+  itemsSum,
   hasCategory4,
 }: Props) {
   const [form, setForm] = useState({
@@ -30,8 +30,8 @@ export default function OrderForm({
     address_id: undefined,
     type: "доставка",
     cart_items: cartItems,
-    total_items: totalItems,
-    total_sum: totalSum,
+    items_amount: totalItems,
+    items_sum: itemsSum,
     notes: "",
   });
   const [notesError, setNotesError] = useState<string | undefined>(undefined);
@@ -43,9 +43,30 @@ export default function OrderForm({
   );
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [orderId, setOrderId] = useState(0);
+  const [message, setMessage] = useState("");
   const { refreshCart, setRefreshCart } = useContext(CartContext)!;
   const router = useRouter();
+  const [deliveryData, setDeliveryData] = useState<Delivery | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    const delivery_cost = form.type === "доставка" ? 500 : 0;
+    const assembly_cost = 100;
+    const total_sum = delivery_cost + assembly_cost + +itemsSum;
+    const now = new Date();
+    const futureDate = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    const expected_arrival_time =
+      form.type === "доставка"
+        ? futureDate.toISOString()
+        : new Date().toISOString();
+    setDeliveryData({
+      delivery_cost: delivery_cost,
+      assembly_cost: assembly_cost,
+      total_sum: total_sum,
+      expected_arrival_time: expected_arrival_time,
+    });
+  }, [itemsSum, form.type]);
 
   useEffect(() => {
     const fetchAddress = async () => {
@@ -75,21 +96,21 @@ export default function OrderForm({
     const response = await fetch("/api/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({ ...form, ...deliveryData }),
     });
     if (response.ok) {
+      const { message, orderId } = await response.json();
+      setMessage(message);
       setShowSuccess(true);
-      const { orderId } = await response.json();
-      setOrderId(orderId);
       setRefreshCart(!refreshCart);
       router.prefetch(`/profile/orders/${orderId}`);
       setTimeout(() => {
         setShowSuccess(false);
         router.replace(`/profile/orders/${orderId}`);
-      }, 2000);
+      }, 5000);
     } else if (response.status === 400 || response.status === 403) {
       setNotesError((await response.json()).error);
-    } else if (response.status === 429) {
+    } else if (response.status === 429 || response.status === 500) {
       const { error } = await response.json();
       window.alert(error);
     } else {
@@ -109,7 +130,8 @@ export default function OrderForm({
             Выберите тип заказа <span className="text-accent">*</span>
           </label>
           <div
-            className={`rounded-full w-25 h-15 bg-gray-600 shadow-[0px_0px_40px_25px_rgba(226,51,36,0.3)] border-3 flex items-center cursor-pointer relative`}
+            className={`rounded-full w-25 h-15 bg-gray-600 shadow-[0px_0px_40px_25px_rgba(226,51,36,0.3)] 
+              border-3 flex items-center cursor-pointer relative`}
             onClick={() =>
               form.type === "самовывоз"
                 ? setForm({ ...form, type: "доставка" })
@@ -174,6 +196,32 @@ export default function OrderForm({
         </div>
       )}
 
+      {addressData && deliveryData && (
+        <div className="flex flex-col gap-3 mt-5">
+          {form.type === "доставка" && (
+            <p className="">
+              Примерное время доставки:{" "}
+              <strong>
+                {new Date(deliveryData.expected_arrival_time)
+                  .toLocaleString()
+                  .substring(0, 17)}
+              </strong>
+            </p>
+          )}
+          {form.type === "доставка" && (
+            <p className="">
+              Стоимость доставки: <strong>{deliveryData.delivery_cost}₽</strong>
+            </p>
+          )}
+          <p className="">
+            Стоимость сборки: <strong>{deliveryData.assembly_cost}₽</strong>
+          </p>
+          <p className="text-2xl">
+            Итого: <strong className="">{deliveryData.total_sum}₽</strong>
+          </p>
+        </div>
+      )}
+
       <div aria-live="polite" aria-atomic="true">
         {notesError && <FormError errorField={notesError} />}
         {hasCategory4 && form.type === "доставка" && (
@@ -190,6 +238,7 @@ export default function OrderForm({
           </div>
         )}
       </div>
+
       <CustomButton
         text="Оформить заказ"
         buttonType="submit"
@@ -201,10 +250,7 @@ export default function OrderForm({
           (hasCategory4 && form.type === "доставка")
         }
       />
-      <Notification
-        text={`Заказ № ${orderId} успешно создан`}
-        show={showSuccess}
-      />
+      <Notification text={message} show={showSuccess} />
     </form>
   );
 }

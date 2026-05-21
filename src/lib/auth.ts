@@ -3,16 +3,18 @@ import { SignJWT, jwtVerify } from "jose";
 const secretKey = new TextEncoder().encode(process.env.JWT_SECRET!);
 const alg = "HS256";
 
+//создание токена сессии
 export async function createSessionToken(
   userId: number,
   role: string
 ) {
   return new SignJWT({ userId, role })
     .setProtectedHeader({ alg })
-    .setExpirationTime("7d") // Увеличенный срок для админов
+    .setExpirationTime("7d") 
     .sign(secretKey);
 }
 
+//проверка сессии
 export async function verifySession(name:string = "dragon_bazar_session") {
   try {
     const cookieStore = await import("next/headers").then((mod) =>

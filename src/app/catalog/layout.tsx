@@ -1,7 +1,7 @@
 import CatalogProvider from "@/components/providers/catalog-provider";
 import CategoriesList from "@/components/sections/categories-list";
 import SearchInput from "@/components/UI/search-input";
-import { getCategories, getCatalog, getBonusParams } from "@/lib/actions";
+import { getCategories, getCatalog, getBonusParams } from "@/lib/server-data";
 import { font_light } from "@/lib/fonts";
 import type { Metadata } from "next";
 import { verifySession } from "@/lib/auth";
@@ -13,14 +13,8 @@ export const metadata: Metadata = {
     template: "Драконий базар | Каталог | %s",
     default: "Каталог | Все",
   },
-  description:
-    'Выберите категорию азиатских снеков и сладостей в магазине "Драконий базар", Пермь',
-  keywords: [
-    "азиатские снеки",
-    "каталог",
-    "категории товаров",
-    "Драконий базар",
-  ],
+  description: 'Выберите категорию азиатских снеков и сладостей в магазине "Драконий базар", Пермь',
+  keywords: ["азиатские снеки", "каталог", "категории товаров", "Драконий базар"],
 };
 
 export default async function CatalogLayout({
@@ -56,9 +50,7 @@ export default async function CatalogLayout({
             showMascot: showMascot,
             mascotPositionId: mascotPositionId
           }}
-        >
-          {children}
-        </CatalogProvider>
+        > {children} </CatalogProvider>
       </UserIdProvider>
     </main>
   );

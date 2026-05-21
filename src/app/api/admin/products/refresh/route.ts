@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
-import { checkMemoryRateLimit } from "@/lib/memory-rate-limiter";
 
 type Price = {
   price: number;
@@ -24,6 +23,7 @@ type Product = {
 
 const host_name = process.env.HOST_NAME;
 
+//аутентификация в GainUp
 export async function auth() {
   try {
     const url = `${host_name}/api/auth`;
@@ -59,42 +59,8 @@ export async function auth() {
 }
 
 export async function GET(request: NextRequest) {
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "127.0.0.1";
-  const { allowed, resetAfter } = checkMemoryRateLimit(ip, 50, 10);
-  if (!allowed) {
-    try {
-      await pool.query(
-        `INSERT INTO security_logs (ip_address, action, timestamp, details)
-         VALUES ($1, $2, NOW(), $3)`,
-        [
-          ip,
-          "попытка брутфорса",
-          JSON.stringify({
-            endpoint: "/api/auth/login",
-            resetAfter: resetAfter,
-            userAgent: request.headers.get("user-agent"),
-          }),
-        ],
-      );
-    } catch (logError) {
-      console.error("Ошибка логирования попытки брутфорса:", logError);
-      // Продолжаем выполнение, даже если логирование не удалось
-    }
-    return NextResponse.json(
-      {
-        error: `Слишком много попыток. Повторите через ${resetAfter} секунд.`,
-        resetAfter,
-      },
-      { status: 429 }, // HTTP 429 Too Many Requests
-    );
-  }
-
   const { searchParams } = new URL(request.url);
   const categoryId = searchParams.get("categoryId") || "";
-
   try {
     const authResult = await auth();
     if (authResult?.success) {

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSwipeable } from "react-swipeable";
 import Headline from "../UI/headline";
-import Slide from "../cards/slide";
+import Slide from "../list-items/slide";
 
 interface Props {
   cloudPath: string;

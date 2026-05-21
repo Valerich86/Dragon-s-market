@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import { font_bold } from "@/lib/fonts";
 import { PiSpinnerGapThin } from "react-icons/pi";
 import { CartContext } from "@/context/cart-context";
@@ -14,19 +13,21 @@ interface Props {
   price: number;
   customer_id: number;
   startQuantity: number;
+  remains: number;
+  order_minimum: number;
   setRefresh?: (value: boolean) => void;
   refresh?: boolean;
   isInCart?: boolean;
 }
 
-const buttonStyle =
-  "bg-accent p-1 rounded-lg text-secondary hover:shadow-[0px_0px_20px_-5px_#E23324] transition duration-400 w-full cursor-pointer outline-none active:scale-98 text-center";
 
 export default function ToCartButton({
   product_id,
   customer_id,
   price,
   startQuantity,
+  order_minimum,
+  remains,
   setRefresh,
   refresh,
   isInCart = false,
@@ -36,7 +37,13 @@ export default function ToCartButton({
   const [messageVisible, setMessageVisible] = useState(false);
   const { refreshCart, setRefreshCart } = useContext(CartContext)!;
   const router = useRouter();
-
+  
+  const buttonStyle =
+    `bg-accent p-1 rounded-lg text-secondary 
+    hover:shadow-[0px_0px_20px_-5px_#E23324] 
+    transition duration-400 w-full cursor-pointer 
+    outline-none active:scale-98 text-center`;
+    
   const handleAddToCart = async (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
@@ -59,6 +66,7 @@ export default function ToCartButton({
           customer_id: customer_id,
           product_id: product_id,
           price: price,
+          k: order_minimum
         }),
       });
       const { quantity } = await response.json();
@@ -100,17 +108,6 @@ export default function ToCartButton({
     }
   };
 
-  const ageConfirm = () => {
-    setMessageVisible(false);
-    // Cookies.set("dragon_bazar_ageConfirmed", "true", {maxAge: 60*60 });
-    router.push("/age-verification");
-  };
-
-  const ageAbort = () => {
-    setMessageVisible(false);
-    Cookies.remove("dragon_bazar_ageConfirmed");
-  };
-
   return (
     <>
       {isLoading && (
@@ -132,23 +129,24 @@ export default function ToCartButton({
             <button
               className={`${buttonStyle} flex justify-center`}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-                handleUpdateQuantity(e, -1)
+                handleUpdateQuantity(e, -order_minimum)
               }
             >
               <FaMinus size={15.5} />
             </button>
           </div>
           <div className="w-1/3 flex justify-center items-center bg-primary h-full text-secondary">
-            <p className={font_bold.className}>{quantity}</p>
+            <p className={font_bold.className}>{order_minimum !== 1 ? quantity.toFixed(1) : quantity}</p>
           </div>
           <div className="w-1/3">
             <button
               className={`${buttonStyle} flex justify-center`}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-                handleUpdateQuantity(e, 1)
+                handleUpdateQuantity(e, order_minimum)
               }
+              disabled={remains<=quantity}
             >
-              <FaPlus size={15.5} />
+              <FaPlus size={15.5} className={remains<=quantity ? "rotate-45 text-gray-600" : "rotate-0"}/>
             </button>
           </div>
         </div>

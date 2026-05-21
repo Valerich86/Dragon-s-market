@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import CustomButton from "@/components/UI/custom-button";
 import PaintCaption from "@/components/UI/paint-caption";
 import { useProfile } from "@/context/profile-context";
-import { font_bold, font_light, font_mg } from "@/lib/fonts";
+import { font_mg } from "@/lib/fonts";
 import { IoMdRadioButtonOff, IoMdRadioButtonOn } from "react-icons/io";
 import { AiTwotoneDelete, AiFillEdit } from "react-icons/ai";
 import Link from "next/link";
@@ -17,9 +17,7 @@ export default function Addresses() {
 
   useEffect(() => {
     for (let a of addresses) {
-      if (a.is_default) {
-        setDefaultAddress(a.id);
-      }
+      if (a.is_default) setDefaultAddress(a.id);
     }
   }, [addresses]);
 

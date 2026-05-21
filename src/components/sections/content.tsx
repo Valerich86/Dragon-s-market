@@ -33,7 +33,8 @@ export default function ContentSection({ content }: Props) {
                 ease: "easeOut",
               }}
               className={
-                `flex items-center justify-center rounded-xl h-[70vh] w-full ${isOnlyMedia ? "" : "md:w-1/2"}`
+                `flex items-center justify-center rounded-xl h-[70vh] w-full 
+                ${isOnlyMedia ? "" : "md:w-1/2"}`
               }
             >
               <Image

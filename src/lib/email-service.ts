@@ -1,9 +1,10 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 export async function sendEmail(
   email: string,
-  purpose: "auth-code"|"reset-password",
+  purpose: "auth-code" | "reset-password" | "pay-link",
   value: string,
+  orderId?: number
 ): Promise<boolean> {
   try {
     const transporter = nodemailer.createTransport({
@@ -23,7 +24,7 @@ export async function sendEmail(
     // Определяем тип письма по наличию параметров
     if (purpose === "auth-code") {
       // Режим отправки кода подтверждения
-      subject = 'Код подтверждения для входа на сайт';
+      subject = "Код подтверждения для входа на сайт";
       text = `Ваш код подтверждения: ${value}. Он действителен в течение 10 минут.`;
       html = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -35,9 +36,25 @@ export async function sendEmail(
           <p style="margin-top: 20px; color: #666;">Код действителен в течение 10 минут.</p>
         </div>
       `;
+    } else if (purpose === "pay-link") {
+      // Режим отправки ссылки на оплату
+      subject = `Оплата заказа № ${orderId}`;
+      text = `Ссылка на оплату заказа № ${orderId}`;
+      html = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">Оплата заказа № ${orderId}, сумма: ${value}</h2>
+          <p>Пройдите по ссылке и совершите оплату:</p>
+          <div style="background: #f0f0f0; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 3px;">
+            <a href="https://platiqr.ru/?uuid=1000405369" target="_blank"
+               style="background: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
+              Оплатить ${value}
+            </a>
+          </div>
+        </div>
+      `;
     } else if (purpose === "reset-password") {
       // Режим отправки ссылки для сброса пароля
-      subject = 'Восстановление пароля для аккаунта';
+      subject = "Восстановление пароля для аккаунта";
       text = `Для сброса пароля перейдите по ссылке: ${value}\n\nСсылка действительна в течение 1 часа.`;
       html = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; padding: 20px; border-radius: 8px;">
@@ -62,7 +79,7 @@ export async function sendEmail(
       `;
     } else {
       // Если ни один параметр не передан
-      throw new Error('Необходимо передать либо code, либо resetUrl');
+      throw new Error("Необходимо передать либо code, либо resetUrl");
     }
 
     const info = await transporter.sendMail({
@@ -75,7 +92,7 @@ export async function sendEmail(
 
     return true;
   } catch (error) {
-    console.error('Ошибка отправки письма:', error);
+    console.error("Ошибка отправки письма:", error);
     return false;
   }
 }

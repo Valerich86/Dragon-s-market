@@ -94,7 +94,7 @@ export async function POST(req: Request) {
 
       // Сохраняем код во временной таблице
       await pool.query(
-        `INSERT INTO temp_auth_codes (user_id, email, code, expires_at, ip_address, purpose)
+        `INSERT INTO temp_auth_codes (customer_id, email, code, expires_at, ip_address, purpose)
          VALUES ($1, $2, $3, NOW() + INTERVAL '10 minutes', $4, 'admin_login')`,
         [validationResult.userId, email.toLowerCase(), code, ip],
       );
@@ -159,7 +159,7 @@ export async function POST(req: Request) {
       ]);
 
       // Создаём токен сессии
-      const token = await createSessionToken(loginCode.user_id, "admin");
+      const token = await createSessionToken(loginCode.customer_id, "admin");
 
       const response = NextResponse.json({ success: true });
 

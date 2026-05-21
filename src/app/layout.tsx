@@ -1,10 +1,10 @@
 import "./globals.css";
 import { font_default } from "@/lib/fonts";
 import { Metadata } from "next";
-import Header from "@/components/UI/header";
-import Footer from "@/components/UI/footer";
+import Header from "@/components/sections/header";
+import Footer from "@/components/sections/footer";
 import BackButton from "@/components/UI/back-button";
-import { getUserInfo } from "@/lib/actions";
+import { getUserInfo } from "@/lib/server-data";
 import { verifySession } from "@/lib/auth";
 import { CartProvider } from "@/context/cart-context";
 import CookieNotification from "@/components/UI/cookie-notification";
@@ -32,7 +32,9 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" 
+    // suppressHydrationWarning
+    >
       <head></head>
       <AccessibilityProvider>
         <body className={`${font_default.className} antialiased`}>

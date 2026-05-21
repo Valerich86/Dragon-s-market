@@ -1,6 +1,6 @@
 "use client";
 
-import NavLink from "./nav-link";
+import NavLink from "../UI/nav-link";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,8 +8,8 @@ import { useState, useEffect } from "react";
 import { SlBasket } from "react-icons/sl";
 import { SlUser } from "react-icons/sl";
 import { SlLogout } from "react-icons/sl";
-import BurgerMenu from "./burger-menu";
-import NavIcon from "./nav-icon";
+import BurgerMenu from "../UI/burger-menu";
+import NavIcon from "../UI/nav-icon";
 
 const centeredLinks = [
   { name: "Kаталог", href: "/catalog" },
@@ -32,13 +32,9 @@ export default function Header({userId}:{userId:number}) {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
-
-    // Устанавливаем начальное значение
     handleResize();
-
     // Подписываемся на событие resize
     window.addEventListener("resize", handleResize);
-
     // Очистка при размонтировании
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -64,11 +60,7 @@ export default function Header({userId}:{userId:number}) {
         />
         <Link href={"/"} className="h-[90%] lg:h-[110%]">
           <Image
-            src={
-              screenWidth > 500
-                ? `/images/logo-white.webp`
-                : `/images/logo-white.webp`
-            }
+            src={`/images/logo-white.webp`}
             alt="logo"
             width={150}
             height={100}

@@ -1,15 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { font_bold } from "@/lib/fonts";
 
 interface Props {
   src?: string;
   onComplete: () => void;
   index: number;
   stopSwing: () => void;
-  // randomBonus: number;
 }
 
 export default function MascotBonusAnimation({
@@ -17,12 +14,9 @@ export default function MascotBonusAnimation({
   onComplete,
   index,
   stopSwing,
-  // randomBonus,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [mascotSide, setMascotSide] = useState(
-    index % 2 === 0 ? "right" : "left",
-  );
+  const [mascotSide, setMascotSide] = useState(index % 2 === 0 ? "right" : "left");
   const [hasBeenClicked, setHasBeenClicked] = useState(false);
   const [animationClass, setAnimationClass] = useState("animate-shining");
   const [mascotRotation, setMascotRotation] = useState(
@@ -35,29 +29,22 @@ export default function MascotBonusAnimation({
 
   useEffect(() => {
     const video = videoRef.current;
-
     if (!video) return;
-
     // Запускаем видео при монтировании
-    video.play().catch((error) => {
-      console.warn("Автовоспроизведение видео заблокировано:", error);
-    });
-
+    video.play().catch((error) => {console.error(error)});
     // Интервал проверки прогресса видео (каждые 100 мс)
     const intervalId = setInterval(() => {
       // Выходим, если клик уже был — отключаем цикличность
       if (hasBeenClicked) return;
-
       const duration = video.duration;
       if (duration > 0) {
         const stopTime = duration * 0.8;
         if (video.currentTime >= stopTime) {
-          video.currentTime = 0; // Возвращаемся к началу
+          video.currentTime = 0;
           video.play(); // Запускаем заново
         }
       }
     }, 100); // Проверка каждые 100 мс — баланс точности и нагрузки
-
     return () => {
       clearInterval(intervalId); // Очистка интервала при размонтировании компонента
     };
@@ -76,15 +63,11 @@ export default function MascotBonusAnimation({
       const duration = video.duration;
       if (duration > 0) {
         video.currentTime = duration * 0.9;
-        video.play().catch((error) => {
-          console.warn("Ошибка воспроизведения после клика:", error);
-        });
+        video.play().catch((error) => {console.error(error)});
       }
       setInterval(() => {
         video.currentTime = duration * 0.9;
-        video.play().catch((error) => {
-          console.warn("Ошибка воспроизведения после клика:", error);
-        });
+        video.play().catch((error) => {console.error(error)});
       }, 1200);
     }
     setTimeout(() => {
@@ -96,9 +79,7 @@ export default function MascotBonusAnimation({
     <div
       onClick={(e) => handleClick(e)}
       className={`${animationClass} ${
-        mascotSide === "left"
-          ? "-left-17 md:-left-19.5"
-          : "left-35 md:left-45"
+        mascotSide === "left" ? "-left-17 md:-left-19.5" : "left-35 md:left-45"
       } ${mascotRotation}
         absolute bottom-0 w-1/2 z-20`}
     >
@@ -122,19 +103,6 @@ export default function MascotBonusAnimation({
         <source src={src} type="video/webm" />
         Ваш браузер не поддерживает видео.
       </video>
-      {/* {hasBeenClicked && (
-        <motion.div
-          initial={{ opacity: 1, y: 0 }}
-          animate={{ opacity: 0, y: "-400%" }}
-          transition={{ duration: 5 }}
-          className={`
-            ${font_bold} text-accent text-shadow-lg text-shadow-amber-50 
-            text-6xl absolute left-1/2 -translate-y-[50%] top-0 w-full rotate-20
-          `}
-        >
-          + {randomBonus}
-        </motion.div>
-      )} */}
     </div>
   );
 }

@@ -30,15 +30,6 @@ export async function verifyCaptcha(
       };
     }
 
-    // Для reCAPTCHA v3 проверяем score
-    if (data.score !== undefined && data.score < 0.5) {
-      return {
-        success: false,
-        score: data.score,
-        error: "Оценка reCAPTCHA слишком низкая",
-      };
-    }
-
     return { success: true, score: data.score };
   } catch (error) {
     console.error("Критическая ошибка проверки reCAPTCHA:", error);
