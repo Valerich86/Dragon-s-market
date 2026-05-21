@@ -50,7 +50,7 @@ export default function HeroBackground({ src, options = "" }: Props) {
             controls={false}
             className={`h-full w-auto object-contain pointer-events-none select-none rounded-xl`}
           >
-            <source src={"/video/hero.webm"} type="video/mp4"/>Not supported</video>
+            <source src={"/video/hero.webm"} type="video/webm"/>Not supported</video>
         </div>
       )}
     </div>
