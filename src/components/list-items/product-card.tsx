@@ -57,7 +57,7 @@ export default function ProductCard({ item, cloudPath, index, userId }: Props) {
       className={`w-[46%] lg:w-50 aspect-2/3 text-primary bg-secondary origin-top
          hover:bg-linear-to-r from-secondary to-gray-200 transition-colors no-scaling
          duration-500 cursor-pointer rounded-xl relative ${mascotHere && swing ? "animate-swing z-10" : ""}`}
-      onClick={() => router.push(href)}
+      // onClick={() => router.push(href)}
     >
       <div
         className={`w-full h-full flex flex-col items-center rounded-xl  

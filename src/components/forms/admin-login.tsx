@@ -54,6 +54,7 @@ export default function AdminLoginForm() {
       }
     } else if ([400, 401, 500].includes(response.status)) {
       const { errors } = await response.json();
+      console.log(errors)
       setErrors(errors);
     } else if (response.status === 429) {
       const { error } = await response.json();
@@ -165,7 +166,7 @@ export default function AdminLoginForm() {
                 </button>
               </div>
               <input
-                className="absolute inset-0 h-10 w-70 outline-none border-none text-2xl px-3"
+                className="absolute inset-0 h-10 w-67 outline-none border-none text-2xl px-3"
                 style={{ letterSpacing: "26px" }}
                 type="text"
                 value={form.verificationCode}
