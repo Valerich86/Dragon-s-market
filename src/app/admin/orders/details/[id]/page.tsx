@@ -89,7 +89,7 @@ export default function Orders() {
               prev ? { ...prev, status: e.target.value } : undefined,
             )
           }
-          className="input focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="input focus:ring-2 focus:ring-indigo-700 focus:border-transparent cursor-pointer"
         >
           {orderStatuses.map((option) => (
             <option key={option} value={option}>

@@ -51,24 +51,6 @@ export default function OrderForm({
   );
 
   useEffect(() => {
-    const delivery_cost = form.type === "доставка" ? 500 : 0;
-    const assembly_cost = 100;
-    const total_sum = delivery_cost + assembly_cost + +itemsSum;
-    const now = new Date();
-    const futureDate = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-    const expected_arrival_time =
-      form.type === "доставка"
-        ? futureDate.toISOString()
-        : new Date().toISOString();
-    setDeliveryData({
-      delivery_cost: delivery_cost,
-      assembly_cost: assembly_cost,
-      total_sum: total_sum,
-      expected_arrival_time: expected_arrival_time,
-    });
-  }, [itemsSum, form.type]);
-
-  useEffect(() => {
     const fetchAddress = async () => {
       try {
         const response = await fetch(
@@ -87,6 +69,33 @@ export default function OrderForm({
     };
     fetchAddress();
   }, []);
+
+  useEffect(() => {
+    const fetchDeliveryData = async () => {
+      try {
+        const response = await fetch("/api/delivery", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            customer_id: userId,
+            address_data: addressData,
+            type: form.type,
+            cart_items: cartItems,
+            items_amount: totalItems,
+            items_sum: itemsSum,
+            notes: "",
+          }),
+        });
+        if (response.ok) {
+          const { deliveryData } = await response.json();
+          setDeliveryData(deliveryData);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchDeliveryData();
+  }, [itemsSum, form.type]);
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();

@@ -48,7 +48,7 @@ export default function Header({userId}:{userId:number}) {
       `}
     >
       {/* левые ссылки */}
-      <div className="flex justify-start items-center h-13 lg:gap-5 w-full lg:w-1/3">
+      <div className="flex justify-start items-center h-13 md:gap-5 w-full md:w-1/3">
         <BurgerMenu />
         <Image
           src={"/images/hieroglyphs.webp"}
@@ -56,9 +56,9 @@ export default function Header({userId}:{userId:number}) {
           width={150}
           height={150}
           loading="eager"
-          className="h-1/2 lg:h-full w-auto select-none pointer-events-none hidden lg:block"
+          className="h-1/2 md:h-full w-auto select-none pointer-events-none hidden lg:block"
         />
-        <Link href={"/"} className="h-[90%] lg:h-[110%]">
+        <Link href={"/"} className="h-[90%] md:h-[110%]">
           <Image
             src={`/images/logo-white.webp`}
             alt="logo"
@@ -73,7 +73,7 @@ export default function Header({userId}:{userId:number}) {
       {/* центральные ссылки */}
       <nav
         aria-label="основная навигация (десктоп)"
-        className="hidden lg:flex justify-center items-center w-1/2 h-full"
+        className="hidden md:flex absolute justify-center items-center w-1/2 left-1/2 -translate-x-1/2 h-full"
       >
         {centeredLinks.map((item, index) => (
           <NavLink href={item.href} name={item.name} key={index} />
@@ -81,7 +81,7 @@ export default function Header({userId}:{userId:number}) {
       </nav>
 
       {/* правые ссылки */}
-      <div className="flex justify-end items-center w-1/2 lg:w-1/3 h-full">
+      <div className="flex justify-end items-center w-1/2 md:w-1/5 h-full">
         {rightLinks.map((item, index) => {
           return <NavIcon key={index} href={item.href} icon={item.icon} userId={userId}/>;
         })}

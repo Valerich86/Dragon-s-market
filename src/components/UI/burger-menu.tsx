@@ -45,7 +45,7 @@ function BurgerMenu() {
 
   return (
     <>
-      <div ref={iconRef} className="h-full flex items-center lg:hidden">
+      <div ref={iconRef} className="h-full flex items-center md:hidden">
         <button
           className="link"
           onClick={() => setIsOpened(isOpened ? false : true)}

@@ -27,7 +27,7 @@ export default function HeroBackground({ src, options = "" }: Props) {
         loading="eager"
         quality={75}
         className={
-          `animate-fadeOut h-full w-full object-top-right lg:object-top-left 
+          `h-full w-full object-top-right lg:object-top-left 
           object-cover select-none pointer-events-none`
         }
       />

@@ -93,7 +93,7 @@ export default function ContentForm({ method, content = undefined }: Props) {
         <select
           value={form.type}
           onChange={(e) => setForm({ ...form, type: e.target.value })}
-          className="input focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="input focus:ring-2 focus:ring-indigo-700 focus:border-transparent cursor-pointer"
         >
           {contentTypes.map((option) => (
             <option key={option.label} value={option.value}>

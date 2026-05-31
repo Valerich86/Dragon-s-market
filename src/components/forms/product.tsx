@@ -80,7 +80,7 @@ export default function ProductForm({
           type="checkbox"
           checked={form.is_active}
           onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
-          className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+          className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-indigo-700"
         />
       </fieldset>
 
@@ -102,10 +102,10 @@ export default function ProductForm({
         <select
           value={form.status}
           onChange={(e) => setForm({ ...form, status: e.target.value })}
-          className="input focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="input focus:ring-2 focus:ring-indigo-700 focus:border-transparent cursor-pointer"
         >
           {statusOptions.map((option) => (
-            <option key={option.label} value={option.value}>
+            <option key={option.label} value={option.value} className="hover:bg-indigo-700">
               {option.label}
             </option>
           ))}

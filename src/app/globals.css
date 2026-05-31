@@ -11,6 +11,14 @@ h2 {
   outline: none;
 }
 
+td, th {
+  @apply border border-gray-200 p-3 text-center;
+}
+
+th {
+  @apply text-base;
+}
+
 /* Скрываем элементы управления */
 video::-webkit-media-controls {
   display: none !important;
@@ -107,7 +115,7 @@ video::--webkit-media-controls-start-playback-button {
   --animate-spin: spin 3s linear infinite;
   --animate-emodji: emodji 10s ease-in infinite;
   --animate-swing: swing 4s ease-in-out infinite;
-  --animate-hero: hero 23s ease-in-out;
+  --animate-hero: hero 22s ease-in-out;
   --animate-address: address 0.7s ease-in;
 
   @keyframes fadeOut {

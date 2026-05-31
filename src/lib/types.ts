@@ -33,6 +33,7 @@ export type Product = {
   to_carousel: boolean;
   status: string;
   quantity: number | 0;
+  created_at: string;
 };
 
 export type Category = {

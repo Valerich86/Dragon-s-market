@@ -19,13 +19,13 @@ export async function GET(
       a.city,
       a.address,
       a.street,
-        a.house,
-        a.entrance,
-        a.floor,
-        a.apartment,
-        a.intercom_number,
-        a.postal_code,
-        a.additional_info
+      a.house,
+      a.entrance,
+      a.floor,
+      a.apartment,
+      a.intercom_number,
+      a.postal_code,
+      a.additional_info
       FROM orders o
       JOIN customers c ON o.customer_id = c.id
       LEFT JOIN addresses a ON o.address_id = a.id

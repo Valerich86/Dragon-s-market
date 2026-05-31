@@ -11,7 +11,7 @@ export const weekDaysCategories = [
   { title: "Товары четверга", dayNumber: 4, categories: [25, 6] },
   { title: "Товары пятницы", dayNumber: 5, categories: [1, 8, 22] },
   { title: "Товары субботы", dayNumber: 6, categories: [11, 12, 5, 16] },
-  { title: "Товары воскресенья", dayNumber: 7, categories: [26, 23, 30] },
+  { title: "Товары воскресенья", dayNumber: 0, categories: [26, 23, 30] },
 ];
 
 // получение данных конкретного пользователя
@@ -193,6 +193,7 @@ export async function getDiscountedProducts(userId: number) {
   let products: Product[] = [];
   let title = "";
   const today = new Date().getDay();
+  console.log(today)
   await pool.query("BEGIN");
   try {
     for (const day of weekDaysCategories) {
