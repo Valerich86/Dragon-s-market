@@ -53,9 +53,7 @@ export default function ProductsList({ products, categoryName }: Props) {
             if (a.name < b.name) return -1;
             if (a.name > b.name) return 1;
             return 0;
-          default:
-            // если sortValue не соответствует ни одному из вариантов, оставляем порядок без изменений
-            return 0;
+          default: return 0;
         }
       });
       return sorted;
@@ -81,7 +79,7 @@ export default function ProductsList({ products, categoryName }: Props) {
 
   return (
     <>
-      <div className={`absolute top-31 right-20 sm:right-30 md:right-50`}>
+      <div className={`absolute top-31 left-1/2 -translate-x-1/2`}>
         <button
           className="link active:scale-95"
           onClick={() => setSortOpened((prev) => !prev)}
@@ -97,7 +95,7 @@ export default function ProductsList({ products, categoryName }: Props) {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.1, ease: "easeOut" }}
               aria-label="сортировка товаров"
-              className={`rounded-xl absolute right-0 top-1/2 -translate-y-1/2 z-50 bg-primary text-secondary
+              className={`rounded-xl absolute right-1/2 translate-x-1/2 top-1/2 -translate-y-1/2 z-50 bg-primary text-secondary
               shadow-[0px_0px_30px_25px_rgba(59,130,246,0.15)] w-50`}
             >
               <select
