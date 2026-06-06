@@ -148,6 +148,7 @@ export default function Orders() {
                 <div className="w-20 h-20">
                   <ProductImage
                     productId={item.product_id}
+                    categoryId={item.product_category}
                     cloudPath={cloudPath}
                   />
                 </div>

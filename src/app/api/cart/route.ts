@@ -73,3 +73,18 @@ export async function PUT(request: Request) {
     return NextResponse.json({ status: 500 });
   }
 }
+
+export async function DELETE(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const customer_id = searchParams.get("customer_id");
+  try {
+    const result = await pool.query(
+      `DELETE FROM cart_items WHERE customer_id=$1`,
+      [Number(customer_id)],
+    );
+    return NextResponse.json({ status: 204 });
+  } catch (error) {
+    console.error("Ошибка удаления данных:", error);
+    return NextResponse.json({ status: 500 });
+  }
+}

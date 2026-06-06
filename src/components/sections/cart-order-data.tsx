@@ -94,6 +94,7 @@ export default function CartOrderData({ cloudPath, userId }: Props) {
                     <div className="w-20 h-20">
                       <ProductImage
                         productId={item.product_id}
+                        categoryId={item.product_category}
                         cloudPath={cloudPath}
                       />
                     </div>

@@ -21,10 +21,10 @@ const centeredLinks = [
 const rightLinks = [
   { icon: SlBasket, href: "/cart" },
   { icon: SlUser, href: "/profile" },
-  { icon: SlLogout , href: "/logout" },
+  { icon: SlLogout, href: "/logout" },
 ];
 
-export default function Header({userId}:{userId:number}) {
+export default function Header({ userId }: { userId: number }) {
   const [screenWidth, setScreenWidth] = useState(0);
   const pathname = usePathname();
 
@@ -41,8 +41,7 @@ export default function Header({userId}:{userId:number}) {
 
   return (
     <header
-      className={
-        `${pathname.startsWith("/admin") ? "hidden" : ""} 
+      className={`${pathname.startsWith("/admin") ? "hidden" : ""} 
         w-full fixed left-0 top-0 flex justify-between items-center z-50 
         bg-primary h-13 pl-3 lg:pl-0 border-b border-gray-700
       `}
@@ -73,7 +72,8 @@ export default function Header({userId}:{userId:number}) {
       {/* центральные ссылки */}
       <nav
         aria-label="основная навигация (десктоп)"
-        className="hidden md:flex absolute justify-center items-center w-1/2 left-1/2 -translate-x-1/2 h-full"
+        className={`hidden sm:flex absolute justify-center items-center 
+          w-2/3 left-1/2 -translate-x-1/2 h-full`}
       >
         {centeredLinks.map((item, index) => (
           <NavLink href={item.href} name={item.name} key={index} />
@@ -83,7 +83,14 @@ export default function Header({userId}:{userId:number}) {
       {/* правые ссылки */}
       <div className="flex justify-end items-center w-1/2 md:w-1/5 h-full">
         {rightLinks.map((item, index) => {
-          return <NavIcon key={index} href={item.href} icon={item.icon} userId={userId}/>;
+          return (
+            <NavIcon
+              key={index}
+              href={item.href}
+              icon={item.icon}
+              userId={userId}
+            />
+          );
         })}
       </div>
     </header>

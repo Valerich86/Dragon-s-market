@@ -101,6 +101,7 @@ export default function SearchInput({
                           <div className="w-10 h-10">
                             <ProductImage
                               productId={item.id}
+                              categoryId={item.category_id}
                               cloudPath={cloudPath}
                             />
                           </div>

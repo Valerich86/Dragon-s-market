@@ -18,7 +18,7 @@ export default function ClearCart({ userId, refresh, setRefresh }: Props) {
   const handleClear = async () => {
     setIsLoading(true);
     try {
-      await fetch(`/api/cart/${userId}`, { method: "DELETE" });
+      await fetch(`/api/cart?customer_id=${userId}`, { method: "DELETE" });
       setRefresh(!refresh);
       setRefreshCart(!refreshCart);
     } catch (error) {

@@ -13,8 +13,14 @@ export const metadata: Metadata = {
     template: "Драконий базар | Каталог | %s",
     default: "Каталог | Все",
   },
-  description: 'Выберите категорию азиатских снеков и сладостей в магазине "Драконий базар", Пермь',
-  keywords: ["азиатские снеки", "каталог", "категории товаров", "Драконий базар"],
+  description:
+    'Выберите категорию азиатских снеков и сладостей в магазине "Драконий базар", Пермь',
+  keywords: [
+    "азиатские снеки",
+    "каталог",
+    "категории товаров",
+    "Драконий базар",
+  ],
 };
 
 export default async function CatalogLayout({
@@ -28,7 +34,10 @@ export default async function CatalogLayout({
   const { categories } = await getCategories();
   const { catalog } = await getCatalog(userId, 0);
   const cloudPath = useCloudPath();
-  const {mascotPositionId, showMascot} = await getBonusParams(userId, catalog );
+  const { mascotPositionId, showMascot } = await getBonusParams(
+    userId,
+    catalog,
+  );
 
   return (
     <main
@@ -48,9 +57,11 @@ export default async function CatalogLayout({
             allProducts: catalog,
             cloudPath: cloudPath,
             showMascot: showMascot,
-            mascotPositionId: mascotPositionId
+            mascotPositionId: mascotPositionId,
           }}
-        > {children} </CatalogProvider>
+        >
+          {children}
+        </CatalogProvider>
       </UserIdProvider>
     </main>
   );

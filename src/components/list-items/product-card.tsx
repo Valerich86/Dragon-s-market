@@ -57,7 +57,7 @@ export default function ProductCard({ item, cloudPath, index, userId }: Props) {
       className={`w-[46%] lg:w-50 aspect-2/3 text-primary bg-secondary origin-top
          hover:bg-linear-to-r from-secondary to-gray-200 transition-colors no-scaling
          duration-500 cursor-pointer rounded-xl relative ${mascotHere && swing ? "animate-swing z-10" : ""}`}
-      // onClick={() => router.push(href)}
+      onClick={() => router.push(href)}
     >
       <div
         className={`w-full h-full flex flex-col items-center rounded-xl  
@@ -70,20 +70,18 @@ export default function ProductCard({ item, cloudPath, index, userId }: Props) {
             width={1024}
             height={1024}
             loading="lazy"
-            className={
-              `h-full w-full object-contain rounded-2xl animate-shining 
-              ${item.category_id === 4 ? "blur-xs" : ""}`
-            }
+            className={`h-full w-full object-contain rounded-2xl animate-shining 
+              ${item.category_id === 4 ? "blur-xs" : ""}`}
             onError={() => setSrc("/images/stickers/please_buy.webp")}
           />
           <p className="text-[7px] absolute bottom-0 text-center w-full left-1/2 -translate-x-[50%]">
             Внешний вид товара может отличаться.
           </p>
         </div>
-        <div className={
-          `h-1/2 w-full flex flex-col lg:gap-2 justify-between p-1 
-          lg:p-2 border-t-2 border-gray-300 rounded-b-xl text-xs`
-        }>
+        <div
+          className={`h-1/2 w-full flex flex-col lg:gap-2 justify-between p-1 
+          lg:p-2 border-t-2 border-gray-300 rounded-b-xl text-xs`}
+        >
           <h3 className="text-primary line-clamp-3 lg:text-sm lg:min-h-15">
             {item.name}
           </h3>
@@ -98,8 +96,9 @@ export default function ProductCard({ item, cloudPath, index, userId }: Props) {
                 {item.unit}
               </p>
               <p
-                className={`${font_bold.className} ${item.price.toString().length > 6 
-                  ? "tracking-tighter" : ""} text-lg`}
+                className={`${font_bold.className} ${
+                  item.price.toString().length > 6 ? "tracking-tighter" : ""
+                } text-lg`}
               >
                 {item.price}₽
               </p>

@@ -30,7 +30,6 @@ export type Product = {
   remains: number;
   order_minimum: number;
   is_active: boolean;
-  to_carousel: boolean;
   status: string;
   quantity: number | 0;
   created_at: string;

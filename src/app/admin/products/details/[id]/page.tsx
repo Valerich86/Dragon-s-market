@@ -46,7 +46,7 @@ export default async function ProductDetailsPage({
         <ProductForm product={product} cloudPath={cloudPath} />
       </div>
       <div className="w-full lg:w-1/2">
-        <ProductImage productId={product.id} cloudPath={cloudPath} />
+        <ProductImage productId={product.id} cloudPath={cloudPath} categoryId={product.category_id}/>
       </div>
     </div>
   );

@@ -107,18 +107,23 @@ export async function POST(request: NextRequest) {
     }
     await pool.query("COMMIT");
     // Отправляем код на email
-    const emailSent = await sendEmail(email, "pay-link", `${total_sum}₽`, id);
+    // const emailSent = await sendEmail(email, "pay-link", `${total_sum}₽`, id);
 
-    if (!emailSent) {
-      return NextResponse.json(
-        { error: "Не удалось отправить ссылку на оплату. Попробуйте позже." },
-        { status: 500 },
-      );
-    }
+    // if (!emailSent) {
+    //   return NextResponse.json(
+    //     { error: "Не удалось отправить ссылку на оплату. Попробуйте позже." },
+    //     { status: 500 },
+    //   );
+    // }
+    // return NextResponse.json({
+    //   status: 201,
+    //   orderId: id,
+    //   message: `Создан новый заказ № ${id}. На e-mail "${email}" отправлена ссылка для оплаты.`
+    // });
     return NextResponse.json({
       status: 201,
       orderId: id,
-      message: `Создан новый заказ № ${id}. На e-mail "${email}" отправлена ссылка для оплаты.`
+      message: "Сайт в режиме разработки. В данный момент заказать товар нельзя"
     });
   } catch (error) {
     await pool.query("ROLLBACK");

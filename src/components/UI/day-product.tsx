@@ -28,7 +28,7 @@ export default function DayProduct({ product, cloudPath }: Props) {
       <Link href={href}>
         <div className="w-1/2 lg:w-full relative">
           <div className="w-25 h-25 lg:w-40 lg:h-40">
-            <ProductImage productId={product.id} cloudPath={cloudPath} />
+            <ProductImage productId={product.id} cloudPath={cloudPath} categoryId={product.category_id}/>
           </div>
           <motion.div
             initial={{ opacity: 0 }}
